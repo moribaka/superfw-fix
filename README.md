@@ -1,6 +1,6 @@
 # superFW fix（chis ver）
 
-这是面向 superchis 硬件的 SuperFW fix r70 源码仓库。项目基于
+这是面向 superchis 硬件的 SuperFW fix r72 源码仓库。项目基于
 [superFW](https://github.com/davidgfnet/superfw)，保留上游固件的核心构建方式、
 菜单、存档、RTC 和补丁框架，并加入面向中文 hack 游戏及宝可梦改版的兼容性修复、
 精简菜单和 ROM 补丁数据库改动。
@@ -21,7 +21,18 @@ ChisBread 和我。由于整个固件是由 AI 完成的，所以不好意思合
 本源码仓库不包含 ROM、BIOS、用户存档、mGBA 模拟器二进制、仿真产物、私人验收
 报告、发布页 HTML、固件发布包或本机配置。固件发布物另行维护。
 
-当前 r70 数据库包含 1,740 条 ROM 记录，固件版本标识为 `70000001`。
+当前 r72 数据库包含 1,741 条 ROM 记录，固件版本标识为 `72000001`。
+
+## r72 更新
+
+- RTC 数据库修正 30 个版本：补全 16 个未适配版本和 12 个接口遗漏版本，纠正参宿六两个版本的状态及日期读取接口；共 622 个 RTC 版本。
+- 支持特殊日期读取函数位于 2 字节对齐的 Thumb 入口，保留游戏原有日期和昼夜后处理。
+- 新增 Apotris 中文版精确记录，保留原生 SRAM，适配 IRQ 和游戏内菜单；跳过启动时切换 SDRAM 的检测，保持 NOR／SDRAM 当前映射。NOR 菜单使用布局 712。
+- r70 原有非 RTC 操作保留；此前模拟人生 2、菜单容量、资源、存档与 IRQ 适配继续保留。
+
+软件 RTC 仍按游戏读取推进，使用每个游戏的 `.rtc` 保存时间与速度，通过游戏内菜单调整；运行时不持续同步系统时间，无电池 RTC 时离线不走时。
+
+本版是测试固件。RTC 接口和 Apotris 的 SDRAM／NOR 菜单及存档流程已完成本地模型验证，完整实机验收尚未完成。
 
 ## 构建
 
@@ -37,7 +48,7 @@ make BOARD=chis
 
 ## 已知原版启动异常
 
-以下两个条目在原版 ROM 中也会启动异常，因此没有把它们标记为 r70 修复回归：
+以下两个条目在原版 ROM 中也会启动异常，因此没有把它们标记为 r72 修复回归：
 
 - 究极绿宝石 I
 - 激进红 v2.1 MOD
@@ -52,7 +63,7 @@ superchis 项目作者 ChisBread 和我。
 
 # superFW fix (chis ver) — English
 
-This is the r70 source repository for SuperFW fix targeting superchis hardware. It is based on [superFW](https://github.com/davidgfnet/superfw), retaining the upstream firmware's core build system, menu, save, RTC, and patch framework while adding compatibility fixes for Chinese hack games and Pokémon modifications, a compact menu, and ROM patch database changes.
+This is the r72 source repository for SuperFW fix targeting superchis hardware. It is based on [superFW](https://github.com/davidgfnet/superfw), retaining the upstream firmware's core build system, menu, save, RTC, and patch framework while adding compatibility fixes for Chinese hack games and Pokémon modifications, a compact menu, and ROM patch database changes.
 
 Project links:
 
@@ -68,7 +79,18 @@ The repository directly contains the firmware source, build scripts, resources, 
 
 This source repository does not contain ROMs, BIOS files, user saves, mGBA emulator binaries, emulation artifacts, private acceptance reports, release-page HTML, firmware release packages, or machine-specific configuration. Firmware release assets are maintained separately.
 
-The r70 database contains 1,740 ROM records and the firmware version identifier is `70000001`.
+The r72 database contains 1,741 ROM records and the firmware version identifier is `72000001`.
+
+## r72 changes
+
+- Correct 30 RTC records: 16 missing adaptations, 12 incomplete interface sets, and two Saiph status/date ABI fixes; 622 RTC versions in total.
+- Support halfword-aligned Thumb entries for strided date readers while retaining game calendar and day/night processing.
+- Add the exact Chinese Apotris version with native SRAM, IRQ integration and in-game menus. Skip the startup SDRAM-switching probe to retain the active cartridge mapping; use layout 712 for the NOR menu.
+- Preserve r70 non-RTC operations and preceding menu, resource, save and IRQ adaptations.
+
+The software RTC advances on game reads, persists each game's time and speed in its `.rtc` file, and is adjusted through the in-game menu. It does not continuously synchronize with system time or advance offline without a battery-backed RTC.
+
+This is test firmware. RTC interfaces and Apotris SDRAM/NOR menu and save flows have been verified in the local model; complete physical-hardware acceptance remains pending.
 
 ## Build
 
@@ -84,7 +106,7 @@ Test scripts remain in the local testing directory and are not published in the 
 
 ## Known startup failures in the original ROMs
 
-The following two entries also fail to start in their original ROMs, so they are not marked as r70 regressions or r70 fixes:
+The following two entries also fail to start in their original ROMs, so they are not marked as r72 regressions or r72 fixes:
 
 - 究极绿宝石 I
 - 激进红 v2.1 MOD

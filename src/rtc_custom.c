@@ -53,8 +53,7 @@ bool rtc_custom_supported(const t_patch *patch) {
     uint32_t operation = patch->op[start + index], argument = patch->op[start + index + 1], kind = argument & 255;
     unsigned offset = operation & 0x1FFFFFF;
     if ((operation & 0xFE000000) != 0x7E000000 || kind > 12 || (offset & 1) ||
-        offset < 192 || offset > MAX_GBA_ROM_SIZE - (kind == 11 ? 44 : kind == 10 ? 24 : kind == 12 ? 14 : 12) ||
-        (kind == 11 && (offset & 3)) ||
+        offset < 192 || offset > MAX_GBA_ROM_SIZE - (kind == 11 ? 44 + (offset & 2) : kind == 10 ? 24 : kind == 12 ? 14 : 12) ||
         (kind == 10 ? argument >> 8 > 0x7FF0 : kind == 12 ?
          (argument & 0xFF800100U) != 0 : argument != kind))
       return false;
@@ -114,8 +113,13 @@ void rtc_custom_apply(uint8_t *buffer, unsigned size, unsigned base, const t_pat
       static const uint16_t code[] = {0xB570,0x1C06,0x3602,0x1C30,0x7834,0x4B06,0x4A06,0x4696,
           0x4718,0x7830,0x1C31,0x3902,0x7008,0x2000,0x7048,0x7034,0xE013,0x46C0};
       payload_apply_rom(buffer,size,base,(const uint8_t*)code,sizeof(code),target);
-      put32(buffer,size,base,target+36,GBA_ROM_BASE+slot+513);
-      put32(buffer,size,base,target+40,GBA_ROM_BASE+target+19);
+      unsigned padding = target & 2;
+      if (padding) {
+        put16(buffer,size,base,target+12,0x4A07);
+        put16(buffer,size,base,target+36,0x46C0);
+      }
+      put32(buffer,size,base,target+36+padding,GBA_ROM_BASE+slot+513);
+      put32(buffer,size,base,target+40+padding,GBA_ROM_BASE+target+19);
       continue;
     }
     if (kind == 12) {
