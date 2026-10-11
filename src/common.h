@@ -65,6 +65,7 @@ extern const uint32_t ingame_trampoline_payload_size;
 #define ROM_OFF_HISCRATCH         0x01000000     // At 0x09000000
 #define ROM_OFF_USRPATCH_DB       0x01C00000     // At 0x09C00000
 #define ROM_OFF_PATCH_DB          0x01D00000     // At 0x09D00000
+#define ROM_OFF_HACK_DB           0x01D20000     // At 0x09D20000
 #define ROM_OFF_ASSETS_BASE       0x01E00000     // At 0x09E00000
 
 #define ROM_SCRATCH_U8          ((volatile uint8_t*)(0x08000000 + ROM_OFF_SCRATCH))
@@ -77,7 +78,8 @@ extern const uint32_t ingame_trampoline_payload_size;
 #define ROM_SCAN_MATCHES_ADDR   (GBA_ROM_BASE + ROM_OFF_HISCRATCH + ROM_SCAN_BUFFER_SIZE + 12288)
 #define ROM_SCAN_LINKS_ADDR     (GBA_ROM_BASE + ROM_OFF_HISCRATCH + ROM_SCAN_BUFFER_SIZE + 16384)
 #define ROM_PATCHDB_U8          ((volatile uint8_t*)(0x08000000 + ROM_OFF_PATCH_DB))
-#define ROM_HACKDB_U8           ((volatile uint8_t*)0x09D20000)
+#define ROM_HACKDB_U8           ((volatile uint8_t*)(0x08000000 + ROM_OFF_HACK_DB))
+#define ROM_HACKDB_MAX_SIZE     (ROM_OFF_ASSETS_BASE - ROM_OFF_HACK_DB)
 #define ROM_ASSETS_U8           ((volatile uint8_t*)(0x08000000 + ROM_OFF_ASSETS_BASE))
 
 // Memory map for flash assets

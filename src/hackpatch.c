@@ -5,6 +5,8 @@
 #include "romcompat.h"
 #include "rtc_custom.h"
 #include "fatfs/ff.h"
+#include "supercard_driver.h"
+#include "gbahw.h"
 
 #pragma GCC optimize ("Os")
 
@@ -253,6 +255,46 @@ bool hackpatch_db_lookup(const uint8_t *database, unsigned romsize, uint32_t ide
     return true;
   }
   return false;
+}
+
+bool hackpatch_load_external_database(void) {
+  FIL file;
+  if (f_open(&file, HACKPATCH_DATABASE_PATH, FA_READ) != FR_OK)
+    return false;
+
+  unsigned size = f_size(&file);
+  if (!size || size > ROM_HACKDB_MAX_SIZE) {
+    f_close(&file);
+    return false;
+  }
+
+  for (unsigned offset = 0; offset < size; offset += 1024) {
+    uint32_t buffer[1024 / 4];
+    unsigned requested = MIN(1024, size - offset);
+    UINT count;
+    if (requested < sizeof(buffer))
+      memset(buffer, 0, sizeof(buffer));
+    if (f_read(&file, buffer, requested, &count) != FR_OK || count != requested) {
+      f_close(&file);
+      return false;
+    }
+    set_supercard_mode(MAPPED_SDRAM, true, false);
+    dma_memcpy32(ROM_HISCRATCH_U8 + offset, buffer, (requested + 3) / 4);
+    set_supercard_mode(MAPPED_SDRAM, true, true);
+  }
+
+  if (f_close(&file) != FR_OK)
+    return false;
+
+  const uint8_t *database = (const uint8_t*)ROM_HISCRATCH_U8;
+  if (size < 8 || memcmp(database, "HDB2", 4) || read_word(database, 4) != HACKPATCH_REVISION)
+    return false;
+
+  set_supercard_mode(MAPPED_SDRAM, true, false);
+  for (unsigned offset = 0; offset < size; offset += 1024)
+    dma_memcpy32(ROM_HACKDB_U8 + offset, database + offset, (MIN(1024, size - offset) + 3) / 4);
+  set_supercard_mode(MAPPED_SDRAM, true, true);
+  return true;
 }
 
 bool hackpatch_save(const char *filename, unsigned romsize, const uint8_t hash[32], const t_patch *patch) {

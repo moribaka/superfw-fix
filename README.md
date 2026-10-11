@@ -21,7 +21,13 @@ ChisBread 和我。由于整个固件是由 AI 完成的，所以不好意思合
 本源码仓库不包含 ROM、BIOS、用户存档、mGBA 模拟器二进制、仿真产物、私人验收
 报告、发布页 HTML、固件发布包或本机配置。固件发布物另行维护。
 
-当前 r75 数据库包含 1,742 条 ROM 记录，其中 622 条适配 RTC；固件版本标识为 `75000001`。
+当前 r76 数据库包含 1,742 条 ROM 记录，其中 622 条适配 RTC；固件版本标识为 `76000001`。
+
+## r76 更新
+
+- 新增外置 Hack 数据库加载：启动菜单时优先读取 TF 卡 `/.superfw/hackpatches.db`，再使用现有 HDB2 查表流程；没有外置文件时继续使用固件内置数据库。
+- 外置数据库使用现有 Hack 数据库 ABI revision 75，不改变已有 ROM 记录格式；可以替换已有补丁操作和已有菜单布局对应的 ROM 记录而不重新编译固件。
+- 外置数据库只在菜单启动阶段读入。已经写入 NOR 的游戏仍需重新写入；新的运行时代码、菜单载荷或尚未包含的菜单布局仍需更新固件。
 
 ## r73–r75 更新
 
@@ -30,9 +36,17 @@ ChisBread 和我。由于整个固件是由 AI 完成的，所以不好意思合
 - r74 新增《铸剑物语 3 简单版》的独立记录，适配内置作弊 IRQ 的 VBlank 分发，保留原作弊主体、简单版游戏改动与原生 SRAM。
 - 保留 r72 的 RTC 修正和 Apotris 中文版启动映射适配；r75 的 1,742 条 ROM 记录及 622 条 RTC 记录与 r74 相同。
 
-本版是测试固件。Apotris 的 TF／NOR 菜单过渡已逐帧验证，存档导出及冷启动读取通过；六个代表性旧版本的菜单回归及其中四个 RTC 接口回归通过。完整实机验收尚未完成。
+本版是测试固件。Apotris 的 TF／NOR 菜单过渡已逐帧验证，存档导出及冷启动读取通过；六个代表性旧版本的菜单回归及其中四个 RTC 接口回归通过。外置数据库路径已完成固件构建验证；完整实机验收尚未完成。
 
 使用专用 ROM 适配时，请选择 Hack／加强补丁模式。NOR 中已经烧入的游戏需要重新烧入，才能应用本次 ROM 补丁变化。
+
+### 从 TF 卡加载 Hack 数据库
+
+固件启动菜单时会优先读取 TF 卡上的 `/.superfw/hackpatches.db`。文件使用仓库中的 `HDB2` 数据库格式，并且需要与当前固件的 Hack 数据库版本一致；没有该文件时继续使用固件内置数据库。这样可以在不重新编译固件的情况下更新已有补丁操作和已有菜单布局对应的 ROM 记录。
+
+使用时把对应版本源码中的 `res/hackpatches.db` 复制到 TF 卡的 `/.superfw/hackpatches.db`，保持文件名和目录名不变。
+
+外置数据库只在启动菜单阶段读入，进入游戏后不会从 TF 卡实时读取。已经写入 NOR 的游戏仍需重新写入，才能应用外置数据库中的 ROM 补丁。新的运行时代码、菜单载荷或固件尚未包含的菜单布局仍需更新固件。
 
 ## r72 更新
 
@@ -90,7 +104,13 @@ The repository directly contains the firmware source, build scripts, resources, 
 
 This source repository does not contain ROMs, BIOS files, user saves, mGBA emulator binaries, emulation artifacts, private acceptance reports, release-page HTML, firmware release packages, or machine-specific configuration. Firmware release assets are maintained separately.
 
-The r75 database contains 1,742 ROM records, including 622 RTC adaptations; the firmware version identifier is `75000001`.
+The r76 database contains 1,742 ROM records, including 622 RTC adaptations; the firmware version identifier is `76000001`.
+
+## r76 changes
+
+- Add external Hack database loading: when the menu starts, the firmware first reads `/.superfw/hackpatches.db` from the TF card and uses the existing HDB2 lookup path. Without the external file, the built-in database remains active.
+- The external database uses the existing Hack database ABI revision 75, so existing ROM record formats are unchanged. Existing patch operations and existing menu-layout records can be replaced without rebuilding the firmware.
+- The external database is loaded during menu startup only. Games already written to NOR must be rewritten; new runtime code, menu payloads, or menu layouts not already present in the firmware still require a firmware update.
 
 ## r73–r75 changes
 
@@ -99,9 +119,17 @@ The r75 database contains 1,742 ROM records, including 622 RTC adaptations; the 
 - r74 adds an independent record for the easy version of Summon Night: Swordcraft Story 3, integrating its built-in cheat IRQ through VBlank dispatch while retaining the original cheat body, easy-mode modifications, and native SRAM.
 - Retain r72 RTC fixes and Chinese Apotris startup mapping support. All 1,742 ROM records and 622 RTC records are unchanged between r74 and r75.
 
-This is test firmware. Apotris TF/NOR menu transitions have been verified frame by frame, with save export and cold-start loading passing. Menu regressions passed for six representative earlier ROM versions, including four applicable RTC interface regressions. Complete physical-hardware acceptance remains pending.
+This is test firmware. Apotris TF/NOR menu transitions have been verified frame by frame, with save export and cold-start loading passing. Menu regressions passed for six representative earlier ROM versions, including four applicable RTC interface regressions. The external database path has passed firmware build verification; complete physical-hardware acceptance remains pending.
 
 Select Hack/enhanced patch mode to use the dedicated ROM adaptations. Rewrite existing NOR game copies to apply the ROM patch changes in this release.
+
+### Loading the Hack database from the TF card
+
+When the firmware menu starts, it first looks for `/.superfw/hackpatches.db` on the TF card. The file uses the repository's `HDB2` database format and must match the Hack database revision of the firmware. If it is absent, the built-in database remains active. This allows ROM records that use existing patch operations and existing menu layouts to be updated without rebuilding the firmware.
+
+To use it, copy `res/hackpatches.db` from the matching source revision to `/.superfw/hackpatches.db` on the TF card, keeping the exact file name and directory.
+
+The external database is loaded during menu startup; the firmware does not read it live after a game has started. Games already written to NOR must be rewritten to apply ROM patches from the external database. New runtime code, menu payloads, or menu layouts not already present in the firmware still require a firmware update.
 
 ## r72 changes
 

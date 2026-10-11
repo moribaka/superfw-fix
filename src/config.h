@@ -34,6 +34,7 @@
 #define SUPERFW_DIR               "/.superfw"
 #define ROMCONFIG_PATH            "/.superfw/config/"
 #define PATCHDB_PATH              "/.superfw/patches/"
+#define HACKPATCH_DATABASE_PATH   "/.superfw/hackpatches.db"
 #define CHEATS_PATH               "/.superfw/cheats/"
 #define EMULATORS_PATH            "/.superfw/emulators/"
 #define GBC_EMULATOR_PATH         "/.superfw/emulators/gbc-emu.gba"
