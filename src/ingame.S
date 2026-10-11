@@ -466,6 +466,11 @@ ingame_menu_entry:
   add sp,r0,r1
 
   // Start restoring the saved state.
+  // Palette and VRAM no longer describe the menu during this copy.
+  // Keep them hidden until the complete game display is restored.
+  mov r0, $0x04000000
+  mov r2, $0x80
+  strh r2, [r0, #REG_DISPCNT]
   ldr r1, spill_addr
   add r1, $(8 + 8 + 16 + 2+2 + 64 + 64)   // Skip register save to RAM buffers.
 
@@ -547,7 +552,7 @@ ingame_menu_entry:
 
   // Restore LCD regs
   mov r2, $0x04000000
-  ldrh r3, [r1], #2; strh r3, [r2, #REG_DISPCNT];
+  add r1, r1, #2; // Read/restore DISPCNT at VBlank after the remaining state.
   ldrh r3, [r1], #2; strh r3, [r2, #REG_DISPSTAT];
   ldrh r3, [r1], #2; strh r3, [r2, #REG_BG0CNT];
   ldrh r3, [r1], #2; strh r3, [r2, #REG_BG1CNT];
@@ -615,10 +620,14 @@ ingame_keep_clock_signature:
   cmp r0, $160
   bne 1b
 
+  // Reveal the fully restored game at the same VBlank as its timers/DMA.
+  ldr r10, spill_header_addr
+  ldrh r0, [r10, #16]
+  strh r0, [r2, #REG_DISPCNT]
+
   // Resume timers (re-enable them if they were enabled essentially)
   strh r11, [r3, #0]
   strh r12, [r3, #(REG_TM1CNT-REG_TM0CNT)]
-  ldr r10, spill_header_addr
   ldrh r0, [r10, #4]
   strh r0, [r3, #(REG_TM2CNT-REG_TM0CNT)]
   ldrh r0, [r10, #6]

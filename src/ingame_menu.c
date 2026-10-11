@@ -1334,7 +1334,7 @@ void ingame_menu_blocked(uint32_t *use_cheats_hook) {
 #else
 void setup_video_frame() {
   // Setup video mode
-  REG_DISPCNT = 0x1444;   // Mode 4, BG2 + OBJs
+  REG_DISPCNT = 0x14C4;   // Mode 4, BG2 + OBJs; reveal after the first frame.
   REG_BGxCNT(2) = 0x80;   // 256 color mode
   REG_BLDCNT = 0x1F40;    // Blending enabled (2nd target = all)
   REG_BLDALPHA = 0x0808;  // 50% alpha
@@ -1394,7 +1394,7 @@ void ingame_menu_blocked(uint32_t *use_cheats_hook) {
   // Wait for VBlank (with some leeway)
   while ((REG_VCOUNT & ~7) != 160);
   // Display frame 1, just rendered
-  REG_DISPCNT = (REG_DISPCNT | 0x10);
+  REG_DISPCNT = (REG_DISPCNT | 0x10) & ~0x80;
 
   // Wait for the user to press any button
   uint16_t pk = 0xFFFF;
@@ -1539,7 +1539,7 @@ void ingame_menu_loop(uint32_t *use_cheats_hook) {
     }
 
     // Flip frame
-    REG_DISPCNT = (REG_DISPCNT & ~0x10) | (framen << 4);
+    REG_DISPCNT = (REG_DISPCNT & ~0x90) | (framen << 4);
 #endif
   }
 

@@ -1,6 +1,6 @@
 # superFW fix（chis ver）
 
-这是面向 superchis 硬件的 SuperFW fix r72 源码仓库。项目基于
+这是面向 superchis 硬件的 SuperFW fix r75 源码仓库。项目基于
 [superFW](https://github.com/davidgfnet/superfw)，保留上游固件的核心构建方式、
 菜单、存档、RTC 和补丁框架，并加入面向中文 hack 游戏及宝可梦改版的兼容性修复、
 精简菜单和 ROM 补丁数据库改动。
@@ -21,7 +21,18 @@ ChisBread 和我。由于整个固件是由 AI 完成的，所以不好意思合
 本源码仓库不包含 ROM、BIOS、用户存档、mGBA 模拟器二进制、仿真产物、私人验收
 报告、发布页 HTML、固件发布包或本机配置。固件发布物另行维护。
 
-当前 r72 数据库包含 1,741 条 ROM 记录，固件版本标识为 `72000001`。
+当前 r75 数据库包含 1,742 条 ROM 记录，其中 622 条适配 RTC；固件版本标识为 `75000001`。
+
+## r73–r75 更新
+
+- r75 修复游戏内菜单进入及返回时显示未完成画面的时序：完整菜单首帧绘制完再显示，恢复游戏调色板与 VRAM 期间保持空白，并在原有 VBlank 同步点恢复游戏显示。切换期间会有短暂空白。
+- r73 修正 Craft Sword 3h 的 NOR 图块指针补丁分类，使共享图块指针在 TF 和 NOR 两条路径都生效；保留原生 SRAM、IRQ 和既有菜单布局。
+- r74 新增《铸剑物语 3 简单版》的独立记录，适配内置作弊 IRQ 的 VBlank 分发，保留原作弊主体、简单版游戏改动与原生 SRAM。
+- 保留 r72 的 RTC 修正和 Apotris 中文版启动映射适配；r75 的 1,742 条 ROM 记录及 622 条 RTC 记录与 r74 相同。
+
+本版是测试固件。Apotris 的 TF／NOR 菜单过渡已逐帧验证，存档导出及冷启动读取通过；六个代表性旧版本的菜单回归及其中四个 RTC 接口回归通过。完整实机验收尚未完成。
+
+使用专用 ROM 适配时，请选择 Hack／加强补丁模式。NOR 中已经烧入的游戏需要重新烧入，才能应用本次 ROM 补丁变化。
 
 ## r72 更新
 
@@ -48,7 +59,7 @@ make BOARD=chis
 
 ## 已知原版启动异常
 
-以下两个条目在原版 ROM 中也会启动异常，因此没有把它们标记为 r72 修复回归：
+以下两个条目在原版 ROM 中也会启动异常，因此没有把它们标记为本次修复或回归：
 
 - 究极绿宝石 I
 - 激进红 v2.1 MOD
@@ -63,7 +74,7 @@ superchis 项目作者 ChisBread 和我。
 
 # superFW fix (chis ver) — English
 
-This is the r72 source repository for SuperFW fix targeting superchis hardware. It is based on [superFW](https://github.com/davidgfnet/superfw), retaining the upstream firmware's core build system, menu, save, RTC, and patch framework while adding compatibility fixes for Chinese hack games and Pokémon modifications, a compact menu, and ROM patch database changes.
+This is the r75 source repository for SuperFW fix targeting superchis hardware. It is based on [superFW](https://github.com/davidgfnet/superfw), retaining the upstream firmware's core build system, menu, save, RTC, and patch framework while adding compatibility fixes for Chinese hack games and Pokémon modifications, a compact menu, and ROM patch database changes.
 
 Project links:
 
@@ -79,7 +90,18 @@ The repository directly contains the firmware source, build scripts, resources, 
 
 This source repository does not contain ROMs, BIOS files, user saves, mGBA emulator binaries, emulation artifacts, private acceptance reports, release-page HTML, firmware release packages, or machine-specific configuration. Firmware release assets are maintained separately.
 
-The r72 database contains 1,741 ROM records and the firmware version identifier is `72000001`.
+The r75 database contains 1,742 ROM records, including 622 RTC adaptations; the firmware version identifier is `75000001`.
+
+## r73–r75 changes
+
+- r75 fixes incomplete frames during in-game menu entry and game restoration. Reveal the full menu after its first frame is drawn, keep the display blank while restoring game palette and VRAM, and restore game display at the existing VBlank synchronization point. A brief blank transition is expected.
+- r73 corrects the NOR patch classification for Craft Sword 3h shared tile pointers, applying those pointers on both TF and NOR paths while retaining native SRAM, IRQ integration, and the existing menu layout.
+- r74 adds an independent record for the easy version of Summon Night: Swordcraft Story 3, integrating its built-in cheat IRQ through VBlank dispatch while retaining the original cheat body, easy-mode modifications, and native SRAM.
+- Retain r72 RTC fixes and Chinese Apotris startup mapping support. All 1,742 ROM records and 622 RTC records are unchanged between r74 and r75.
+
+This is test firmware. Apotris TF/NOR menu transitions have been verified frame by frame, with save export and cold-start loading passing. Menu regressions passed for six representative earlier ROM versions, including four applicable RTC interface regressions. Complete physical-hardware acceptance remains pending.
+
+Select Hack/enhanced patch mode to use the dedicated ROM adaptations. Rewrite existing NOR game copies to apply the ROM patch changes in this release.
 
 ## r72 changes
 
@@ -106,7 +128,7 @@ Test scripts remain in the local testing directory and are not published in the 
 
 ## Known startup failures in the original ROMs
 
-The following two entries also fail to start in their original ROMs, so they are not marked as r72 regressions or r72 fixes:
+The following two entries also fail to start in their original ROMs, so they are not marked as fixes or regressions in this update:
 
 - 究极绿宝石 I
 - 激进红 v2.1 MOD

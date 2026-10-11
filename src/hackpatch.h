@@ -3,7 +3,7 @@
 
 #include "patchengine.h"
 
-#define HACKPATCH_REVISION 72
+#define HACKPATCH_REVISION 75
 #define HACKPATCH_SERIALIZED_SIZE 888
 
 int hackpatch_serialize(const t_patch *patch, unsigned romsize, const uint8_t hash[32], uint8_t *buffer);
