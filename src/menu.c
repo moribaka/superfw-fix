@@ -594,6 +594,9 @@ bool generate_patches_progress(const char *fn, unsigned fs) {
 }
 
 static bool load_hack_database(t_load_gba_info *info) {
+  info->patches_hack_found = false;
+  if (!hackpatch_load_external_database())
+    return false;
   uint8_t hash[32];
   sha256sum((const uint8_t*)&info->romh, sizeof(info->romh), hash);
   uint32_t identity, offsets[32];
@@ -618,27 +621,7 @@ static bool load_hack_record(t_load_gba_info *info) {
     return false;
   if (info->patches_hack_found)
     return true;
-  if (hackpatch_load_cached(info->romfn, info->romfs, &info->patches_hack)) {
-    // A reviewed layout cannot inherit the identity of a same-name cache.
-    // Reuse the bounded database samples; never hash or scan the whole ROM.
-    if (info->patches_hack.menu_layout) return load_hack_database(info);
-    info->patches_hack_found = true;
-    return true;
-  }
   return load_hack_database(info);
-}
-
-static bool generate_hack_patches(t_load_gba_info *info) {
-  info->patches_hack_found = false;
-  // Rebuild known caches directly from the current offline record. Unknown
-  // ROMs still use the explicit scanner; never overwrite its result afterwards.
-  if (!load_hack_database(info) &&
-      !build_patches_progress(info->romfn, info->romfs, true, &info->patches_hack))
-    return false;
-  info->patches_hack_found = true;
-  if (!hackpatch_save(info->romfn, info->romfs, NULL, &info->patches_hack))
-    WRITE_LOG("Hack patch cache write failed; using generated patches in memory");
-  return true;
 }
 
 static t_patch_policy next_patch_policy(t_patch_policy policy, bool forward) {
@@ -710,9 +693,6 @@ void sram_battery_test_callback(bool confirm) {
 
 
 static const t_patch * get_game_patch(const t_load_gba_info *info) {
-  if (info->patch_type == PatchHack && !info->patches_hack_found)
-    return info->patches_cache_found ? &info->patches_cache :
-           info->patches_datab_found ? &info->patches_datab : NULL;
   return info->patch_type == PatchDatabase && info->patches_datab_found ? &info->patches_datab :
          info->patch_type == PatchEngine   && info->patches_cache_found ? &info->patches_cache :
          info->patch_type == PatchHack     && info->patches_hack_found ? &info->patches_hack : NULL;
@@ -794,6 +774,10 @@ bool rtcemu_avail(const t_load_gba_info *info) {
 static bool prepare_selected_hack_patches(t_load_gba_info *info, bool load_sdram) {
   if (info->patch_type != PatchHack)
     return true;
+  if (!load_hack_record(info)) {
+    spop.alert_msg = msgs[lang_id][MSG_HACKPATCH_FAIL];
+    return false;
+  }
   info->use_dsaving &= load_sdram ? dirsav_avail_sdram(info) : dirsav_avail_flash(info);
   info->ingame_menu_enabled &= load_sdram ? ingame_menu_avail_sdram(info) : ingame_menu_avail_flash(info);
   info->rtc_patch_enabled &= rtcemu_avail(info);
@@ -1684,7 +1668,7 @@ static const char *render_gbarom_patching(volatile uint8_t *frame, const t_load_
   draw_text_ovf(msgs[lang_id][MSG_LOADER_RTCE], frame, 12, 98, 224);
   draw_central_text(msgs[lang_id][info->rtc_patch_enabled ? MSG_KNOB_ENABLED : MSG_KNOB_DISABLED], frame, 170, 98);
 
-  draw_text_ovf(msgs[lang_id][MSG_LOADER_PTCH], frame, 12, 116, 224);
+  draw_text_ovf(msgs[lang_id][info->patch_type == PatchHack ? MSG_HACKDB_RELOAD : MSG_LOADER_PTCH], frame, 12, 116, 224);
   draw_box_outline(frame, 170 - 20, 170 + 20, 115, 133, FG_COLOR);
   draw_central_text("▸", frame, 170, 116);
 
@@ -1692,7 +1676,7 @@ static const char *render_gbarom_patching(volatile uint8_t *frame, const t_load_
          (selector == GBASavePatch) ? msgs[lang_id][MSG_LOADER_ST_I0 + (info->use_dsaving ? 0 : 1)] :
          (selector == GBAInGameMen) ? msgs[lang_id][MSG_INGAME_I] :
          (selector == GBARTCPatch)  ? msgs[lang_id][MSG_PATCHRTC_I] :
-         (selector == GBAPatchGen)  ? msgs[lang_id][MSG_PATCHE_I] : NULL;
+         (selector == GBAPatchGen)  ? msgs[lang_id][info->patch_type == PatchHack ? MSG_PATCH_TYPE_I4 : MSG_PATCHE_I] : NULL;
 }
 
 static const char *render_gbarom_loading(volatile uint8_t *frame, const t_load_gba_lcfg *data, bool rtc_patching, int selector) {
@@ -2555,15 +2539,14 @@ static void keypress_popup_loadgba(unsigned newkeys) {
     }
     else if (spop.submenu == GbaLoadPopPatch && spop.selector == GBAPatchGen) {
       if (spop.p.load.i.patch_type == PatchHack) {
-        bool success = generate_hack_patches(&spop.p.load.i);
-        spop.alert_msg = msgs[lang_id][success ? MSG_PATCHGEN_OK : MSG_HACKPATCH_FAIL];
+        bool success = load_hack_database(&spop.p.load.i);
+        spop.alert_msg = msgs[lang_id][success ? MSG_HACKDB_LOADED : MSG_HACKPATCH_FAIL];
       }
       else {
         bool success = generate_patches_progress(spop.p.load.i.romfn, spop.p.load.i.romfs);
         spop.alert_msg = msgs[lang_id][success ? MSG_PATCHGEN_OK : MSG_ERR_READ];
+        spop.p.load.i.patches_cache_found = load_cached_patches(spop.p.load.i.romfn, &spop.p.load.i.patches_cache);
       }
-      // Try/Load the just-generated patches.
-      spop.p.load.i.patches_cache_found = load_cached_patches(spop.p.load.i.romfn, &spop.p.load.i.patches_cache);
     }
     else if (spop.submenu == GbaLoadPopLoadS && spop.selector == GBALdRemember) {
       // Save settings to disk now!
@@ -2732,15 +2715,14 @@ static void keypress_popup_norwrite(unsigned newkeys) {
 
     if ((newkeys & KEY_BUTTA) && spop.selector == GBAPatchGen) {
       if (spop.p.norwr.i.patch_type == PatchHack) {
-        bool success = generate_hack_patches(&spop.p.norwr.i);
-        spop.alert_msg = msgs[lang_id][success ? MSG_PATCHGEN_OK : MSG_HACKPATCH_FAIL];
+        bool success = load_hack_database(&spop.p.norwr.i);
+        spop.alert_msg = msgs[lang_id][success ? MSG_HACKDB_LOADED : MSG_HACKPATCH_FAIL];
       }
       else {
         bool success = generate_patches_progress(spop.p.norwr.i.romfn, spop.p.norwr.i.romfs);
         spop.alert_msg = msgs[lang_id][success ? MSG_PATCHGEN_OK : MSG_ERR_READ];
+        spop.p.norwr.i.patches_cache_found = load_cached_patches(spop.p.norwr.i.romfn, &spop.p.norwr.i.patches_cache);
       }
-      // Try/Load the just-generated patches.
-      spop.p.norwr.i.patches_cache_found = load_cached_patches(spop.p.norwr.i.romfn, &spop.p.norwr.i.patches_cache);
     }
   } else {
     if (newkeys & KEY_BUTTA) {

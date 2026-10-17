@@ -24,7 +24,6 @@
 #include "rtc_speed.h"
 #include "save.h"
 #include "patchengine.h"
-#include "hackpatch.h"
 #include "supercard_driver.h"
 #include "nanoprintf.h"
 #include "fonts/font_render.h"
@@ -151,10 +150,6 @@ static int main_gba() {
 
   // This hangs on failure since it is fatal.
   init_sdcard_and_mount();
-
-  // Replace the built-in hack database when an updated copy is present on TF.
-  // The built-in database remains in place when no external file is found.
-  hackpatch_load_external_database();
 
   if (!rtc_state_flush_pending(get_undef_lr(), rtc_speed_unpack(get_undef_sp()),
                               get_undef_signature() == RTC_RUNTIME_SIGNATURE))

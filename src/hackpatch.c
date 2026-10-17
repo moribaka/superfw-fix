@@ -286,11 +286,12 @@ bool hackpatch_load_external_database(void) {
   if (f_close(&file) != FR_OK)
     return false;
 
-  const uint8_t *database = (const uint8_t*)ROM_HISCRATCH_U8;
-  if (size < 8 || memcmp(database, "HDB2", 4) || read_word(database, 4) != HACKPATCH_REVISION)
-    return false;
-
   set_supercard_mode(MAPPED_SDRAM, true, false);
+  const uint8_t *database = (const uint8_t*)ROM_HISCRATCH_U8;
+  if (size < 8 || memcmp(database, "HDB2", 4) || read_word(database, 4) != HACKPATCH_REVISION) {
+    set_supercard_mode(MAPPED_SDRAM, true, true);
+    return false;
+  }
   for (unsigned offset = 0; offset < size; offset += 1024)
     dma_memcpy32(ROM_HACKDB_U8 + offset, database + offset, (MIN(1024, size - offset) + 3) / 4);
   set_supercard_mode(MAPPED_SDRAM, true, true);

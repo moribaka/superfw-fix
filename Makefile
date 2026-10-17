@@ -1,6 +1,6 @@
 
 VERSION_WORD := 0x00000015
-VERSION_SLUG_WORD ?= 76000001
+VERSION_SLUG_WORD ?= 77000001
 
 PREFIX		?= arm-none-eabi-
 NM := $(PREFIX)nm
@@ -56,10 +56,6 @@ endif
 ifeq ($(COMPRESS_FIRMWARE),1)
   GLOBAL_DEFINES += -DCOMPRESS_FONTS -DCOMPRESS_PATCHES -DCOMPRESS_FIRMWARE
   FWBINFILES := $(addsuffix .comp,$(FWBINFILES))
-endif
-
-ifeq ($(BOARD),chis)
-  FWBINFILES += res/hackpatches.db
 endif
 
 ifeq ($(BUNDLE_GBC_EMULATOR),1)
