@@ -363,6 +363,13 @@ _main_end:
   #endif
 
   @ Go ahead and copy assets to SDRAM locations.
+  #ifdef SUPERCHIS_IO
+    ldr r0, =hackpatches_start
+    ldr r1, =0x09D20000
+    mov r2, $((hackpatches_end - hackpatches_start + 2047) / 2048)
+    bl sdram_copy
+  #endif
+
   ldr r0, =cheat_gbk_start
   ldr r1, =0x09D60000
   mov r2, $((cheat_gbk_end - cheat_gbk_start + 2047) / 2048)
@@ -806,6 +813,14 @@ assets_end:
   // The IGM trampoline handles IRQs and switches to SDRAM-IGM
   .org 0x00198000
   .incbin "ingame_trampoline.payload"
+#endif
+
+#ifdef SUPERCHIS_IO
+  hackpatches_start:
+    .balign 4
+    .incbin "res/hackpatches.db"
+    .balign 4
+  hackpatches_end:
 #endif
 
   cheat_gbk_start:

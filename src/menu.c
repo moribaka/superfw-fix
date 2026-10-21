@@ -595,8 +595,6 @@ bool generate_patches_progress(const char *fn, unsigned fs) {
 
 static bool load_hack_database(t_load_gba_info *info) {
   info->patches_hack_found = false;
-  if (!hackpatch_load_external_database())
-    return false;
   uint8_t hash[32];
   sha256sum((const uint8_t*)&info->romh, sizeof(info->romh), hash);
   uint32_t identity, offsets[32];

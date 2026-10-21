@@ -1,6 +1,6 @@
 
 VERSION_WORD := 0x00000015
-VERSION_SLUG_WORD ?= 77000001
+VERSION_SLUG_WORD ?= 78000001
 
 PREFIX		?= arm-none-eabi-
 NM := $(PREFIX)nm
@@ -184,6 +184,7 @@ all:	$(FWBINFILES) $(BIEMUFILES) directsave.payload ingame_trampoline.payload ch
 	$(OBJCOPY) --output-target=binary firmware.elf superfw.gba
 	# Fix the header/checksum.
 	$(PYTHON) tools/fw-fixer.py superfw.gba
+	cp superfw.gba superfw.fw
 
 ifeq ($(BOARD),chis)
 FWMENUASSETS=ingamemenu.head ingamemenu.compact.head
@@ -229,14 +230,14 @@ ingame_trampoline.payload:	src/ingame_trampoline.S
 	$(OBJCOPY) --output-target=binary ingame_trampoline.elf ingame_trampoline.payload
 
 src/messages_data.h:	res/messages.py
-	./res/messages.py h main > src/messages_data.h
+	$(PYTHON) res/messages.py h main > src/messages_data.h
 
 src/menu_messages_compact.h: src/menu_messages.h tools/build_compact_menu_text.py
 	$(PYTHON) tools/build_compact_menu_text.py
 	$(PYTHON) tools/build_menu_font_index.py
 
 src/menu_messages.h:	res/messages.py
-	./res/messages.py h menu > src/menu_messages.h
+	$(PYTHON) res/messages.py h menu > src/menu_messages.h
 
 firmware.ewram.gba.comp:	firmware.ewram.gba ./upkr.elf
 	./upkr.elf -l $(COMPRESSION_RATIO) $< $@
@@ -265,5 +266,5 @@ upkr.elf:	tools/upkr.cc
 	g++ -o $@ $< -O3 -ffast-math
 
 clean:
-	rm -f ldscripts/*.i *.gba *.elf *.payload *.map res/*.comp emu/*.comp *.comp src/menu_messages.h src/messages_data.h
+	rm -f ldscripts/*.i *.gba *.fw *.elf *.payload *.map res/*.comp emu/*.comp *.comp src/menu_messages.h src/messages_data.h
 

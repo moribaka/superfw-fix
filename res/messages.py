@@ -37,9 +37,9 @@ en_strings = [
   "MSG_Q4_DELREC":   "Delete recently played game? (Does not delete the ROM!)",
 
   "MSG_PATCHGEN_OK": "Patch generation completed!",        # alertmsg
-  "MSG_HACKDB_LOADED": "External database record loaded",
+  "MSG_HACKDB_LOADED": "Built-in Hack record loaded",
   "MSG_HACKDB_RELOAD": "Reload record",
-  "MSG_HACKPATCH_FAIL": "External database unavailable or ROM not listed",
+  "MSG_HACKPATCH_FAIL": "ROM not listed in the Hack database",
   "MSG_SRAMTST_RDY": "You might now power off!",           # alertmsg
 
   "MSG_SRAMTST_OK":    "SRAM test passed!",                # alertmsg
@@ -107,7 +107,7 @@ en_strings = [
   "MSG_PATCH_TYPE1": "< Patch engine >",
   "MSG_PATCH_TYPE2": "< No patching >",
   "MSG_PATCH_TYPE3": "< Auto >",
-  "MSG_PATCH_TYPE4": "< External DB >",
+  "MSG_PATCH_TYPE4": "< Hack enhanced >",
   "MSG_BOOT_TYPE0":  "< Skip BIOS boot >",
   "MSG_BOOT_TYPE1":  "< BIOS boot >",
   "MSG_NEXTTO_ROM":  "< Next to ROM >",
@@ -118,7 +118,7 @@ en_strings = [
   "MSG_PATCH_TYPE_I1": "Dynamically patches any game, might prompt patch generation",
   "MSG_PATCH_TYPE_I2": "No patching whatsoever (works well with most homebrew)",
   "MSG_PATCH_TYPE_I3": "Tries to find existing patch files, will use the built-in database otherwise",
-  "MSG_PATCH_TYPE_I4": "Uses /.superfw/hackpatches.db on TF; reload to refresh the ROM record",
+  "MSG_PATCH_TYPE_I4": "Uses the built-in Hack database; reload to look up the ROM record",
   "MSG_BOOT_TYPE_I0":  "Skips BIOS and its splash screen",
   "MSG_BOOT_TYPE_I1":  "Boots to BIOS (GBA reset)",
   "MSG_SAVE_TYPE_NR":  ".sav in the same dir as the ROM",
