@@ -971,12 +971,17 @@ static void browser_open_gba(const char *fn, uint32_t fs, bool prompt_patchgen) 
 
       // If patch engine is selected but no patches found, prompt for generation.
       // If auto is selected and no patches nor DB entries found, do prompt too.
+      // A Hack miss that also misses the default database must be visible before
+      // the original ROM is allowed to run without patch-dependent features.
       bool no_patches = (ld_sett.patch_policy == PatchAuto &&
                          !spop.p.load.i.patches_datab_found && !spop.p.load.i.patches_cache_found);
+      bool no_hack_patches = (ld_sett.patch_policy == PatchHack &&
+                              !spop.p.load.i.patches_hack_found &&
+                              !spop.p.load.i.patches_datab_found);
       bool no_engine  = (ld_sett.patch_policy == PatchEngine && !spop.p.load.i.patches_cache_found);
       bool issfw = is_superfw(rmh);
 
-      if (prompt_patchgen && !issfw && (no_patches || no_engine)) {
+      if (prompt_patchgen && !issfw && (no_patches || no_hack_patches || no_engine)) {
         // No patches found, ask the user if they want to generate patches
         // using the patch engine.
         spop.qpop.message = msgs[lang_id][no_patches ? MSG_Q1_NOPATCH : MSG_Q1_PATCHENG];
