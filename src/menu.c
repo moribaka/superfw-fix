@@ -624,8 +624,9 @@ static bool load_hack_record(t_load_gba_info *info) {
 }
 
 static void fallback_hack_to_database(t_load_gba_info *info) {
-  if (info->patch_type == PatchHack && !info->patches_hack_found && info->patches_datab_found)
-    info->patch_type = PatchDatabase;
+  if (info->patch_type != PatchHack || info->patches_hack_found)
+    return;
+  info->patch_type = info->patches_datab_found ? PatchDatabase : PatchNone;
 }
 
 static t_patch_policy next_patch_policy(t_patch_policy policy, bool forward) {
@@ -782,7 +783,7 @@ static bool prepare_selected_hack_patches(t_load_gba_info *info, bool load_sdram
     return true;
   if (!load_hack_record(info)) {
     fallback_hack_to_database(info);
-    if (info->patch_type == PatchDatabase)
+    if (info->patch_type == PatchDatabase || info->patch_type == PatchNone)
       return true;
     spop.alert_msg = msgs[lang_id][MSG_HACKPATCH_FAIL];
     return false;

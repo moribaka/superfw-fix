@@ -27,7 +27,7 @@ ChisBread 和我。由于整个固件是由 AI 完成的，所以不好意思合
 
 - 新增《口袋妖怪灵魂金独立普通版》专用 Hack 记录。该独立改版虽然使用 `BPEE` 和 `FLASH1M_V103` 标记，但实际 Flash 探测和读取入口不同；新增补丁补上独立 Flash ID 探测、Flash1M SRAM 读取、擦除与写入路径，并保留 RTC 操作。
 - 新增 Diablo [Bangoo] v0.9.4 的双 bank SRAM 存档适配和 WAITCNT 处理，RTC 不启用；完整游戏内菜单仍只在有经过验证的 ROM 空间时启用。
-- Hack 库未命中时回退到默认内置数据库；两个库都未命中时才显示原有失败提示。
+- Hack 库未命中时回退到默认内置数据库；两个库都未命中时以无补丁方式运行，并关闭依赖补丁的菜单、RTC 和 DirectSave。
 - 加入网页补丁的流式处理路径，NOR 和 SDRAM 都按单一 32 MiB 游戏映像处理，不使用 ROM overlay 或异构游戏存储。
 - 当前本地 mGBA 已验证新增 ROM 的启动、菜单、存档和 RTC 接口；完整实体卡刷写验收仍需单独进行。
 
@@ -122,7 +122,7 @@ The built-in Hack database contains 1,962 lookup records; existing records and t
 
 - Add a dedicated Hack record for the standalone Pokémon SoulGold ROM. Although it carries the `BPEE` and `FLASH1M_V103` markers, its Flash detection and read entrypoints differ from the original game; the dedicated patch supplies the Flash ID path, Flash1M-to-SRAM reads, erase/write handlers, and RTC operations.
 - Add the Diablo [Bangoo] v0.9.4 dual-bank SRAM save adaptation and WAITCNT handling; RTC remains disabled, and the full in-game menu is only enabled where verified ROM space exists.
-- Fall back from a Hack database miss to the ordinary built-in database, showing the existing failure prompt only when both databases miss.
+- Fall back from a Hack database miss to the ordinary built-in database; when both databases miss, launch the original ROM without patch-dependent menu, RTC or DirectSave features.
 - Add streaming web-patch processing while keeping each game in one 32 MiB SDRAM or NOR image without ROM overlay or heterogeneous game storage.
 - The new ROM's startup, menu, save and RTC interfaces were verified locally with mGBA; complete physical-cartridge flashing acceptance remains separate.
 
