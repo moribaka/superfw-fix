@@ -1,6 +1,6 @@
 # superFW fix（chis ver）
 
-这是面向 superchis 硬件的 SuperFW fix r78 源码仓库。项目基于
+这是面向 superchis 硬件的 SuperFW fix r79 源码仓库。项目基于
 [superFW](https://github.com/davidgfnet/superfw)，保留上游固件的核心构建方式、
 菜单、存档、RTC 和补丁框架，并加入面向中文 hack 游戏及宝可梦改版的兼容性修复、
 精简菜单和 ROM 补丁数据库改动。
@@ -21,9 +21,17 @@ ChisBread 和我。由于整个固件是由 AI 完成的，所以不好意思合
 本源码仓库不包含 ROM、BIOS、用户存档、mGBA 模拟器二进制、仿真产物、私人验收
 报告、发布页 HTML、固件发布包或本机配置。固件发布物另行维护。
 
-当前内置 Hack 数据库覆盖 1,743 个 ROM 版本，其中 622 个适配 RTC；相同补丁合并为 1,428 条查表记录。固件版本标识为 `78000001`。
+当前内置 Hack 数据库包含 1,962 条查表记录；新增记录保留原有记录和默认数据库，固件版本标识为 `79000004`。
 
-## r78 更新
+## r79 更新
+
+- 新增《口袋妖怪灵魂金独立普通版》专用 Hack 记录。该独立改版虽然使用 `BPEE` 和 `FLASH1M_V103` 标记，但实际 Flash 探测和读取入口不同；新增补丁补上独立 Flash ID 探测、Flash1M SRAM 读取、擦除与写入路径，并保留 RTC 操作。
+- 新增 Diablo [Bangoo] v0.9.4 的双 bank SRAM 存档适配和 WAITCNT 处理，RTC 不启用；完整游戏内菜单仍只在有经过验证的 ROM 空间时启用。
+- Hack 库未命中时回退到默认内置数据库；两个库都未命中时才显示原有失败提示。
+- 加入网页补丁的流式处理路径，NOR 和 SDRAM 都按单一 32 MiB 游戏映像处理，不使用 ROM overlay 或异构游戏存储。
+- 当前本地 mGBA 已验证新增 ROM 的启动、菜单、存档和 RTC 接口；完整实体卡刷写验收仍需单独进行。
+
+## r78 历史更新
 
 - 恢复固件内置 Hack 数据库，选择“Hack 加强”即可使用，无需向 TF 卡复制 `hackpatches.db`。
 - 保留 Famicom Mini《超级马里奥》FSMJ v1 的专用修复，以及已有游戏、存档和 RTC 适配。该补丁的汇编源见 `res/rom-patches/famicom-fsmj-v1.S`。
@@ -32,14 +40,14 @@ ChisBread 和我。由于整个固件是由 AI 完成的，所以不好意思合
 
 ## 机内升级
 
-从 [r78 发布页](https://github.com/moribaka/superfw-fix/releases/tag/r78) 下载 `superfw-chis-r78.fw`，只适用于 SuperChis（Chis），不适用于 SuperCard SD/Lite。
+从 [r79 发布页](https://github.com/moribaka/superfw-fix/releases/tag/r79) 下载 `superfw-chis-r79.fw`，只适用于 SuperChis（Chis），不适用于 SuperCard SD/Lite。
 
 1. 将当前游戏存档保存到 TF 卡，再把 `.fw` 文件复制到卡上。刷写会覆盖卡带固件，中途断电可能导致无法启动。
 2. 启动现有 SuperFW，用 L/R 切换到“信息”页面，同时按 `Down+B+Start` 启用固件升级。
 3. 返回文件浏览器，选中 `.fw`，按 A 打开，再按 `L+R+Up` 开始刷写。
 4. 等待固件更新完成后重启。使用专用游戏修复时选择“Hack 加强”。
 
-升级窗口可能显示基础版本 `0.21`；本版为 r78，构建标识 `78000001`。数据库随固件更新，NOR 中已有的游戏需要重新写入才能应用新的 ROM 补丁。`.fw` 保留原项目的型号、文件长度和摘要格式。
+升级窗口可能显示基础版本 `0.21`；本版为 r79，构建标识 `79000004`。数据库随固件更新，NOR 中已有的游戏需要重新写入才能应用新的 ROM 补丁。`.fw` 保留原项目的型号、文件长度和摘要格式。
 
 本版是测试固件，完整实机刷写及游戏验收尚未完成。
 
@@ -92,7 +100,7 @@ superchis 项目作者 ChisBread 和我。
 
 # superFW fix (chis ver) — English
 
-This is the r78 source repository for SuperFW fix targeting superchis hardware. It is based on [superFW](https://github.com/davidgfnet/superfw), retaining the upstream firmware's core build system, menu, save, RTC, and patch framework while adding compatibility fixes for Chinese hack games and Pokémon modifications, a compact menu, and ROM patch database changes.
+This is the r79 source repository for SuperFW fix targeting superchis hardware. It is based on [superFW](https://github.com/davidgfnet/superfw), retaining the upstream firmware's core build system, menu, save, RTC, and patch framework while adding compatibility fixes for Chinese hack games and Pokémon modifications, a compact menu, and ROM patch database changes.
 
 Project links:
 
@@ -108,9 +116,17 @@ The repository directly contains the firmware source, build scripts, resources, 
 
 This source repository does not contain ROMs, BIOS files, user saves, mGBA emulator binaries, emulation artifacts, private acceptance reports, release-page HTML, firmware release packages, or machine-specific configuration. Firmware release assets are maintained separately.
 
-The built-in Hack database covers 1,743 ROM versions, including 622 RTC adaptations, deduplicated into 1,428 lookup records; the firmware version identifier is `78000001`.
+The built-in Hack database contains 1,962 lookup records; existing records and the ordinary built-in database are preserved. The firmware version identifier is `79000004`.
 
-## r78 changes
+## r79 changes
+
+- Add a dedicated Hack record for the standalone Pokémon SoulGold ROM. Although it carries the `BPEE` and `FLASH1M_V103` markers, its Flash detection and read entrypoints differ from the original game; the dedicated patch supplies the Flash ID path, Flash1M-to-SRAM reads, erase/write handlers, and RTC operations.
+- Add the Diablo [Bangoo] v0.9.4 dual-bank SRAM save adaptation and WAITCNT handling; RTC remains disabled, and the full in-game menu is only enabled where verified ROM space exists.
+- Fall back from a Hack database miss to the ordinary built-in database, showing the existing failure prompt only when both databases miss.
+- Add streaming web-patch processing while keeping each game in one 32 MiB SDRAM or NOR image without ROM overlay or heterogeneous game storage.
+- The new ROM's startup, menu, save and RTC interfaces were verified locally with mGBA; complete physical-cartridge flashing acceptance remains separate.
+
+## r78 historical changes
 
 - Embed the Hack database in the firmware again. Select Hack enhanced; no TF database file is required.
 - Retain the Famicom Mini Super Mario FSMJ v1 fix and existing game, save and RTC adaptations. Its assembly source is `res/rom-patches/famicom-fsmj-v1.S`.
@@ -119,14 +135,14 @@ The built-in Hack database covers 1,743 ROM versions, including 622 RTC adaptati
 
 ## Updating on the device
 
-Download `superfw-chis-r78.fw` from the [r78 release](https://github.com/moribaka/superfw-fix/releases/tag/r78). This image targets SuperChis (Chis), not SuperCard SD/Lite.
+Download `superfw-chis-r79.fw` from the [r79 release](https://github.com/moribaka/superfw-fix/releases/tag/r79). This image targets SuperChis (Chis), not SuperCard SD/Lite.
 
 1. Save the current game to TF and copy the `.fw` file onto the card. Flashing replaces the cartridge firmware; loss of power can prevent booting.
 2. Boot the existing SuperFW, open Info with L/R, and press `Down+B+Start` to enable flashing.
 3. Open the `.fw` in the file browser and press `L+R+Up` to flash.
 4. Restart after completion and select Hack enhanced for dedicated ROM fixes.
 
-The update window may show the base version `0.21`; this release is r78 with identifier `78000001`. The database is updated with the firmware. Rewrite existing NOR games to apply new ROM patches. The `.fw` retains the upstream variant, length and checksum format.
+The update window may show the base version `0.21`; this release is r79 with identifier `79000004`. The database is updated with the firmware. Rewrite existing NOR games to apply new ROM patches. The `.fw` retains the upstream variant, length and checksum format.
 
 This is test firmware; complete physical flashing and game acceptance remain pending.
 
