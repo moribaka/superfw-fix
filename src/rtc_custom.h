@@ -19,6 +19,7 @@ extern const uint32_t rtc_custom_payload_size;
 
 bool rtc_custom_note_identity(unsigned romsize, const uint8_t hash[32], t_patch *patch);
 bool rtc_custom_supported(const t_patch *patch);
+unsigned patch_rom_size(unsigned size, const t_patch *patch, bool rtc);
 void rtc_custom_apply(uint8_t *buffer, unsigned size, unsigned base, const t_patch *patch);
 
 #endif

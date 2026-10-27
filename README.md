@@ -27,7 +27,7 @@ ChisBread 和我。由于整个固件是由 AI 完成的，所以不好意思合
 
 - 恢复固件内置 Hack 数据库，选择“Hack 加强”即可使用，无需向 TF 卡复制 `hackpatches.db`。
 - 保留 Famicom Mini《超级马里奥》FSMJ v1 的专用修复，以及已有游戏、存档和 RTC 适配。该补丁的汇编源见 `res/rom-patches/famicom-fsmj-v1.S`。
-- 使用内置库查找当前 ROM；未收录时显示已有失败提示。普通内置数据库、补丁引擎、无补丁和自动模式保持原有逻辑。
+- 使用内置库查找当前 ROM；未收录时回退到普通内置数据库，普通库也未收录时才显示已有失败提示。其他补丁模式保持原有逻辑。
 - 构建同时生成 `superfw.gba` 和机内升级用 `superfw.fw`，两个文件内容相同。
 
 ## 机内升级
@@ -114,7 +114,7 @@ The built-in Hack database covers 1,743 ROM versions, including 622 RTC adaptati
 
 - Embed the Hack database in the firmware again. Select Hack enhanced; no TF database file is required.
 - Retain the Famicom Mini Super Mario FSMJ v1 fix and existing game, save and RTC adaptations. Its assembly source is `res/rom-patches/famicom-fsmj-v1.S`.
-- Look up the selected ROM in the built-in Hack database; unlisted ROMs use the existing failure prompt. Other patch modes retain their existing behavior.
+- Look up the selected ROM in the built-in Hack database; unlisted ROMs fall back to the ordinary built-in database, and use the existing failure prompt only when neither database has a record. Other patch modes retain their existing behavior.
 - The build produces byte-identical `superfw.gba` and `superfw.fw` files.
 
 ## Updating on the device

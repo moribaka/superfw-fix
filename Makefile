@@ -1,6 +1,6 @@
 
 VERSION_WORD := 0x00000015
-VERSION_SLUG_WORD ?= 78000001
+VERSION_SLUG_WORD ?= 79000004
 
 PREFIX		?= arm-none-eabi-
 NM := $(PREFIX)nm
@@ -146,6 +146,7 @@ INFILES=src/gba_ewram_crt0.S \
         src/menu_overlay_profile.c \
         src/save.c \
         src/patchengine.c \
+        src/webpatch.c \
         src/irqpatch.c \
         src/patcher.c \
         src/romcompat.c \

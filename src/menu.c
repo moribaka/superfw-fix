@@ -23,6 +23,7 @@
 #include "patchengine.h"
 #include "hackpatch.h"
 #include "rtc_state.h"
+#include "rtc_custom.h"
 
 #pragma GCC optimize ("Os")
 #include "fatfs/ff.h"
@@ -622,6 +623,11 @@ static bool load_hack_record(t_load_gba_info *info) {
   return load_hack_database(info);
 }
 
+static void fallback_hack_to_database(t_load_gba_info *info) {
+  if (info->patch_type == PatchHack && !info->patches_hack_found && info->patches_datab_found)
+    info->patch_type = PatchDatabase;
+}
+
 static t_patch_policy next_patch_policy(t_patch_policy policy, bool forward) {
   do {
     policy = (policy + (forward ? 1 : PatchOptCNT - 1)) % PatchOptCNT;
@@ -698,18 +704,19 @@ static const t_patch * get_game_patch(const t_load_gba_info *info) {
 
 bool ingame_menu_avail_sdram(const t_load_gba_info *info) {
   const t_patch *p = get_game_patch(info);
+  unsigned image_size = patch_rom_size(info->romfs, p, info->rtc_patch_enabled);
   unsigned cheats = spop.p.load.l.use_cheats ? spop.p.load.l.cheats_size : 0;
   // Necessary size to load the IGM (+fonts +cheats)
   unsigned igm_reqsz = ROUND_UP2(ingame_menu_payload.menu_rsize + font_block_size() + cheats, 1024);
 
   // If the ROM is too big, must use some hole to load the menu.
-  if (info->romfs > MAX_GBA_ROM_SIZE - igm_reqsz) {
+  if (image_size > MAX_GBA_ROM_SIZE - igm_reqsz) {
     if (p && !cheats && p->hole_size < igm_reqsz)
       igm_reqsz = ROUND_UP2(ingame_menu_payload.menu_rsize + font_menu_subset_size(lang_id), 1024);
-    if (info->romfs > MAX_GBA_ROM_SIZE-igm_reqsz && (!p || p->hole_size < igm_reqsz))
+    if (image_size > MAX_GBA_ROM_SIZE-igm_reqsz && (!p || p->hole_size < igm_reqsz))
       igm_reqsz=ROUND_UP2(ingame_menu_compact_payload.menu_rsize+(cheats?font_block_size():font_menu_compact_size(lang_id))+cheats,1024);
     // Discard holes that are too small, or not well formed.
-    if (info->romfs > MAX_GBA_ROM_SIZE-igm_reqsz &&
+    if (image_size > MAX_GBA_ROM_SIZE-igm_reqsz &&
         (!p || p->hole_size < igm_reqsz || p->hole_addr + p->hole_size > info->romfs) &&
         !menu_layout_available(p,cheats)) return false;   // Too big to fit the menu!
   }
@@ -722,7 +729,7 @@ bool ingame_menu_avail_flash(const t_load_gba_info *info) {
   const t_patch *p = get_game_patch(info);
 
   // Checks if the ROM is small enough so the last 4MiB block can be remapped.
-  if (info->romfs > MAX_GBA_ROM_SIZE - NOR_BLOCK_SIZE) {
+  if (patch_rom_size(info->romfs, p, info->rtc_patch_enabled) > MAX_GBA_ROM_SIZE - NOR_BLOCK_SIZE) {
     // Otherwise find a gap to flash on NOR our tiny payload
     if ((!p || p->hole_size < DIRSAVE_REQ_SPACE || p->hole_addr + p->hole_size > info->romfs) &&
         (!p || (!menu_layout_get(p->menu_layout)&&!menu_overlay_profile_get(p->menu_layout))))
@@ -736,14 +743,15 @@ bool ingame_menu_avail_flash(const t_load_gba_info *info) {
 // Calculates whether DirectSaving can be used given some information.
 bool dirsav_avail_sdram(const t_load_gba_info *info) {
   const t_patch *p = get_game_patch(info);
+  unsigned image_size = patch_rom_size(info->romfs, p, info->rtc_patch_enabled);
   if(p && p->menu_layout && info->ingame_menu_enabled) {
     unsigned required=ingame_menu_payload.menu_rsize+font_menu_subset_size(lang_id)+DIRSAVE_REQ_SPACE;
-    if(info->romfs>MAX_GBA_ROM_SIZE-required && p->hole_size<required)
+    if(image_size>MAX_GBA_ROM_SIZE-required && p->hole_size<required)
       return false;
   }
 
   // Check if there's enough space for it! (Placing it at the end).
-  if (info->romfs > MAX_GBA_ROM_SIZE - DIRSAVE_REQ_SPACE) {
+  if (image_size > MAX_GBA_ROM_SIZE - DIRSAVE_REQ_SPACE) {
     if (!p || p->hole_size < DIRSAVE_REQ_SPACE || p->hole_addr + p->hole_size > info->romfs)
       return false;   // Too big to fit!
   }
@@ -755,7 +763,7 @@ bool dirsav_avail_flash(const t_load_gba_info *info) {
   const t_patch *p = get_game_patch(info);
 
   // Checks if the ROM is small enough so the last 4MiB block can be remapped.
-  if (info->romfs > MAX_GBA_ROM_SIZE - NOR_BLOCK_SIZE) {
+  if (patch_rom_size(info->romfs, p, info->rtc_patch_enabled) > MAX_GBA_ROM_SIZE - NOR_BLOCK_SIZE) {
     // Otherwise find a gap to flash on NOR our tiny payload
     if (!p || p->hole_size < DIRSAVE_REQ_SPACE || p->hole_addr + p->hole_size > info->romfs)
       return false;   // Too big to fit!
@@ -773,6 +781,9 @@ static bool prepare_selected_hack_patches(t_load_gba_info *info, bool load_sdram
   if (info->patch_type != PatchHack)
     return true;
   if (!load_hack_record(info)) {
+    fallback_hack_to_database(info);
+    if (info->patch_type == PatchDatabase)
+      return true;
     spop.alert_msg = msgs[lang_id][MSG_HACKPATCH_FAIL];
     return false;
   }
@@ -852,13 +863,14 @@ static bool prepare_gba_info(
 
   if (info->patch_type == PatchHack)
     load_hack_record(info);
+  fallback_hack_to_database(info);
 
   // Fill defaults as requested if possible.
+  info->rtc_patch_enabled = st->use_rtc && rtcemu_avail(info);
   bool allowigm = load_sdram ? ingame_menu_avail_sdram(info) : ingame_menu_avail_flash(info);
   info->ingame_menu_enabled = st->use_igm && allowigm;
   bool allowds = load_sdram ? dirsav_avail_sdram(info) : dirsav_avail_flash(info);
 
-  info->rtc_patch_enabled = st->use_rtc && rtcemu_avail(info);
   info->use_dsaving = st->use_dsaving && allowds;
 
   return true;
@@ -2439,8 +2451,10 @@ static void keypress_popup_loadgba(unsigned newkeys) {
     if (!spop.p.load.i.patches_datab_found && spop.p.load.i.patch_type == PatchDatabase)
       spop.p.load.i.patch_type = PatchNone;
 
-    if (spop.submenu == GbaLoadPopPatch && spop.selector == GBALoadPatch)
+    if (spop.submenu == GbaLoadPopPatch && spop.selector == GBALoadPatch) {
       load_hack_record(&spop.p.load.i);
+      fallback_hack_to_database(&spop.p.load.i);
+    }
 
     if (!dirsav_avail_sdram(&spop.p.load.i))
       spop.p.load.i.use_dsaving = false;
@@ -2489,8 +2503,10 @@ static void keypress_popup_loadgba(unsigned newkeys) {
     if (!spop.p.load.i.patches_cache_found && spop.p.load.i.patch_type == PatchEngine)
       spop.p.load.i.patch_type = PatchNone;
 
-    if (spop.submenu == GbaLoadPopPatch && spop.selector == GBALoadPatch)
+    if (spop.submenu == GbaLoadPopPatch && spop.selector == GBALoadPatch) {
       load_hack_record(&spop.p.load.i);
+      fallback_hack_to_database(&spop.p.load.i);
+    }
 
     if (!dirsav_avail_sdram(&spop.p.load.i))
       spop.p.load.i.use_dsaving = false;
@@ -2700,8 +2716,10 @@ static void keypress_popup_norwrite(unsigned newkeys) {
         spop.p.norwr.i.patch_type = PatchNone;
     }
 
-    if ((newkeys & (KEY_BUTTLEFT|KEY_BUTTRIGHT)) && spop.selector == GBALoadPatch)
+    if ((newkeys & (KEY_BUTTLEFT|KEY_BUTTRIGHT)) && spop.selector == GBALoadPatch) {
       load_hack_record(&spop.p.norwr.i);
+      fallback_hack_to_database(&spop.p.norwr.i);
+    }
 
     // Disable certain features (depends on patch types)
     if (!dirsav_avail_flash(&spop.p.norwr.i))
@@ -2724,16 +2742,16 @@ static void keypress_popup_norwrite(unsigned newkeys) {
     }
   } else {
     if (newkeys & KEY_BUTTA) {
+      if (!prepare_selected_hack_patches(&spop.p.norwr.i, false))
+        return;
+      const t_load_gba_info *info = &spop.p.norwr.i;
+      const t_patch *p = get_game_patch(info);
       // Check whether we have enough space.
-      unsigned blkcnt = (spop.p.norwr.i.romfs + NOR_BLOCK_SIZE - 1) / NOR_BLOCK_SIZE;
+      unsigned image_size = patch_rom_size(info->romfs, p, info->rtc_patch_enabled);
+      unsigned blkcnt = (image_size + NOR_BLOCK_SIZE - 1) / NOR_BLOCK_SIZE;
       if (smenu.fbrowser.freeblks < blkcnt || smenu.fbrowser.maxentries + 1 >= FLASHG_MAXFN_CNT)
         spop.alert_msg = msgs[lang_id][MSG_ERR_NORSPC];
       else {
-        if (!prepare_selected_hack_patches(&spop.p.norwr.i, false))
-          return;
-        const t_load_gba_info *info = &spop.p.norwr.i;
-        const t_patch *p = get_game_patch(info);
-
         // Allocate the last entry for the new game.
         t_flash_game_entry ne = {
           .gamecode = *(uint32_t*)info->romh.gcode,

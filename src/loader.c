@@ -24,8 +24,10 @@
 #include "compiler.h"
 #include "save.h"
 #include "patchengine.h"
+#include "webpatch.h"
 #include "romcompat.h"
 #include "rtc_state.h"
+#include "rtc_custom.h"
 #include "settings.h"
 #include "ingame.h"
 #include "menu_layout.h"
@@ -109,7 +111,7 @@ static void copy_menu_image(uint32_t base,const t_menu_layout *layout,bool compa
 #endif
 }
 
-static uint32_t menu_language_work[MENU_LANGUAGE_RESERVE/4] __attribute__((section(".sbss")));
+static uint32_t menu_language_work[MENU_LANGUAGE_RESERVE/4];
 
 // Loads the in-game menu at the desired address and size (returns success).
 // addr must be 4 byte aligned.
@@ -302,7 +304,8 @@ unsigned load_gba_rom(
   unsigned igm_reqsz = ingame_menu_payload.menu_rsize + font_block_size() + cheats;
   // Round it up, reserve ~1KB after the ROM for patches.
   // 32MiB games cannot generate patches beyond the end.
-  const unsigned romrsize = ROUND_UP2(fs, 1024) + (fs < MAX_GBA_ROM_SIZE ? 1024 : 0);
+  const unsigned romrsize = MAX(patch_rom_size(fs, ptch, use_rtc_patches),
+                               ROUND_UP2(fs, 1024) + (fs < MAX_GBA_ROM_SIZE ? 1024 : 0));
   if (ingame_menu && !cheats && romrsize + igm_reqsz + (dsinfo ? DIRSAVE_REQ_SPACE : 0) > MAX_GBA_ROM_SIZE &&
       ptch && ptch->hole_size < igm_reqsz + (dsinfo ? DIRSAVE_REQ_SPACE : 0))
     igm_reqsz = ingame_menu_payload.menu_rsize + font_menu_subset_size(lang_id);
@@ -436,11 +439,21 @@ unsigned load_gba_rom(
   // Close the file, not super necessary really :P
   f_close(&fd);
 
-  // Proceed to patch the ROM
-  set_supercard_mode(MAPPED_SDRAM, true, false);
-
-  if (fs < gap_start)
+  if (fs < gap_start) {
+    set_supercard_mode(MAPPED_SDRAM, true, false);
     memset32(ptr + ROUND_UP2(fs, 4), 0xFFFFFFFF, gap_start - ROUND_UP2(fs, 4));
+    set_supercard_mode(MAPPED_SDRAM, true, true);
+  }
+
+  // Proceed to patch the ROM
+  if (ptch && ptch->web_edits) {
+    t_webpatch_reader edits;
+    if (!webpatch_open(&edits, fn, ptch)) return ERR_LOAD_BADROM;
+    bool applied = webpatch_process(&edits, ptr, MAX_GBA_ROM_SIZE, 0);
+    webpatch_close(&edits);
+    if (!applied) return ERR_LOAD_BADROM;
+  }
+  set_supercard_mode(MAPPED_SDRAM, true, false);
 
   // Load/Patch the DirectSave payload if necessary.
   if (dsinfo)
@@ -497,7 +510,8 @@ unsigned flash_gba_nor(
   // Determine if the DirSav payload must be flashed in a ROM gap or not.
   const t_menu_layout *nor_layout=ingame_menu?menu_layout_get(ptch->menu_layout):NULL;
   const t_menu_overlay_profile *nor_overlay=ingame_menu?menu_overlay_profile_get(ptch->menu_layout):NULL;
-  const bool flashmap0 = fs <= MAX_GBA_ROM_SIZE - NOR_BLOCK_SIZE;
+  const unsigned image_size = patch_rom_size(fs, ptch, rtc_patches);
+  const bool flashmap0 = image_size <= MAX_GBA_ROM_SIZE - NOR_BLOCK_SIZE;
   uint32_t ds_flashoffset  = flashmap0 ? 0 : ptch->hole_addr;
   uint32_t igm_flashoffset = nor_overlay ? nor_overlay->anchor : nor_layout ? nor_layout->anchor : flashmap0 ? 0 : ptch->hole_addr + DIRSAVE_REQ_SPACE;
 
@@ -510,20 +524,33 @@ unsigned flash_gba_nor(
   if (res != FR_OK)
     return ERR_LOAD_BADROM;
 
+  t_webpatch_reader edits;
+  if (!webpatch_open(&edits, fn, ptch)) {
+    f_close(&fd);
+    return ERR_LOAD_BADROM;
+  }
+
   // Map the game to the base 32MiB address space.
   set_superchis_normap(blkmap);
 
   t_flash_erase_state erst;
-  for (uint32_t bigoff = 0; bigoff < fs; bigoff += ssize) {
+  for (uint32_t bigoff = 0; bigoff < image_size; bigoff += ssize) {
     // Start clearing the flash block we will be writing to!
     flash_erase_fsm_start(&erst, GBA_ROM_BASE_WS1 + bigoff, flashinfo.blksize, ssize / flashinfo.blksize);
+
+    if (image_size > fs && bigoff + ssize > fs) {
+      unsigned start = fs > bigoff ? ROUND_UP2(fs - bigoff, 4) : 0;
+      set_supercard_mode(MAPPED_SDRAM, true, false);
+      memset32(scratch + start, 0xFFFFFFFF, MIN(ssize, image_size - bigoff) - start);
+      set_supercard_mode(MAPPED_SDRAM, true, true);
+    }
 
     // Load the ROM in chunks to the scratch area. So that we can mange it.
     for (uint32_t offset = 0; offset < ssize && offset + bigoff < fs; offset += LOAD_BS) {
       uint32_t absoff = offset + bigoff;
       if ((absoff & (128*1024-1)) == 0) {
         if (progress)
-          progress((bigoff + offset / 4) >> 8, fs >> 8);
+          progress((bigoff + offset / 4) >> 8, image_size >> 8);
 
         flash_erase_fsm_step(&erst);
       }
@@ -534,12 +561,20 @@ unsigned flash_gba_nor(
       if (toread & 3)
         tmp[toread / 4] = 0xFFFFFFFF;
       if (FR_OK != f_read(&fd, tmp, toread, &rdbytes) || rdbytes != toread) {
+        webpatch_close(&edits);
         f_close(&fd);
         reset_superchis_normap();
         return ERR_LOAD_BADROM;
       }
 
       dma_memcpy32(&scratch[offset], tmp, (toread + 3)/4);
+    }
+
+    if (!webpatch_process(&edits, scratch, ssize, bigoff)) {
+      webpatch_close(&edits);
+      f_close(&fd);
+      reset_superchis_normap();
+      return ERR_LOAD_BADROM;
     }
 
     if (ingame_menu && bigoff && !(ptch->irq_flags & IRQPATCH_ENTRY_CHECKS_SCANNED)) {
@@ -556,6 +591,7 @@ unsigned flash_gba_nor(
     // Patch ROM, don't need WAITCNT patches
     if (!patch_apply_rom(scratch, ssize, bigoff, false, ptch, rtc_patches,
                          ingame_menu ? igmaddr : 0, dirsaving ? dsaddr : 0, true)) {
+      webpatch_close(&edits);
       f_close(&fd);
       reset_superchis_normap();
       return ERR_FLASH_OP;
@@ -577,6 +613,7 @@ unsigned flash_gba_nor(
       if (r > 0)
         break;
       if (r < 0) {
+        webpatch_close(&edits);
         f_close(&fd);
         reset_superchis_normap();
         return ERR_FLASH_OP;
@@ -584,13 +621,13 @@ unsigned flash_gba_nor(
     }
 
     // Write flash blocks.
-    for (uint32_t offset = 0; offset < ssize && offset + bigoff < fs; offset += flashinfo.blksize) {
+    for (uint32_t offset = 0; offset < ssize && offset + bigoff < image_size; offset += flashinfo.blksize) {
       uint32_t absoff = offset + bigoff;
       uint32_t flashaddr = GBA_ROM_BASE_WS1 + absoff;
       if (progress && (absoff & (128*1024-1)) == 0)
-        progress((bigoff + ssize / 4 + offset * 3/4) >> 8, fs >> 8);
+        progress((bigoff + ssize / 4 + offset * 3/4) >> 8, image_size >> 8);
 
-      unsigned toflash = MIN(flashinfo.blksize, fs - absoff);
+      unsigned toflash = MIN(flashinfo.blksize, image_size - absoff);
       bool wr_ok = flash_program_buffered(flashaddr, &scratch[offset], toflash, flashinfo.blkwrite);
 
       // Check the written block if so configured
@@ -598,6 +635,7 @@ unsigned flash_gba_nor(
         wr_ok = flash_verify(flashaddr, &scratch[offset], toflash);
 
       if (!wr_ok) {
+        webpatch_close(&edits);
         f_close(&fd);
         reset_superchis_normap();
         return ERR_FLASH_OP;
@@ -605,6 +643,7 @@ unsigned flash_gba_nor(
     }
   }
 
+  webpatch_close(&edits);
   reset_superchis_normap();
   return 0;
 }

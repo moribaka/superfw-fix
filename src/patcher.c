@@ -68,6 +68,8 @@ void patchmem_dbinfo(const uint8_t *dbptr, uint32_t *pcnt, char *version, char *
 // Routines to lookup patches from the patch database in memory
 bool patchmem_lookup(const uint8_t *gamecode, const uint8_t *dbptr, t_patch *pdata) {
   pdata->menu_layout = 0;
+  pdata->web_edits = 0;
+  pdata->image_kib = 0;
   const t_db_header *dbh = (t_db_header*)dbptr;
   if (dbh->signature != 0x31424450 ||      // PTDB signature mismatch
       dbh->dbversion != 0x00010000)        // Version check
@@ -296,6 +298,12 @@ void apply_patch_ops(
     uint32_t opc = ops[i] >> 28;
     uint32_t arg = (ops[i] >> 25) & 7;
     uint32_t moff = ops[i] & 0x1FFFFFF;
+
+    if ((opc == 8 || opc == 9) && (moff & 2)) {
+      if (moff >= baseaddr && moff < baseaddr + bufsize)
+        write_mem16(&buffer[moff - baseaddr], 0x46C0);
+      moff += 2;
+    }
 
     switch (opc) {
     case IRQPATCH_NESTING_OPCODE:

@@ -53,15 +53,26 @@ bool rtc_custom_supported(const t_patch *patch) {
     uint32_t operation = patch->op[start + index], argument = patch->op[start + index + 1], kind = argument & 255;
     unsigned offset = operation & 0x1FFFFFF;
     if ((operation & 0xFE000000) != 0x7E000000 || kind > 12 || (offset & 1) ||
-        offset < 192 || offset > MAX_GBA_ROM_SIZE - (kind == 11 ? 44 + (offset & 2) : kind == 10 ? 24 : kind == 12 ? 14 : 12) ||
-        (kind == 10 ? argument >> 8 > 0x7FF0 : kind == 12 ?
-         (argument & 0xFF800100U) != 0 : argument != kind))
+        offset < 192 || offset > MAX_GBA_ROM_SIZE - (kind == 11 ? 44 + (offset & 2) : kind == 10 ? 24 + (offset & 2) : kind == 12 ? 14 : 12) ||
+        (kind == 10 ? (argument & 0x7FFFFFFF) >> 8 > 0x3FFF0 : kind == 12 ?
+         (argument & 0x7C000100U) != 0 : kind != 11 && argument != kind))
       return false;
-    if ((kind == 8 || kind == 9) && (patch->op[start + 1] >> 24 != 3 || patch->op[start + 2] >> 24 != 3))
+    if ((kind == 8 || kind == 9) && (patch->op[start + 1] >> 25 != 1 || patch->op[start + 2] >> 25 != 1))
       return false;
     date |= kind <= 1 || kind == 10 || kind == 11;
   }
   return date;
+}
+
+__attribute__((noipa))
+unsigned patch_rom_size(unsigned size, const t_patch *patch, bool rtc) {
+  if (patch) size = MAX(size, (unsigned)patch->image_kib << 10);
+  if (patch && rtc && patch->rtc_ops) {
+    unsigned start = patch->wcnt_ops + patch->save_ops + patch->irqh_ops;
+    if ((patch->op[start] & 0xFE000000) == RTC_CUSTOM_MARKER)
+      return MAX(size, (patch->op[start] & 0x1FFFFFF) + RTC_CUSTOM_SLOT_SIZE);
+  }
+  return size;
 }
 
 static __attribute__((noinline)) void put16(uint8_t *buffer, unsigned size, unsigned base, unsigned offset, uint16_t value) {
@@ -74,6 +85,10 @@ static __attribute__((noinline)) void put16(uint8_t *buffer, unsigned size, unsi
 static __attribute__((noinline)) void put32(uint8_t *buffer, unsigned size, unsigned base, unsigned offset, uint32_t value) {
   put16(buffer, size, base, offset, value);
   put16(buffer, size, base, offset + 2, value >> 16);
+}
+
+static uint32_t ram_address(unsigned argument) {
+  return ((3U - (argument >> 31)) << 24) | ((argument >> 8) & 0x3FFFF);
 }
 
 void rtc_custom_apply(uint8_t *buffer, unsigned size, unsigned base, const t_patch *patch) {
@@ -101,18 +116,36 @@ void rtc_custom_apply(uint8_t *buffer, unsigned size, unsigned base, const t_pat
       // decimal date, then continue its original day/night processing/pop.
       static const uint16_t code[] = {0x4802,0x4B03,0x4A03,0x4696,0x4718,0x46C0};
       payload_apply_rom(buffer,size,base,(const uint8_t*)code,sizeof(code),target);
-      put32(buffer,size,base,target+12,0x03000000 | (argument >> 8));
-      put32(buffer,size,base,target+16,GBA_ROM_BASE+slot+word(rtc_custom_payload,15*4)+1);
-      put32(buffer,size,base,target+20,GBA_ROM_BASE+target+0x34+1);
+      unsigned padding = target & 2;
+      if (padding) {
+        put16(buffer,size,base,target,0x4803);
+        put16(buffer,size,base,target+4,0x4A04);
+        put16(buffer,size,base,target+12,0x46C0);
+      }
+      put32(buffer,size,base,target+12+padding,ram_address(argument));
+      put32(buffer,size,base,target+16+padding,GBA_ROM_BASE+slot+word(rtc_custom_payload,15*4)+1);
+      put32(buffer,size,base,target+20+padding,GBA_ROM_BASE+target+0x34+1);
       continue;
     }
     if (kind == 11) {
       // This reader stores year/month/day in a strided BCD buffer before
       // converting it and applying the game's own calendar/day-night logic.
-      // Replace only GPIO acquisition; retain all postprocessing at +74.
+      // 保留原有后续处理，续接位置由接口布局给出。
       static const uint16_t code[] = {0xB570,0x1C06,0x3602,0x1C30,0x7834,0x4B06,0x4A06,0x4696,
           0x4718,0x7830,0x1C31,0x3902,0x7008,0x2000,0x7048,0x7034,0xE013,0x46C0};
       payload_apply_rom(buffer,size,base,(const uint8_t*)code,sizeof(code),target);
+      if (argument >> 8) {
+        unsigned base_register = argument >> 8 & 7, temporary = argument >> 11 & 7;
+        put16(buffer,size,base,target,0xB500 | (argument >> 14 & 255));
+        put16(buffer,size,base,target+2,0x1C00 | base_register);
+        put16(buffer,size,base,target+4,0x3002 | base_register << 8);
+        put16(buffer,size,base,target+6,0x1C00 | base_register << 3);
+        put16(buffer,size,base,target+8,0x7800 | base_register << 3 | temporary);
+        put16(buffer,size,base,target+18,0x7800 | base_register << 3);
+        put16(buffer,size,base,target+20,0x1C01 | base_register << 3);
+        put16(buffer,size,base,target+30,0x7000 | base_register << 3 | temporary);
+        put16(buffer,size,base,target+32,0xE000 | ((argument >> 22) - 18));
+      }
       unsigned padding = target & 2;
       if (padding) {
         put16(buffer,size,base,target+12,0x4A07);
@@ -128,7 +161,7 @@ void rtc_custom_apply(uint8_t *buffer, unsigned size, unsigned base, const t_pat
       unsigned padding = target & 2;
       put32(buffer,size,base,target,0x20404B01+padding/2);
       put32(buffer,size,base,target+4,0x47708018);
-      put32(buffer,size,base,target+8+padding,0x03000000 | (argument >> 8));
+      put32(buffer,size,base,target+8+padding,ram_address(argument));
       continue;
     }
     unsigned padding = target & 2 ? 2 : 0;

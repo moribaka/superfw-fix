@@ -1415,6 +1415,7 @@ bool patchengine_process_rom(const uint32_t *rom, unsigned romsize, t_patch_buil
 int serialize_patch(const t_patch *patch, uint8_t *buffer) {
   // Write the patch into the buffer.
   memcpy(&buffer[0], "SUPERFWPATCHV01", 16);
+  if (patch->image_kib) buffer[14] = '3';
   buffer[16] = patch->wcnt_ops;
   buffer[17] = patch->save_ops;
   buffer[18] = patch->save_mode;
@@ -1425,8 +1426,8 @@ int serialize_patch(const t_patch *patch, uint8_t *buffer) {
   buffer[23] = patch->hole_size >> 18;
   buffer[24] = (patch->hole_addr >> 10) & 0xFF;
   buffer[25] = patch->hole_addr >> 18;
-  buffer[26] = 0;
-  buffer[27] = 0;
+  buffer[26] = patch->image_kib & 0xFF;
+  buffer[27] = patch->image_kib >> 8;
   memcpy(buffer + 28, &patch->menu_layout, 4);
   buffer += 32;
 
@@ -1438,13 +1439,24 @@ int serialize_patch(const t_patch *patch, uint8_t *buffer) {
 }
 
 // Loads a patch from a buffer.
+static bool is_web_patch(const uint8_t *buffer) {
+  return !memcmp(buffer, "SUPERFWPATCHV0", 14) && (buffer[14] == '2' || buffer[14] == '3') && !buffer[15];
+}
+
 bool unserialize_patch(const uint8_t *buffer, unsigned size, t_patch *patch) {
   // Check header anf size
-  if (size != 32 + sizeof(patch->op) + sizeof(patch->prgs))
+  if (size < 32 + sizeof(patch->op) + sizeof(patch->prgs))
     return false;
-  if (memcmp(&buffer[0], "SUPERFWPATCHV01", 16))
+  bool web = is_web_patch(buffer);
+  bool extended = web && buffer[14] == '3';
+  if (size != 32 + sizeof(patch->op) + sizeof(patch->prgs) &&
+      !(web && size >= 32 + sizeof(patch->op) + sizeof(patch->prgs)))
+    return false;
+  if (!web && memcmp(&buffer[0], "SUPERFWPATCHV01", 16))
     return false;
 
+  patch->web_edits = web;
+  patch->image_kib = extended ? buffer[26] | (buffer[27] << 8) : 0;
   patch->wcnt_ops = buffer[16];
   patch->save_ops = buffer[17];
   patch->save_mode = buffer[18];
@@ -1476,10 +1488,14 @@ bool load_rom_patches(const char *romfn, t_patch *patches) {
 
   uint8_t buf[1024];
   UINT rdbytes;
-  if (FR_OK != f_read(&fd, buf, sizeof(buf), &rdbytes))
+  if (FR_OK != f_read(&fd, buf, 800, &rdbytes)) {
+    f_close(&fd);
     return false;
-
-  return unserialize_patch(buf, rdbytes, patches);
+  }
+  unsigned size = rdbytes;
+  if (rdbytes == 800 && !is_web_patch(buf)) size = f_size(&fd);
+  f_close(&fd);
+  return unserialize_patch(buf, size, patches);
 }
 
 bool load_cached_patches(const char *romfn, t_patch *patches) {
@@ -1498,10 +1514,16 @@ bool load_cached_patches(const char *romfn, t_patch *patches) {
 
   uint8_t buf[1024];
   UINT rdbytes;
-  if (FR_OK != f_read(&fd, buf, sizeof(buf), &rdbytes))
+  if (FR_OK != f_read(&fd, buf, 800, &rdbytes)) {
+    f_close(&fd);
     return false;
-
-  return unserialize_patch(buf, rdbytes, patches);
+  }
+  unsigned size = rdbytes;
+  if (rdbytes == 800 && !is_web_patch(buf)) size = f_size(&fd);
+  f_close(&fd);
+  bool found = unserialize_patch(buf, size, patches);
+  if (found && patches->web_edits) patches->web_edits = 2;
+  return found;
 }
 
 NOINLINE bool write_patches_cache(const char *romfn, const t_patch *patches) {

@@ -41,6 +41,8 @@ struct struct_t_patch {
   uint8_t irqh_ops;               // IRQ handler patches
   uint8_t rtc_ops;                // RTC patches
   uint8_t irq_flags;
+  uint8_t web_edits;
+  uint16_t image_kib;
   uint32_t menu_layout;            // Reviewed scatter layout, zero for legacy.
   uint32_t hole_size;             // Hole/trailing info, for ROM free space
   uint32_t hole_addr;
