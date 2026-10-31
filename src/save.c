@@ -106,16 +106,15 @@ bool wipe_sav_file(const char *fn) {
   for (unsigned i = 0; i < SRAM_CHIP_SIZE; i += sizeof(tmpbuf)) {
     UINT wrbytes = 0;
     res = f_write(&fd, tmpbuf, sizeof(tmpbuf), &wrbytes);
-    if (res != FR_OK) {
+    if (res != FR_OK || wrbytes != sizeof(tmpbuf)) {
       f_close(&fd);
       return false;
     }
   }
-  f_close(&fd);
 
   WRITE_LOG("Wiped save file: %s", fn);
 
-  return true;
+  return f_close(&fd) == FR_OK;
 }
 
 bool write_save_sram(const char *fn) {
@@ -136,14 +135,13 @@ bool write_save_sram(const char *fn) {
     set_supercard_mode(MAPPED_SDRAM, true, true);
 
     res = f_write(&fd, tmpbuf, sizeof(tmpbuf), &wrbytes);
-    if (res != FR_OK) {
+    if (res != FR_OK || wrbytes != sizeof(tmpbuf)) {
       f_close(&fd);
       return false;
     }
   }
-  f_close(&fd);
 
-  return true;
+  return f_close(&fd) == FR_OK;
 }
 
 bool compare_save_sram(const char *fn) {
@@ -190,14 +188,13 @@ bool rotate_savefile(const char *templ_fn, unsigned max_backups) {
   WRITE_LOG("Rotating save file '%s' (#backups: %d)", templ_fn, max_backups);
 
   // Backup renaming, f_rename doesn't like existing dest files tho.
-  if (max_backups) {
-    npf_snprintf(tmpfn, sizeof(tmpfn), "%s.%u.sav", templ_fn, max_backups+1);
-    f_unlink(tmpfn);
-    for (unsigned i = max_backups; i >= 1; i--) {
-      npf_snprintf(dstfn, sizeof(dstfn), "%s.%u.sav", templ_fn, i+1);
-      npf_snprintf(tmpfn, sizeof(tmpfn), "%s.%u.sav", templ_fn, i);
-      f_rename(tmpfn, dstfn);
-    }
+  npf_snprintf(tmpfn, sizeof(tmpfn), "%s.%u.sav", templ_fn, max_backups+1);
+  f_unlink(tmpfn);
+
+  for (unsigned i = max_backups; i >= 1; i--) {
+    npf_snprintf(dstfn, sizeof(dstfn), "%s.%u.sav", templ_fn, i+1);
+    npf_snprintf(tmpfn, sizeof(tmpfn), "%s.%u.sav", templ_fn, i);
+    f_rename(tmpfn, dstfn);
   }
 
   // Rename the .sav to .1.sav
@@ -228,6 +225,22 @@ bool write_save_sram_rotate(const char *templ_fn, unsigned max_backups) {
   return rotate_savefile(templ_fn, max_backups);
 }
 
+bool write_save_sram_safe_overwrite(const char *templ_fn) {
+  char tmpfn[MAX_FN_LEN], finalfn[MAX_FN_LEN];
+  strcpy(tmpfn, templ_fn);
+  strcat(tmpfn, ".tmp.sav");
+  if (!write_save_sram(tmpfn))
+    return false;
+
+  strcpy(finalfn, templ_fn);
+  strcat(finalfn, ".sav");
+
+  // No way to do this atomic/safe, this is the closest probably :P
+  f_unlink(finalfn);
+  f_rename(tmpfn, finalfn);
+
+  return true;
+}
 
 // Writes a save game from SRAM using a pending file sentinel as input.
 unsigned flush_pending_sram() {
@@ -257,7 +270,7 @@ unsigned flush_pending_sram() {
   for (unsigned i = strlen(content) + 1; i < l + 1; ) {
     if (!strncmp(&content[i], "backup_count=", 13))
       bkpn = &content[i + 13];
-    i += strlen(content) + 1;
+    i += strlen(&content[i]) + 1;
   }
 
   // Parse options.
@@ -300,10 +313,8 @@ bool program_sram_dump(const char *save_filename, unsigned backup_cnt) {
         return false;
     }
   } else {
-    // Create the directory (just in case it doesn't exist
+    // Create the directory (just in case it doesn't exist)
     f_mkdir(SUPERFW_DIR);
-    // Make it hidden
-    f_chmod(SUPERFW_DIR, AM_HID, AM_HID);
 
     // Write filename along with backup count.
     char content[512];

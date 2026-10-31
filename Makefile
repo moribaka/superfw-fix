@@ -1,6 +1,6 @@
 
-VERSION_WORD := 0x00000015
-VERSION_SLUG_WORD ?= 79000004
+VERSION_WORD := 0x00000016
+VERSION_SLUG_WORD ?= 81000001
 
 PREFIX		?= arm-none-eabi-
 NM := $(PREFIX)nm
@@ -211,12 +211,13 @@ directsave.payload:	$(DIRECTSAVEFILES)
 
 ingamemenu.payload:	$(MENUFILES) src/ingame.h src/menu_messages.h src/rtc_speed.h ldscripts/gba_ingame.ld
 	# Build in-game menu
-	$(CC) $(INGAME_CFLAGS) -o ingamemenu.elf $(MENUFILES) -T ldscripts/gba_ingame.ld \
+	# 控制代码展开，使主线更新后的菜单继续使用现有 ROM 预留布局。
+	$(CC) $(INGAME_CFLAGS) -fno-inline-functions-called-once -o ingamemenu.elf $(MENUFILES) -T ldscripts/gba_ingame.ld \
 			-nostartfiles -fno-builtin -Wl,-Map=firmware.ingame.map -Wl,--print-memory-usage
 	$(OBJCOPY) --output-target=binary ingamemenu.elf ingamemenu.payload
 
 ingamemenu.compact.raw: src/menu_messages_compact.h src/menu_format.c $(MENUFILES) src/ingame.h src/menu_compact_render.h src/menu_messages.h src/rtc_speed.h ldscripts/gba_ingame.ld
-	$(CC) $(INGAME_CFLAGS) -DCOMPACT_INGAME_MENU -o ingamemenu.compact.elf $(subst src/nanoprintf.c,src/menu_format.c,$(MENUFILES)) -Wl,--defsym,IGM_EWRAM_LIMIT=35K -Wl,--defsym,IGM_SPILL_LIMIT=33K -T ldscripts/gba_ingame.ld \
+	$(CC) $(INGAME_CFLAGS) -fno-tree-sra -DCOMPACT_INGAME_MENU -o ingamemenu.compact.elf $(subst src/nanoprintf.c,src/menu_format.c,$(MENUFILES)) -Wl,--defsym,IGM_EWRAM_LIMIT=35K -Wl,--defsym,IGM_SPILL_LIMIT=33K -T ldscripts/gba_ingame.ld \
 		-nostartfiles -fno-builtin -Wl,-Map=firmware.ingame.compact.map -Wl,--print-memory-usage
 	$(OBJCOPY) --output-target=binary ingamemenu.compact.elf ingamemenu.compact.raw
 

@@ -1,7 +1,8 @@
 # superFW fix（chis ver）
 
-这是面向 superchis 硬件的 SuperFW fix r79 源码仓库。项目基于
-[superFW](https://github.com/davidgfnet/superfw)，保留上游固件的核心构建方式、
+这是面向 superchis 硬件的 SuperFW fix r81 测试版源码仓库。项目基于
+[SuperFW 主线](https://github.com/davidgfnet/superfw) 的
+[v0.22](https://github.com/davidgfnet/superfw/releases/tag/v0.22)，保留上游固件的核心构建方式、
 菜单、存档、RTC 和补丁框架，并加入面向中文 hack 游戏及宝可梦改版的兼容性修复、
 精简菜单和 ROM 补丁数据库改动。
 
@@ -11,17 +12,37 @@
 - [SuperFW 文档](https://superfw.davidgf.net/)
 - [superchis 项目](https://github.com/ChisBread/SuperChis)
 
-感谢 superFW 上游作者 David Guillen Fandos（davidgf），以及 superchis 项目作者
-ChisBread 和我。由于整个固件是由 AI 完成的，所以不好意思合并到主线。:)
+**感谢 SuperFW 主线作者 David Guillen Fandos（davidgf / davidgfnet）开发并开放固件。**
+本项目的启动、驱动、菜单、存档和补丁框架以主线工作为基础；上游原有署名与许可随源码保留。
+同时感谢 SuperChis 项目作者 ChisBread。本项目由 moribaka 维护，加入中文 Hack 兼容性适配。
 
 ## 仓库内容
 
 仓库直接包含固件源码、构建脚本、资源、链接脚本和 FatFs。构建必需的资源文件、补丁数据库和菜单资源保留在 `res/` 及源码树中。
 
-本源码仓库不包含 ROM、BIOS、用户存档、mGBA 模拟器二进制、仿真产物、私人验收
+本源码仓库不包含游戏 ROM、GBA BIOS、用户存档、mGBA 模拟器工具、仿真产物、私人验收
 报告、发布页 HTML、固件发布包或本机配置。固件发布物另行维护。
 
-当前内置 Hack 数据库包含 1,962 条查表记录；新增记录保留原有记录和默认数据库，固件版本标识为 `79000004`。
+当前内置 Hack 数据库包含 1,963 条查表记录；固件基础版本为 `0.22`，构建标识为 `81000001`。
+
+## r81 更新
+
+- 新增 Pokémon Monomyth v1.0（`MONE`）专用记录，保留既有 1,962 条记录和默认数据库。
+- 适配重新实现的 Flash 设备描述表、Flash1M SRAM 读取、双 bank 擦写及单字节写入；保留游戏原有部分扇区保存和校验流程。
+- 接入原有软件 RTC，保留日期、时间、状态及设置接口。
+- 菜单与 RTC 载荷使用 ROM 尾部连续 `0xFF` 留白，运行映像仍为单一 32 MiB；不使用 SD 临时 ROM 或 ROM overlay。
+- 快速读取选项保持原样。真三国无双的偶发卡死仍需对应 ROM 和实机条件定点复现。
+
+## r80 更新
+
+- 将完整源码基底更新至上游 v0.22（`4701c4e92a4c2defc91dcbc2924fa468d672727f`），在此基础上迁移 r79 的 Hack 加强。
+- 保留内置 Hack 数据库、默认数据库回退、未命中提示和无补丁启动，以及网页补丁、完整／精简菜单、专用存档与 RTC 适配。
+- 保留上游的大卡 DirectSave 修复、设置解析修复、补丁策略修复、存档临时文件覆盖和文件浏览器改动。
+- RTC 继续使用已有加强实现，保留无符号时间换算、固定返回值、调速和专用接口；原有金手指导入及 VM 保持不变。
+- 菜单沿用原有 ROM 预留布局，不扩展游戏映像，不增加 NOR 写入后回读。
+- 修正主线 UI 设置取值上限，使“最近游戏”和“隐藏文件”的已保存开关能正常恢复。
+
+本地构建与回归范围见交付说明；实体卡刷写及完整实机验收尚未完成。
 
 ## r79 更新
 
@@ -40,14 +61,14 @@ ChisBread 和我。由于整个固件是由 AI 完成的，所以不好意思合
 
 ## 机内升级
 
-从 [r79 发布页](https://github.com/moribaka/superfw-fix/releases/tag/r79) 下载 `superfw-chis-r79.fw`，只适用于 SuperChis（Chis），不适用于 SuperCard SD/Lite。
+从 [r81 发布页](https://github.com/moribaka/superfw-fix/releases/tag/r81) 下载 `superfw-chis-r81-monomyth.fw`，只适用于 SuperChis（Chis），不适用于 SuperCard SD/Lite。
 
 1. 将当前游戏存档保存到 TF 卡，再把 `.fw` 文件复制到卡上。刷写会覆盖卡带固件，中途断电可能导致无法启动。
 2. 启动现有 SuperFW，用 L/R 切换到“信息”页面，同时按 `Down+B+Start` 启用固件升级。
 3. 返回文件浏览器，选中 `.fw`，按 A 打开，再按 `L+R+Up` 开始刷写。
 4. 等待固件更新完成后重启。使用专用游戏修复时选择“Hack 加强”。
 
-升级窗口可能显示基础版本 `0.21`；本版为 r79，构建标识 `79000004`。数据库随固件更新，NOR 中已有的游戏需要重新写入才能应用新的 ROM 补丁。`.fw` 保留原项目的型号、文件长度和摘要格式。
+升级窗口显示基础版本 `0.22`；本版为 r81，构建标识 `81000001`。数据库随固件更新；若要让 NOR 中已有游戏使用新版菜单或运行代码，需要重新写入游戏。`.fw` 保留原项目的型号、文件长度和摘要格式。
 
 本版是测试固件，完整实机刷写及游戏验收尚未完成。
 
@@ -79,9 +100,16 @@ ChisBread 和我。由于整个固件是由 AI 完成的，所以不好意思合
 make BOARD=chis
 ```
 
-当前 Chis 构建配置引用的内置模拟器二进制需另外提供在 `emu/`；它们不随此源码仓库发布。菜单、金手指和 RTC payload 由源码生成，不上传已编译 payload。
+本次源码包保留主线已有的内置模拟器资源，并包含构建所需的 `emu/sfc-patches.bin`。菜单、金手指和 RTC payload 由源码生成，不包含已编译 payload。
 
 测试脚本保留在本机测试目录，不随源码仓库发布；测试使用的 ROM、BIOS、SAV 和仿真产物也保留在本机。
+
+## 已知问题与测试范围
+
+- 快速读取开启时，部分游戏有偶发卡死反馈，尚未定位；r81 未修改快速读取实现。
+- 现有存档转存和文件替换在 I/O 失败时存在错误处理漏洞，可能丢失进度；r81 尚未修复。NOR 重刷后进游戏无进度的个案仍在调查，不能认定是 NOR 擦写直接删除存档。
+- Monomyth 已在 mGBA 中通过开局、时钟设置、存档接口和冷启动继续，以及两次完整菜单进入／返回。保存测试调用游戏原生入口，不等同于常规存档按钮全流程验收。
+- 尚未完成实机刷写、物理 SD／NOR 时序和完整剧情验收。升级前请保留现有存档文件。
 
 ## 已知原版启动异常
 
@@ -93,12 +121,14 @@ make BOARD=chis
 ## 许可与署名
 
 SuperFW 上游代码按其原有 GPL 许可发布；各第三方源代码目录中的许可文件和署名
-随对应代码保留。感谢 superFW 上游作者 David Guillen Fandos（davidgf）以及
-superchis 项目作者 ChisBread 和我。
+随对应代码保留。感谢 [SuperFW 主线](https://github.com/davidgfnet/superfw) 作者
+David Guillen Fandos（davidgf / davidgfnet），以及 SuperChis 项目作者 ChisBread。
 
 ---
 
 # superFW fix (chis ver) — English
+
+> 以下英文保留 r79 历史说明。当前 r81 的版本、文件名和适配说明以本文上半部分为准。
 
 This is the r79 source repository for SuperFW fix targeting superchis hardware. It is based on [superFW](https://github.com/davidgfnet/superfw), retaining the upstream firmware's core build system, menu, save, RTC, and patch framework while adding compatibility fixes for Chinese hack games and Pokémon modifications, a compact menu, and ROM patch database changes.
 

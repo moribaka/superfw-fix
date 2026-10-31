@@ -1023,12 +1023,9 @@ void create_paths(const char *fn) {
 }
 
 static bool save_game_overwrite() {
-  // Just overwrites the .sav file with our data.
-  char finalfn[256];
-  strcpy(finalfn, savefile_pattern);
-  strcat(finalfn, ".sav");
-  create_paths(finalfn);     // Just in case it doesn't exist.
-  return write_save_sram(finalfn);
+  // 使用主线的存档覆盖流程，同时保留 RTC 持久化。
+  create_paths(savefile_pattern);
+  return write_save_sram_safe_overwrite(savefile_pattern);
 }
 
 bool action_save_overw() {
@@ -1349,7 +1346,7 @@ void setup_video_frame() {
   REG_BG2Y = 0;
 
   // Setup palettes
-  memory_copy16((uint16_t*)&MEM_PALETTE[1], logo_pal, sizeof(logo_pal) >> 1);
+  init_logo_palette(&MEM_PALETTE[1]);
   MEM_PALETTE[FG_COLOR] = ingame_menu_palette[0];
   MEM_PALETTE[BG_COLOR] = ingame_menu_palette[1];
   MEM_PALETTE[HI_COLOR] = ingame_menu_palette[2];

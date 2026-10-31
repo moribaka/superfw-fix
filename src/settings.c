@@ -30,6 +30,15 @@
 unsigned lang_lookup(uint16_t code);
 uint16_t lang_getcode();
 
+const t_theme_colors themes[THEME_COUNT] = {
+  { RGB2GBA(0xaaaaaa), RGB2GBA(0xffffff), RGB2GBA(0x000000), RGB2GBA(0xcccccc), RGB2GBA(0x9999bb), RGB2GBA(0xc08888) }, // White
+  { RGB2GBA(0xeca551), RGB2GBA(0xe7c092), RGB2GBA(0x000000), RGB2GBA(0xbda27b), RGB2GBA(0x90816e), RGB2GBA(0x615d58) }, // Orange
+  { RGB2GBA(0x26879c), RGB2GBA(0x8fb1b8), RGB2GBA(0x000000), RGB2GBA(0x5296a5), RGB2GBA(0x1d7f95), RGB2GBA(0x6f8185) }, // Blue
+  { RGB2GBA(0x308855), RGB2GBA(0x88aa99), RGB2GBA(0x000000), RGB2GBA(0x778888), RGB2GBA(0x777777), RGB2GBA(0x606060) }, // Green
+  { RGB2GBA(0xad11c8), RGB2GBA(0xe47af6), RGB2GBA(0x000000), RGB2GBA(0xad5dc6), RGB2GBA(0x724095), RGB2GBA(0x72667a) }, // Purple
+  { RGB2GBA(0x222222), RGB2GBA(0x444444), RGB2GBA(0xeeeeee), RGB2GBA(0x737573), RGB2GBA(0xaaaaaa), RGB2GBA(0x606060) }, // Dark
+};
+
 const t_combo_key hotkey_list[] = {
   {"L+R+Start",     0x00F7},
   {"L+R+Select",    0x00FB},
@@ -104,10 +113,8 @@ uint32_t rtcvalue_default = 45568800U;
 
 // Setting loading/saving routines
 bool save_ui_settings() {
-  // Create the directory (just in case it doesn't exist
+  // Create the directory (just in case it doesn't exist)
   f_mkdir(SUPERFW_DIR);
-  // Make it hidden
-  f_chmod(SUPERFW_DIR, AM_HID, AM_HID);
 
   // Proceed to create the file
   FIL fd;
@@ -133,10 +140,8 @@ bool save_ui_settings() {
 }
 
 bool save_settings() {
-  // Create the directory (just in case it doesn't exist
+  // Create the directory (just in case it doesn't exist)
   f_mkdir(SUPERFW_DIR);
-  // Make it hidden
-  f_chmod(SUPERFW_DIR, AM_HID, AM_HID);
 
   // Proceed to create the file
   FIL fd;
@@ -232,21 +237,24 @@ static void parse_ui_settings(void *usr, const char *var, const char *value) {
     static const struct {
       const char *s;
       uint8_t * const var;
+      unsigned maxval;
     } uintset[] = {
-      { "theme",       &menu_theme },
-      { "recent_menu", &recent_menu },
-      { "hide_hidden", &hide_hidden },
-      { "anim_speed",  &anim_speed },
+      { "theme",       &menu_theme,  THEME_COUNT },
+      { "recent_menu", &recent_menu, 2 },
+      { "hide_hidden", &hide_hidden, 2 },
+      { "anim_speed",  &anim_speed,  animspd_cnt },
     };
     unsigned valu = parseuint(value);
     for (unsigned i = 0; i < sizeof(uintset)/sizeof(uintset[0]); i++)
       if (!strcmp(var, uintset[i].s)) {
-        *uintset[i].var = valu;
+        *uintset[i].var = valu < uintset[i].maxval ? valu : 0;
         break;
       }
   }
 }
 
+// Parses a config file and calls the user callback with varname+value
+// Pointers are only valid for the duration of the callback!
 static void parse_file(char *buf, void(*parse_cb)(void *usr, const char*, const char*), void *usrptr) {
   char *p = buf;
   while (1) {
@@ -258,10 +266,13 @@ static void parse_file(char *buf, void(*parse_cb)(void *usr, const char*, const 
     if (a) {
       *a = 0;
       parse_cb(usrptr, p, &a[1]);
+      *a = '=';
     }
 
     if (!e)
       break;
+
+    *e = '\n';
     p = &e[1];  // Advance to the next line
   }
 }
@@ -331,23 +342,28 @@ static void parse_rom_launch_settings(void *usr, const char *var, const char *va
 }
 
 bool load_rom_settings(const char *fn, t_rom_load_settings *rld, t_rom_launch_settings *rlh) {
-  char buf[512];
-  strcpy(buf, ROMCONFIG_PATH);
-  strcat(buf, file_basename(fn));
-  replace_extension(buf, ".config");
-
-  // Attempt to open and read the file.
   FIL fd;
-  if (FR_OK != f_open(&fd, buf, FA_READ))
-    return false;
+  {
+    char path[MAX_FN_LEN];
+    strcpy(path, ROMCONFIG_PATH);
+    strcat(path, file_basename(fn));
+    replace_extension(path, ".config");
 
-  UINT rdbytes;
-  if (FR_OK == f_read(&fd, buf, sizeof(buf) - 1, &rdbytes)) {
-    buf[rdbytes] = 0;
-    if (rld)
-      parse_file(buf, parse_rom_load_settings, rld);
-    if (rlh)
-      parse_file(buf, parse_rom_launch_settings, rlh);
+    // Attempt to open and read the file.
+    if (FR_OK != f_open(&fd, path, FA_READ))
+      return false;
+  }
+
+  {
+    char buf[128];
+    UINT rdbytes;
+    if (FR_OK == f_read(&fd, buf, sizeof(buf) - 1, &rdbytes)) {
+      buf[rdbytes] = 0;
+      if (rld)
+        parse_file(buf, parse_rom_load_settings, rld);
+      if (rlh)
+        parse_file(buf, parse_rom_launch_settings, rlh);
+    }
   }
   f_close(&fd);
 
@@ -355,40 +371,44 @@ bool load_rom_settings(const char *fn, t_rom_load_settings *rld, t_rom_launch_se
 }
 
 bool save_rom_settings(const char *fn, const t_rom_load_settings *rld, const t_rom_launch_settings *rlh) {
-  // Create the directory (just in case it doesn't exist
+  // Create the directory (just in case it doesn't exist)
   f_mkdir(SUPERFW_DIR);
   f_mkdir(ROMCONFIG_PATH);
-  // Make it hidden
-  f_chmod(SUPERFW_DIR, AM_HID, AM_HID);
-
-  char buf[256];
-  strcpy(buf, ROMCONFIG_PATH);
-  strcat(buf, file_basename(fn));
-  replace_extension(buf, ".config");
 
   // Proceed to create the file
   FIL fd;
-  if (FR_OK != f_open(&fd, buf, FA_WRITE | FA_CREATE_ALWAYS))
-    return false;
+  {
+    char path[MAX_FN_LEN];
+    strcpy(path, ROMCONFIG_PATH);
+    strcat(path, file_basename(fn));
+    replace_extension(path, ".config");
+
+    if (FR_OK != f_open(&fd, path, FA_WRITE | FA_CREATE_ALWAYS))
+      return false;
+  }
 
   // Serialize the ROM settings
-  npf_snprintf(buf, sizeof(buf),
-    "patchmode=%u\n"
-    "igm=%u\n"
-    "rtc=%u\n"
-    "directsaving=%u\n"
-    "cheats=%u\n"
-    "rtcts=%u\n",
-    rld->patch_policy,
-    rld->use_igm ? 1 : 0,
-    rld->use_rtc ? 1 : 0,
-    rld->use_dsaving ? 1 : 0,
-    rlh->use_cheats ? 1 : 0,
-    (unsigned int)rlh->rtcts);
+  FRESULT res;
+  {
+    char buf[128];
+    npf_snprintf(buf, sizeof(buf),
+      "patchmode=%u\n"
+      "igm=%u\n"
+      "rtc=%u\n"
+      "directsaving=%u\n"
+      "cheats=%u\n"
+      "rtcts=%u\n",
+      rld->patch_policy,
+      rld->use_igm ? 1 : 0,
+      rld->use_rtc ? 1 : 0,
+      rld->use_dsaving ? 1 : 0,
+      rlh->use_cheats ? 1 : 0,
+      (unsigned int)rlh->rtcts);
 
-  UINT wrbytes;
-  FRESULT res = f_write(&fd, buf, strlen(buf), &wrbytes);
-  f_close(&fd);
+    UINT wrbytes;
+    res = f_write(&fd, buf, strlen(buf), &wrbytes);
+    f_close(&fd);
+  }
 
   return FR_OK == res;
 }

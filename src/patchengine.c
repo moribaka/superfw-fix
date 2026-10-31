@@ -1472,7 +1472,7 @@ bool unserialize_patch(const uint8_t *buffer, unsigned size, t_patch *patch) {
   buffer += sizeof(patch->prgs);
   memcpy(patch->op, buffer, sizeof(patch->op));
 
-  return true;
+  return patch->wcnt_ops + patch->save_ops + patch->irqh_ops + patch->rtc_ops <= MAX_PATCH_OPS;
 }
 
 bool load_rom_patches(const char *romfn, t_patch *patches) {
