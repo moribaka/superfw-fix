@@ -461,23 +461,21 @@ bool patch_apply_rom(
           igmenu_addr + offsetof(t_igmenu, menu_hotkey))) return false;
     apply_patch_ops(buffer, bufsize, baseaddr, ops, pdata->irqh_ops, pdata->prgs, &psi);
 
-    unsigned brop = 0xEA000000 | ((igmenu_addr - GBA_ROM_BASE - 8) >> 2);
-    if (pdata->irq_flags & IRQPATCH_ENTRY_CHECKS_SCANNED)
-      irqpatch_retarget_entry_checks_block(buffer, bufsize, baseaddr, ops, pdata->irqh_ops, brop);
+    // 由原生启动处的 IRQ 写入钩子安装菜单时，保留游戏头部的汉化跳板。
+    if (!(pdata->irq_flags & IRQPATCH_NATIVE_STARTUP)) {
+      unsigned brop = 0xEA000000 | ((igmenu_addr - GBA_ROM_BASE - 8) >> 2);
+      if (pdata->irq_flags & IRQPATCH_ENTRY_CHECKS_SCANNED)
+        irqpatch_retarget_entry_checks_block(buffer, bufsize, baseaddr, ops, pdata->irqh_ops, brop);
 
-    // Need to patch the header with some entrypoint detour.
-    if (baseaddr == 0x0) {
-      uint32_t ibranch = *(uint32_t*)buffer;
-      uint32_t boot_addr = ((ibranch & 0xFFFFFF) << 2) + 8 + GBA_ROM_BASE;
-
-      // Calculate the branch from 0x08000000 to igmenu_addr
-      if (!(pdata->irq_flags & IRQPATCH_ENTRY_CHECKS_SCANNED))
-        romcompat_apply_legacy_entry_checks(buffer, bufsize, 0, ibranch, brop);
-
-      // Patch the first instruction with the branch opcode
-      write_mem32(&buffer[0], brop);
-      // Patch offset 0xB8 (unused header bits) with the real boot addr.
-      write_mem32(&buffer[0xB8], boot_addr);
+      // 原有游戏继续使用头部启动跳转。
+      if (baseaddr == 0x0) {
+        uint32_t ibranch = *(uint32_t*)buffer;
+        uint32_t boot_addr = ((ibranch & 0xFFFFFF) << 2) + 8 + GBA_ROM_BASE;
+        if (!(pdata->irq_flags & IRQPATCH_ENTRY_CHECKS_SCANNED))
+          romcompat_apply_legacy_entry_checks(buffer, bufsize, 0, ibranch, brop);
+        write_mem32(&buffer[0], brop);
+        write_mem32(&buffer[0xB8], boot_addr);
+      }
     }
   }
   ops += pdata->irqh_ops;

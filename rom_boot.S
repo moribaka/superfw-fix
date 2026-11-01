@@ -17,6 +17,7 @@
  */
 
 @ Wrapper/Bootloader for firmware.ewram
+#include "src/ingame.h"
 @ Wraps the EWRAM payload around a ROM (linked at 0x08000000) and boots it by
 @ copying the payload into the EWRAM and executing it from there.
 
@@ -812,7 +813,39 @@ assets_end:
 
   // The IGM trampoline handles IRQs and switches to SDRAM-IGM
   .org 0x00198000
+flash_igm_trampoline:
   .incbin "ingame_trampoline.payload"
+
+  // 晓月大字版的原生 IRQ 启动钩子；旧 NOR 桥接入口保持不变。
+  // 与 irqpatch_apply 为 0xE0 的 STR 指令生成的首个钩子逐字对应。
+  .org 0x00198400
+  .arm
+  str r0, [r1, #-8]
+  push {r0, r1}
+  ldr r0, 1f
+  ldr r1, 2f
+  str r1, [r0]
+  pop {r0, r1}
+  .word (0xEA000000 | (((0x080000E4 - (IGM_NOR_TRAMPOLINE_ADDR + 0x418) - 8) >> 2) & 0xFFFFFF))
+  nop
+  nop
+  nop
+1: .word 0x03007FFC
+2: .word (IGM_NOR_TRAMPOLINE_ADDR + 0x608)
+  .org 0x00198608
+  mrs r2, CPSR
+  msr CPSR_c, #0x97
+  mov r1, sp
+  msr CPSR_cxs, r2
+  cmp r1, #0
+  ldreq r1, 3f
+  ldrne r1, 4f
+  // 返回菜单时按 1 KiB 对齐寻找旧桥接基址，先切回其原有 IRQ 入口。
+  str r1, [r0, #-4]
+  msr CPSR_f, r2
+  bx r1
+3: .word (IGM_NOR_TRAMPOLINE_ADDR + FLASH_IGM_TRAMP_NOCHEATS_OFF)
+4: .word (IGM_NOR_TRAMPOLINE_ADDR + FLASH_IGM_TRAMP_CHEATS_OFF)
 #endif
 
 #ifdef SUPERCHIS_IO

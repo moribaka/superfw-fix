@@ -55,7 +55,7 @@
 
 // The firmware block (#0) is mapped to the last 4MiB block, plus its offset.
 #define FLASH_DIRSAV_PAYLOAD_W0       (0x0A000000 - NOR_BLOCK_SIZE + 0x00190000)
-#define FLASH_IGM_TRAMPOLINE_W0       (0x0A000000 - NOR_BLOCK_SIZE + 0x00198000)
+#define FLASH_IGM_TRAMPOLINE_W0       IGM_NOR_TRAMPOLINE_ADDR
 
 #define ING_PALETTE_BASE    240
 
@@ -577,7 +577,7 @@ unsigned flash_gba_nor(
       return ERR_LOAD_BADROM;
     }
 
-    if (ingame_menu && bigoff && !(ptch->irq_flags & IRQPATCH_ENTRY_CHECKS_SCANNED)) {
+    if (ingame_menu && bigoff && !(ptch->irq_flags & (IRQPATCH_ENTRY_CHECKS_SCANNED | IRQPATCH_NATIVE_STARTUP))) {
       uint32_t branch = 0xEA000000 | ((igmaddr - GBA_ROM_BASE - 8) >> 2);
       romcompat_apply_legacy_entry_checks(scratch, ssize, bigoff, rom_header->start_branch, branch);
     }

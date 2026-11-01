@@ -36,6 +36,7 @@
 
 #define FLASH_IGM_TRAMP_NOCHEATS_OFF    ( 8*4)    // Offsets in ingame_trampoline.S
 #define FLASH_IGM_TRAMP_CHEATS_OFF      (32*4)
+#define IGM_NOR_TRAMPOLINE_ADDR         0x09D98000
 
 #ifndef __ASSEMBLER__
 

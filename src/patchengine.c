@@ -185,7 +185,7 @@ static bool push_irq_operations(void *context, const uint32_t *operations, unsig
 bool patch_igm_supported(const t_patch *patch, bool nor) {
   if(nor && patch_has_sdram_only_ops(patch))return false;
   if (!patch || !patch->irqh_ops || (patch->irq_flags & IRQPATCH_UNSUPPORTED) ||
-      (patch->irq_flags & ~(IRQPATCH_BOOT_CLEAR | IRQPATCH_UNSUPPORTED | IRQPATCH_BOOT_RESTORE | IRQPATCH_ENTRY_CHECKS_SCANNED)) ||
+      (patch->irq_flags & ~(IRQPATCH_BOOT_CLEAR | IRQPATCH_UNSUPPORTED | IRQPATCH_BOOT_RESTORE | IRQPATCH_ENTRY_CHECKS_SCANNED | IRQPATCH_NATIVE_STARTUP)) ||
       patch->wcnt_ops + patch->save_ops + patch->irqh_ops + patch->rtc_ops > MAX_PATCH_OPS)
     return false;
   unsigned hooks;
@@ -205,7 +205,7 @@ bool patch_igm_supported(const t_patch *patch, bool nor) {
     if (patch->irqh_ops == 3 && (patch->op[position] >> 25) ==
         ((IRQPATCH_METADATA_OPCODE << 3) | IRQPATCH_VBLANK_ARGUMENT)) return false;
   }
-  return (!nor || !hooks || patch->menu_layout == 3) && irqpatch_native_program_present(patch->op + patch->wcnt_ops + patch->save_ops, patch->irqh_ops, program_mask) &&
+  return (!nor || !hooks || patch->menu_layout == 3 || (patch->irq_flags & IRQPATCH_NATIVE_STARTUP)) && irqpatch_native_program_present(patch->op + patch->wcnt_ops + patch->save_ops, patch->irqh_ops, program_mask) &&
          (!(patch->irq_flags & (IRQPATCH_BOOT_CLEAR | IRQPATCH_BOOT_RESTORE)) || hooks);
 }
 
