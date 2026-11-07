@@ -1,28 +1,27 @@
-# r84 主线基底与补丁库
+# r88 源码基底与 ROM 兼容
 
 - 上游：[SuperFW](https://github.com/davidgfnet/superfw)。
-- 版本：[v0.22](https://github.com/davidgfnet/superfw/releases/tag/v0.22)。
-- 提交：[4701c4e92a4c2defc91dcbc2924fa468d672727f](https://github.com/davidgfnet/superfw/commit/4701c4e92a4c2defc91dcbc2924fa468d672727f)。
-- 构建标识：`84000001`，目标硬件：SuperChis，固件容量上限 2 MiB。
+- 基础版本：[v0.22](https://github.com/davidgfnet/superfw/releases/tag/v0.22)。
+- 上游提交：`4701c4e92a4c2defc91dcbc2924fa468d672727f`。
+- 硬件：SuperChis，固件上限 2 MiB。
+- 构建标识：`88000001`。
 
-感谢 David Guillen Fandos（davidgf / davidgfnet）开发并开放 SuperFW，感谢 ChisBread 的 SuperChis 项目。原有署名和许可保留。
+感谢 David Guillen Fandos（davidgf / davidgfnet）和 ChisBread。原有许可、源码署名和第三方声明保留。
 
-## 通用行为
+## 本版 ROM 兼容
 
-除自有补丁库及其必要适配外，遵循所采用主线的行为。`src/save.c` 与主线原文件一致，开机转存函数与主线一致；DirectSave、SD 驱动、Flash 管理、最近游戏列表等沿用主线。设置解析采用主线取值，不额外改变错误处理或增加失败停载机制。发现主线问题时报告，不自行修正。
+《欢乐足球 球队球员名全汉化版 v1.3》（BIXJ v0）新增游戏内存档适配，处理提示保存成功但重新启动没有进度的问题。使用“Hack 加强”补丁模式。
 
-## 补丁库及必要适配
+本次对应的 ROM 为 16 MiB，SHA256：`79bc6cf662c1aef458fab8cc4294dfd37a2184ab3c76c057980db72eaa170f07`。已完成本机 SRAM、DirectSave 的新建保存、覆盖保存和独立冷启动读档测试，实卡仍待确认。
 
-内置 Hack 库共 1,964 条，ABI 为 75，默认数据库保持主线原样。保留游戏专用存档与 RTC、补丁查找与回退、网页补丁流、已定义的完整/精简菜单布局及运行所需的导入器和载荷。
+内置加强库现有 1,965 条记录；此前 1,964 条记录内容保留。该 ROM 的适配源码位于 `res/rom-patches/football-v13-compare.S`。
 
-晓月大字版专用记录使用 `IRQPATCH_NATIVE_STARTUP`，从 `0xE0` 原生 IRQ 写入处安装菜单，保留头部 `0xB4` 的汉化跳板和 `0xB8` 指针。NOR 固定启动钩子位于固件 `0x00198400`，首次 IRQ 调度位于 `0x00198608`；原共享桥接前缀与既有入口保持。
+## 构建与使用
 
-完整/精简菜单维持已定义 ROM 布局和存储预算。游戏映像仍为单一 32 MiB SDRAM 或 NOR，不增加 ROM overlay、SD 临时 ROM、额外回读或校验流程。
+执行 `make BOARD=chis`。游戏使用单一 32 MiB SDRAM 或 NOR，保留既有 ROM 与完整/精简菜单适配。安装与升级方式见 README。
 
-## NOR
+## NOR 重刷范围
 
-仅此前用旧菜单补丁写入 NOR 的上述晓月大字版需重新写入，以恢复已被覆盖的汉化指针；已用修正版写入的无需再次重刷。其他 NOR 游戏无需因本版通用流程对齐而重刷。
+仅已经写入 NOR 的上述《欢乐足球》v1.3 需重新写入一次，以更新游戏内的存档适配。其他 NOR 游戏无需因本次更新重刷；从 TF 直接启动该 ROM 时，更新固件并选择“Hack 加强”即可应用。
 
-## 构建与范围
-
-`make BOARD=chis`。本地检查覆盖实际 ARM 存档往返及代表性游戏菜单，具体结果随交付说明。未进行实体卡刷写、物理总线时序或完整剧情验收。
+更早旧版《晓月圆舞曲[简大字]》仍按其历史交付范围重写；已经使用修正版写入的无需重复操作。

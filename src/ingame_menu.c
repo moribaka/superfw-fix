@@ -47,7 +47,8 @@
 #define MIN(a,b) ((a) < (b) ? (a) : (b))
 #define MAX(a,b) ((a) > (b) ? (a) : (b))
 
-#define SAVESTATE_VERSION       0x00010001
+#define SAVESTATE_VERSION       0x00010000
+#define SAVESTATE_VERSION_CHIS  0x00010001
 
 // ASM functions and varibles:
 extern unsigned has_rtc_support;
@@ -61,6 +62,7 @@ extern uint32_t spill_addr;
 extern uint32_t capacity_context;
 void scatter_restore_borrowed(void);
 extern uint32_t spill_header_addr;                      // Spill buffer that gets reloaded on IGM exit
+extern uint32_t native_irq_cpsr;
 extern char savefile_pattern[256];
 extern char savestate_pattern[256];
 extern char rtcfile_path[256];
@@ -149,6 +151,22 @@ extern void scatter_read(void *,const void *,unsigned);
 extern void scatter_write(const void *,void *,unsigned);
 static const void *spill_buffer(unsigned offset) { return (const uint8_t*)spill_addr+offset; }
 
+// 主线快照使用速度编号；旧 Chis 快照使用运行时打包值。
+static void snapshot_store_clock(t_savestate_regs *regs) {
+  if (has_rtc_support)
+    regs->und_regs[0] = rtc_speed_unpack(regs->und_regs[0]);
+}
+
+static void snapshot_restore_context(t_spilled_region *spill, uint32_t version) {
+  if (has_rtc_support) {
+    if (version == SAVESTATE_VERSION)
+      spill->und_regs[0] = rtc_speed_pack(spill->und_regs[0]);
+    spill->und_regs[2] = RTC_RUNTIME_SIGNATURE;
+  }
+  // 返回适配使用本次读入的上下文，不沿用打开菜单时的标志。
+  native_irq_cpsr = spill->cpsr;
+}
+
 // Save state management.
 
 // Savestates take 388 KiB:
@@ -215,6 +233,7 @@ __attribute__((noinline,used,externally_visible)) void take_mem_snapshot(void *b
   memory_copy32(save_ptr->regs.sup_regs, spill_ptr->sup_regs, sizeof(save_ptr->regs.sup_regs) / 4);
   memory_copy32(save_ptr->regs.abt_regs, spill_ptr->abt_regs, sizeof(save_ptr->regs.abt_regs) / 4);
   memory_copy32(save_ptr->regs.und_regs, spill_ptr->und_regs, sizeof(save_ptr->regs.und_regs) / 4);
+  snapshot_store_clock(&save_ptr->regs);
 
   // Complete the state by clearing empty regions and completing the header
   memory_set16(save_ptr->header.pad, 0, sizeof(save_ptr->header.pad) / 2);
@@ -296,6 +315,7 @@ bool writefd_mem_snapshot(FIL *fd) {
   memory_copy32(tmp.regs.sup_regs, spill_ptr->sup_regs, sizeof(tmp.regs.sup_regs) / 4);
   memory_copy32(tmp.regs.abt_regs, spill_ptr->abt_regs, sizeof(tmp.regs.abt_regs) / 4);
   memory_copy32(tmp.regs.und_regs, spill_ptr->und_regs, sizeof(tmp.regs.und_regs) / 4);
+  snapshot_store_clock(&tmp.regs);
   set_supercard_mode(MAPPED_SDRAM, true, true);   // So we can write to the SD card
   if (FR_OK != f_write(fd, &tmp.regs, sizeof(tmp.regs), &wrbytes) || wrbytes != sizeof(tmp.regs))
     return false;
@@ -370,7 +390,8 @@ __attribute__((noinline,used,externally_visible)) bool load_mem_snapshot(const v
       save_ptr->header.signature[2] != SIGNATURE_C)
     return false;
 
-  if (save_ptr->header.version != SAVESTATE_VERSION)
+  if (save_ptr->header.version != SAVESTATE_VERSION &&
+      save_ptr->header.version != SAVESTATE_VERSION_CHIS)
     return false;
 
   // Copy the (partially) spilled buffers first.
@@ -437,6 +458,7 @@ __attribute__((noinline,used,externally_visible)) bool load_mem_snapshot(const v
   memory_copy32(spill_ptr->sup_regs, save_ptr->regs.sup_regs, sizeof(save_ptr->regs.sup_regs) / 4);
   memory_copy32(spill_ptr->abt_regs, save_ptr->regs.abt_regs, sizeof(save_ptr->regs.abt_regs) / 4);
   memory_copy32(spill_ptr->und_regs, save_ptr->regs.und_regs, sizeof(save_ptr->regs.und_regs) / 4);
+  snapshot_restore_context(spill_ptr, save_ptr->header.version);
 
   return true;
 }
@@ -484,8 +506,10 @@ bool readfd_mem_snapshot(FIL *fd) {
       tmp.header.signature[2] != SIGNATURE_C)
     return false;
 
-  if (tmp.header.version != SAVESTATE_VERSION)
+  if (tmp.header.version != SAVESTATE_VERSION &&
+      tmp.header.version != SAVESTATE_VERSION_CHIS)
     return false;
+  uint32_t version = tmp.header.version;
 
   if (FR_OK != f_read(fd, &tmp.regs, sizeof(tmp.regs), &rdbytes) || rdbytes != sizeof(tmp.regs))
     return false;
@@ -498,6 +522,7 @@ bool readfd_mem_snapshot(FIL *fd) {
   memory_copy32(spill_ptr->sup_regs, tmp.regs.sup_regs, sizeof(tmp.regs.sup_regs) / 4);
   memory_copy32(spill_ptr->abt_regs, tmp.regs.abt_regs, sizeof(tmp.regs.abt_regs) / 4);
   memory_copy32(spill_ptr->und_regs, tmp.regs.und_regs, sizeof(tmp.regs.und_regs) / 4);
+  snapshot_restore_context(spill_ptr, version);
   set_supercard_mode(MAPPED_SDRAM, true, true);   // So we can read from the SD card
 
   if (FR_OK != f_read(fd, &tmp.iomap, sizeof(tmp.iomap), &rdbytes) || rdbytes != sizeof(tmp.iomap))
@@ -926,15 +951,11 @@ typedef void(*menu_key_fn)(uint16_t keyp);
 typedef bool(*menu_action_fn)();
 typedef unsigned (*menu_getoptcnt_fn)();
 
-static bool checkpoint_rtc() {
+static void checkpoint_rtc() {
   if (!has_rtc_support || !rtcfile_path[0])
-    return true;
-  if (rtc_state_save(rtcfile_path, get_undef_lr(), rtc_speed_unpack(get_undef_sp()))) {
-    set_undef_lrsp(get_undef_lr(), get_undef_sp());
-    return true;
-  }
-  popup.msg = menu_message(IMENU_MSG_SAVEERR);
-  return false;
+    return;
+  rtc_state_save(rtcfile_path, get_undef_lr(), rtc_speed_unpack(get_undef_sp()));
+  set_undef_lrsp(get_undef_lr(), get_undef_sp());
 }
 
 bool action_resume_game() {
@@ -1029,8 +1050,8 @@ static bool save_game_overwrite() {
 }
 
 bool action_save_overw() {
-  bool rtc_saved = checkpoint_rtc();
-  if (save_game_overwrite() && rtc_saved)
+  checkpoint_rtc();
+  if (save_game_overwrite())
     popup.msg = menu_message(IMENU_MSG_SAVEC);
   else
     popup.msg = menu_message(IMENU_MSG_SAVEERR);
@@ -1039,12 +1060,12 @@ bool action_save_overw() {
 }
 
 bool action_save_backup() {
-  bool rtc_saved = checkpoint_rtc();
+  checkpoint_rtc();
   create_paths(savefile_pattern);     // Just in case it doesn't exist.
 
   // Write save generating a backup, honoring the backup_count.
   unsigned bc = MAX(savefile_backups, 1);
-  if (write_save_sram_rotate(savefile_pattern, bc) && rtc_saved)
+  if (write_save_sram_rotate(savefile_pattern, bc))
     popup.msg = menu_message(IMENU_MSG_SAVEC);
   else
     popup.msg = menu_message(IMENU_MSG_SAVEERR);
@@ -1166,8 +1187,8 @@ bool state_load() {
       npf_snprintf(fn, sizeof(fn), "%s.%d.state", savestate_pattern, -state_slot);
       if (FR_OK == f_open(&fd, fn, FA_READ)) {
         bool success = readfd_mem_snapshot(&fd);
-        success = (f_close(&fd) == FR_OK) && success;
         popup.msg = menu_message(success ? IMENU_QLD_OK : IMENU_PLD_ERR);
+        f_close(&fd);
       }
       else
         popup.msg = menu_message(IMENU_WSTAR_ERR);

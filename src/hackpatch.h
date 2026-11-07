@@ -9,8 +9,6 @@
 int hackpatch_serialize(const t_patch *patch, unsigned romsize, const uint8_t hash[32], uint8_t *buffer);
 bool hackpatch_unserialize(const uint8_t *buffer, unsigned size, unsigned romsize,
                            const uint8_t hash[32], t_patch *patch);
-bool hackpatch_hash_rom(const char *filename, unsigned romsize, uint8_t hash[32],
-                        void (*progress)(unsigned, unsigned));
 bool hackpatch_load(const char *filename, unsigned romsize, const uint8_t hash[32], t_patch *patch);
 bool hackpatch_load_cached(const char *filename, unsigned romsize, t_patch *patch);
 bool hackpatch_quick_id(const char *filename, const uint8_t *header, const uint32_t *offsets,

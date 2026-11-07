@@ -747,7 +747,7 @@ bool dirsav_avail_sdram(const t_load_gba_info *info) {
       return false;   // Too big to fit!
   }
 
-  return (p && supports_directsave(p->save_mode) && patch_directsave_supported(p));
+  return (p && supports_directsave(p->save_mode));
 }
 
 bool dirsav_avail_flash(const t_load_gba_info *info) {
@@ -760,7 +760,7 @@ bool dirsav_avail_flash(const t_load_gba_info *info) {
       return false;   // Too big to fit!
   }
 
-  return (p && supports_directsave(p->save_mode) && patch_directsave_supported(p));
+  return (p && supports_directsave(p->save_mode));
 }
 
 bool rtcemu_avail(const t_load_gba_info *info) {

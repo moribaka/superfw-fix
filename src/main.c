@@ -151,12 +151,11 @@ static int main_gba() {
   // This hangs on failure since it is fatal.
   init_sdcard_and_mount();
 
-  if (!rtc_state_flush_pending(get_undef_lr(), rtc_speed_unpack(get_undef_sp()),
-                              get_undef_signature() == RTC_RUNTIME_SIGNATURE))
-    fatal_init_error("%s", "Cannot save virtual clock");
-
   // Check if we need to save SRAM before doing anything else.
   check_pending_saves();
+
+  rtc_state_flush_pending(get_undef_lr(), rtc_speed_unpack(get_undef_sp()),
+                          get_undef_signature() == RTC_RUNTIME_SIGNATURE);
 
   // Check if there's a pending SRAM test and perform it.
   int sram_tres = check_peding_sram_test();

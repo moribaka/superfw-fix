@@ -765,45 +765,8 @@ static NOINLINE void scan_prepatched_eeprom(const uint8_t *data, unsigned size,
     builder->sram_patch_functions |= 2;
 }
 
-bool patch_directsave_supported(const t_patch *patch) {
-  if (!patch || patch->wcnt_ops + patch->save_ops + patch->irqh_ops + patch->rtc_ops > MAX_PATCH_OPS)
-    return false;
-  for (unsigned index = 0; index < patch->save_ops; index++) {
-    uint32_t operation = patch->op[patch->wcnt_ops + index];
-    if (operation >> 28 == PATCH_NATIVE_FLASH_READ_OPCODE)
-      return false;
-    if (operation >> 28 == OPC_FLASH_HD && ((operation >> 25) & 7) == FLASH_BANK_HNDLR)
-      return false;
-  }
-  return true;
-}
-
 bool patch_rtc_supported(const t_patch *patch) {
-  if (!patch || patch->wcnt_ops + patch->save_ops + patch->irqh_ops + patch->rtc_ops > 128)
-    return false;
-  if (rtc_custom_supported(patch))
-    return true;
-  const uint32_t *operations = patch->op + patch->wcnt_ops + patch->save_ops + patch->irqh_ops;
-  unsigned handlers = 0;
-  for (unsigned index = 0; index < patch->rtc_ops; index++) {
-    uint32_t operation = operations[index];
-    unsigned handler = (operation >> 25) & 7;
-    if (operation >> 28 != OPC_RTC_HD || handler > RTC_SETTD_HNDLR)
-      return false;
-    handlers |= 1U << handler;
-    if (handler == RTC_GETTD_HNDLR || handler == RTC_SETTD_HNDLR) {
-      unsigned distance = handler == RTC_GETTD_HNDLR ? 504 : 176;
-      unsigned dependency = handler == RTC_GETTD_HNDLR ? RTC_RESET_HNDLR : RTC_GETTD_HNDLR;
-      unsigned offset = operation & 0x1FFFFFF;
-      bool found = false;
-      for (unsigned other = 0; other < patch->rtc_ops; other++)
-        if (offset >= distance && operations[other] == ((OPC_RTC_HD << 28) | (dependency << 25) | (offset - distance)))
-          found = true;
-      if (!found)
-        return false;
-    }
-  }
-  return (handlers & 15) == 15;
+  return patch && (rtc_custom_supported(patch) || patch->rtc_ops);
 }
 
 void patchengine_init(t_patch_builder *patchb, unsigned filesize) {

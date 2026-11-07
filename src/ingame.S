@@ -465,12 +465,7 @@ ingame_menu_entry:
   ldr r1,scatter_restore_stack_offset
   add sp,r0,r1
 
-  // Start restoring the saved state.
-  // Palette and VRAM no longer describe the menu during this copy.
-  // Keep them hidden until the complete game display is restored.
-  mov r0, $0x04000000
-  mov r2, $0x80
-  strh r2, [r0, #REG_DISPCNT]
+  // 按主线顺序恢复暂存区域和显示寄存器。
   ldr r1, spill_addr
   add r1, $(8 + 8 + 16 + 2+2 + 64 + 64)   // Skip register save to RAM buffers.
 
@@ -552,7 +547,7 @@ ingame_menu_entry:
 
   // Restore LCD regs
   mov r2, $0x04000000
-  add r1, r1, #2; // Read/restore DISPCNT at VBlank after the remaining state.
+  ldrh r3, [r1], #2; strh r3, [r2, #REG_DISPCNT];
   ldrh r3, [r1], #2; strh r3, [r2, #REG_DISPSTAT];
   ldrh r3, [r1], #2; strh r3, [r2, #REG_BG0CNT];
   ldrh r3, [r1], #2; strh r3, [r2, #REG_BG1CNT];
@@ -597,11 +592,7 @@ ingame_menu_entry:
   reload_regs(0x11, 1);              // FIQ mode
   reload_regs(0x13, 2);              // supervisor mode
   reload_part_regs(0x17, 3);         // abort mode
-  ldr r0, has_rtc_support
-  cmp r0, $0
-  bne ingame_keep_clock_signature
   reload_part_regs(0x1B, 4);         // undefined mode
-ingame_keep_clock_signature:
 
   ldr r3, [r1, #(64 + 0)]            // CPSR (IRQ mode)
   msr cpsr, r3                       // Load CPSR, changes to IRQ mode too.
@@ -620,10 +611,8 @@ ingame_keep_clock_signature:
   cmp r0, $160
   bne 1b
 
-  // Reveal the fully restored game at the same VBlank as its timers/DMA.
+  // 分散菜单的定时器暂存位于独立头部，不能使用已恢复的 IRQ SP/LR。
   ldr r10, spill_header_addr
-  ldrh r0, [r10, #16]
-  strh r0, [r2, #REG_DISPCNT]
 
   // Resume timers (re-enable them if they were enabled essentially)
   strh r11, [r3, #0]
@@ -717,6 +706,9 @@ tramp_data:
   .word 0x0000A55A
   .word 0x04000000
 
+// 保持已烧入 NOR 的跳板所使用的菜单入口和元数据偏移。
+.space 28
+
 // Some constants that, for some reason, don't wanna go into the pool
 sob_addr:
   .word 0          // Updated with the actual ROM addr where the menu lives
@@ -726,6 +718,7 @@ use_cheats_irq:
   .word 0          // Whether we should be using the slower cheats IRQ hook
 running_on_nor:
   .word 0          // Whether we should be returning to NOR (or SDRAM)
+.global native_irq_cpsr
 native_irq_cpsr:
   .word 0
 native_irq_vector:

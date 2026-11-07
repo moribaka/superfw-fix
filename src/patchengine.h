@@ -114,7 +114,6 @@ void patchmem_dbinfo(const uint8_t *dbptr, uint32_t *pcnt, char *version, char *
 bool patchmem_lookup(const uint8_t *gamecode, const uint8_t *dbptr, t_patch *pdata);
 // Actual patching magic
 bool patch_rtc_supported(const t_patch *patch);
-bool patch_directsave_supported(const t_patch *patch);
 bool patch_igm_supported(const t_patch *patch, bool nor);
 bool patch_apply_rom(uint8_t *buffer, unsigned bufsize, uint32_t baseaddr, bool patch_waitcnt, const t_patch *pdata,
                      bool patch_rtc, uint32_t igmenu_addr, uint32_t ds_addr, bool nor);

@@ -93,7 +93,7 @@ int hackpatch_serialize(const t_patch *patch, unsigned romsize, const uint8_t ha
   else
     memset(buffer + 24, 0, 32);
   int size = serialize_patch(patch, buffer + 88);
-  sha256sum(buffer + 88, size, buffer + 56);
+  memset(buffer + 56, 0, 32);
   return 88 + size;
 }
 
@@ -104,32 +104,6 @@ bool hackpatch_unserialize(const uint8_t *buffer, unsigned size, unsigned romsiz
       (hash && memcmp(buffer + 24, hash, 32)))
     return false;
   return unserialize_patch(buffer + 88, size - 88, patch);
-}
-
-bool hackpatch_hash_rom(const char *filename, unsigned romsize, uint8_t hash[32],
-                        void (*progress)(unsigned, unsigned)) {
-  FIL file;
-  if (!romsize || f_open(&file, filename, FA_READ) != FR_OK)
-    return false;
-  bool success = f_size(&file) == romsize;
-  SHA256_State state;
-  sha256_init(&state);
-  for (unsigned offset = 0; success && offset < romsize; ) {
-    uint32_t buffer[1024];
-    UINT count, requested = MIN(sizeof(buffer), romsize - offset);
-    success = f_read(&file, buffer, requested, &count) == FR_OK && count == requested;
-    if (success) {
-      sha256_transform(&state, buffer, count);
-      offset += count;
-      if (progress && (!(offset & 0xFFFF) || offset == romsize))
-        progress(offset >> 8, (romsize + 255) >> 8);
-    }
-  }
-  if (f_close(&file) != FR_OK)
-    success = false;
-  if (success)
-    sha256_finalize(&state, hash);
-  return success;
 }
 
 static bool cache_path(const char *filename, char *path) {

@@ -297,8 +297,7 @@ unsigned load_gba_rom(
   bool use_rtc_patches = rtcinfo != NULL;
   char rtc_path[MAX_FN_LEN] = {0};
   rtc_state_path(fn, rtc_path);
-  if (!rtc_state_prepare_pending(use_rtc_patches ? rtc_path : NULL))
-    return ERR_LOAD_BADROM;
+  rtc_state_prepare_pending(use_rtc_patches ? rtc_path : NULL);
 
   // Determine how much ROM space we need for the IGM and DirSav payloads
   unsigned igm_reqsz = ingame_menu_payload.menu_rsize + font_block_size() + cheats;
@@ -661,20 +660,12 @@ unsigned launch_gba_nor(
   bool use_rtc_patches = rtcinfo != NULL;
   char rtc_path[MAX_FN_LEN] = {0};
   rtc_state_path(romfn, rtc_path);
-  if (!rtc_state_prepare_pending(use_rtc_patches ? rtc_path : NULL))
-    return ERR_LOAD_BADROM;
+  rtc_state_prepare_pending(use_rtc_patches ? rtc_path : NULL);
 
   const t_menu_layout *nor_layout=NULL;
   const t_menu_overlay_profile *nor_overlay=NULL;
-  // Check the actual mapped game once on every NOR launch, with or without IGM.
-  // Existing NOR is read-only here: a bad header requires rewriting the game.
   set_superchis_normap(normap);
   set_supercard_mode(MAPPED_FIRMWARE,false,false);
-  if (!validate_gba_header(GBA_ROM_ADDR)) {
-    set_supercard_mode(MAPPED_SDRAM,true,true);
-    reset_superchis_normap();
-    return ERR_LOAD_BADROM;
-  }
   if(ingame_menu) {
     uint32_t branch=*(const uint32_t*)GBA_ROM_BASE;
     uint32_t target=GBA_ROM_BASE+8+((branch&0xFFFFFF)<<2);
@@ -683,9 +674,6 @@ unsigned launch_gba_nor(
       unsigned id=*(const uint32_t*)(target+8);
       nor_layout=menu_layout_get(id);
       nor_overlay=menu_overlay_profile_get(id);
-      if((!nor_layout&&!nor_overlay) || target!=GBA_ROM_BASE+(nor_layout?nor_layout->anchor:nor_overlay->anchor)) {
-        set_supercard_mode(MAPPED_SDRAM,true,true);reset_superchis_normap();return ERR_LOAD_MENU;
-      }
     }
   }
   set_supercard_mode(MAPPED_SDRAM,true,true);
