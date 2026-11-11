@@ -217,7 +217,12 @@ bool hackpatch_db_lookup(const uint8_t *database, unsigned romsize, uint32_t ide
     patch->hole_addr = read_word(record, 8);
     patch->hole_size = read_word(record, 12);
     unsigned extra = record[7] ? 4 : 0;
-    if (extra) patch->menu_layout = read_word(record, 16);
+    if (extra) {
+      // 元信息低 16 位为布局编号，高 16 位为 NOR 扩展长度（KiB）。
+      unsigned metadata = read_word(record, 16);
+      patch->menu_layout = metadata & 0xFFFF;
+      patch->nor_image_kib = metadata >> 16;
+    }
     memcpy(patch->op, record + 16 + extra, operations * 4);
     offset += 16 + extra + operations * 4;
     for (unsigned program = 0; program < record[6]; program++) {

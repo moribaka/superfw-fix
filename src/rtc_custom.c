@@ -2,6 +2,7 @@
 #include "rtc_custom_identities.h"
 #include "common.h"
 #include "patches.h"
+#include "flash_mgr.h"
 
 #pragma GCC optimize ("Oz")
 
@@ -72,6 +73,13 @@ unsigned patch_rom_size(unsigned size, const t_patch *patch, bool rtc) {
     if ((patch->op[start] & 0xFE000000) == RTC_CUSTOM_MARKER)
       return MAX(size, (patch->op[start] & 0x1FFFFFF) + RTC_CUSTOM_SLOT_SIZE);
   }
+  return size;
+}
+
+unsigned patch_nor_rom_size(unsigned size, const t_patch *patch, bool rtc, bool menu, bool directsave) {
+  size=patch_rom_size(size,patch,rtc);
+  if(patch && (menu || (directsave && size>MAX_GBA_ROM_SIZE-NOR_BLOCK_SIZE)))
+    size=MAX(size,(unsigned)patch->nor_image_kib<<10);
   return size;
 }
 

@@ -1,6 +1,7 @@
 // Mirrored instructions survive the NOR/SDRAM transition without using any
 // game stack bytes. Legacy trampolines remain available for existing games.
 #include "menu_nor_offsets.h"
+#include "irqpatch.h"
 .syntax unified
 .cpu arm7tdmi
 .arm
@@ -75,11 +76,19 @@ startup:
   ldr pc,[r0,#0xB8]
 .pool
 
+// 供 ROM 专用入口读取，位置与 TF 菜单头的入口字段一致。
+.org MENU_NOR_ENTRY_FIELD
+  .word MENU_NOR_EXPLICIT_ENTRY
+
 // Boot hooks retain their existing addressing and are installed after this
 // template. All their handler branches land on the stable NOR bridge.
+.org IRQPATCH_EXTRA_HOOK_OFFSET
+.fill (IRQPATCH_HOOK_OFFSET - IRQPATCH_EXTRA_HOOK_OFFSET)/4,4,0xE1A00000
 .org 0x400
-.fill 8*48/4,4,0xE1A00000
+.fill IRQPATCH_PRIMARY_HOOKS*IRQPATCH_HOOK_SIZE/4,4,0xE1A00000
 .org MENU_NOR_HOOK_HANDLER
   b irq_entry
 .org MENU_NOR_EXPLICIT_ENTRY
-  b irq_entry
+  // 原生 VBlank 回调已经确认热键，并且可能已经清除了 IF。
+  mrs ip,cpsr
+  b enter

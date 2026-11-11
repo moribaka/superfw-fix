@@ -1,0 +1,36 @@
+{
+  "sha256": "1cc084d228983744ac954dc0a40f847f442f124f8369438b17625270b00a7404",
+  "patch_sha256": "5963f49390ebeabecc78ba329f13a34d143624e7632576b7b41853ed9c56fee2",
+  "source": "res/rom-patches/quake-menu-final.S",
+  "source_sha256": "14d64db414eac2e941983868106700eb35f191aa85e1345bf9eb294c8e8f9fd5",
+  "common_binary_sha256": "b7b1b654dbad5c58744e4ef4cedd2cbadbff055e38d37cdca427a018761e5912",
+  "compiled_source_matches_full_declared_common_bytes": true,
+  "common_span": [
+    1327616,
+    1327984
+  ],
+  "nor_only_writes": [
+    {
+      "offset": 1327908,
+      "value": 135554756
+    },
+    {
+      "offset": 1327912,
+      "value": 50364402
+    },
+    {
+      "offset": 1327728,
+      "value": 3942645785
+    },
+    {
+      "offset": 1327744,
+      "value": 3942645791
+    },
+    {
+      "offset": 262324,
+      "value": 3926134945
+    }
+  ],
+  "actual_rom_sha256": "1cc084d228983744ac954dc0a40f847f442f124f8369438b17625270b00a7404",
+  "space": "源原件从菜单前512B至菜单窗口末端均为原连续FF；当前原布局实际路径read/branch0。"
+}

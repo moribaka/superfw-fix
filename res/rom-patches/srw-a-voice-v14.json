@@ -1,0 +1,13 @@
+{
+  "name": "机战A-添加战斗汉化和语音1.4版",
+  "game_code": "ASRJ",
+  "game_version": 0,
+  "source_bytes": 33299684,
+  "sha256": "43ebe19c4fd1677a4a7353d6e6eee291d5bca2a69fb293953015b14c664b941b",
+  "image_bytes": 33554432,
+  "tail_start": 33301504,
+  "tail_bytes": 252928,
+  "nor_menu_address": "0x09FC4000",
+  "metadata_image_kib": 32768,
+  "metadata_layout": 0
+}

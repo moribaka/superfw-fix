@@ -1,6 +1,6 @@
 
 VERSION_WORD := 0x00000016
-VERSION_SLUG_WORD ?= 88000001
+VERSION_SLUG_WORD ?= 88000002
 
 PREFIX		?= arm-none-eabi-
 NM := $(PREFIX)nm
@@ -56,6 +56,12 @@ endif
 ifeq ($(COMPRESS_FIRMWARE),1)
   GLOBAL_DEFINES += -DCOMPRESS_FONTS -DCOMPRESS_PATCHES -DCOMPRESS_FIRMWARE
   FWBINFILES := $(addsuffix .comp,$(FWBINFILES))
+endif
+
+ifeq ($(BOARD),chis)
+  # 沿用主线字体压缩，为自有补丁库留空间，扩展字库内容保持完整。
+  GLOBAL_DEFINES += -DCOMPRESS_FONTS
+  FWBINFILES := $(filter-out res/fonts.pack res/fonts.pack.comp,$(FWBINFILES)) res/fonts-ext.pack.comp
 endif
 
 ifeq ($(BUNDLE_GBC_EMULATOR),1)
@@ -193,7 +199,7 @@ else
 FWMENUASSETS=ingamemenu.payload
 endif
 
-firmware.ewram.gba: $(INFILES) src/sfc_core_layout.h $(FWMENUASSETS) superfw.dldi.payload directsave.payload ingame_trampoline.payload ingame_nor_scatter.payload rtc_custom.payload src/rtc_custom_identities.h src/rtc_state.h src/messages_data.h src/rtc_speed.h ldscripts/gba_ewram.ld.i
+firmware.ewram.gba: $(INFILES) src/vblank_bridge.h src/menu_overlay_profiles.h src/sfc_core_layout.h $(FWMENUASSETS) superfw.dldi.payload directsave.payload ingame_trampoline.payload ingame_nor_scatter.payload rtc_custom.payload src/rtc_custom_identities.h src/rtc_state.h src/messages_data.h src/rtc_speed.h ldscripts/gba_ewram.ld.i
 	# Build the actual firmware image
 	$(CC) $(CFLAGS) -o firmware.ewram.elf $(INFILES) -T ldscripts/gba_ewram.ld.i -nostartfiles -Wl,-Map=firmware.ewram.map -Wl,--print-memory-usage -fno-builtin
 	$(OBJCOPY) --output-target=binary firmware.ewram.elf firmware.ewram.gba
@@ -221,8 +227,11 @@ ingamemenu.compact.raw: src/menu_messages_compact.h src/menu_format.c $(MENUFILE
 		-nostartfiles -fno-builtin -Wl,-Map=firmware.ingame.compact.map -Wl,--print-memory-usage
 	$(OBJCOPY) --output-target=binary ingamemenu.compact.elf ingamemenu.compact.raw
 
-ingamemenu.head ingamemenu.body ingamemenu.size.S ingamemenu.compact.head ingamemenu.compact.body ingamemenu.compact.size.S ingamemenu.compact.payload ingame_nor_scatter.payload &: ingamemenu.payload ingamemenu.compact.raw tools/build_menu_assets.py
+ingamemenu.head ingamemenu.body ingamemenu.size.S ingamemenu.compact.head ingamemenu.compact.body ingamemenu.compact.size.S ingamemenu.compact.payload ingame_nor_scatter.payload &: ingamemenu.payload ingamemenu.compact.raw src/ingame_nor_scatter.S tools/build_menu_assets.py
 	$(PYTHON) tools/build_menu_assets.py
+
+src/vblank_bridge.h: src/vblank_bridge.S tools/build_vblank_bridge.py
+	$(PYTHON) tools/build_vblank_bridge.py
 
 cheat_import.payload cheat_runtime.payload &: $(wildcard src/cheat_formats/*) src/cheats.h tools/build_cheat_engine.py
 	$(PYTHON) tools/build_cheat_engine.py

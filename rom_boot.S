@@ -366,7 +366,7 @@ _main_end:
   @ Go ahead and copy assets to SDRAM locations.
   #ifdef SUPERCHIS_IO
     ldr r0, =hackpatches_start
-    ldr r1, =0x09D20000
+    ldr r1, =0x09D70000
     mov r2, $((hackpatches_end - hackpatches_start + 2047) / 2048)
     bl sdram_copy
   #endif
@@ -732,7 +732,11 @@ patches_end:
 
 font_start:
   #if defined(COMPRESS_FONTS)
+    #if defined(FONTS_EXT)
+    .incbin "res/fonts-ext.pack.comp"
+    #else
     .incbin "res/fonts.pack.comp"
+    #endif
   #elif defined(FONTS_EXT)
     .incbin "res/fonts-ext.pack"
   #else
@@ -806,6 +810,15 @@ assets_start:
   .word 0
 assets_end:
 
+#ifdef SUPERCHIS_IO
+  // 压缩字库空出的固件区域容纳完整自有库，固定 NOR 入口位置保持。
+  .balign 4
+hackpatches_start:
+  .incbin "res/hackpatches.db"
+  .balign 4
+hackpatches_end:
+#endif
+
 #if defined(SUPPORT_NORGAMES)
   // We place a mirror copy of the DirSave payload so it can be used by NOR games.
   .org 0x00190000
@@ -846,14 +859,6 @@ flash_igm_trampoline:
   bx r1
 3: .word (IGM_NOR_TRAMPOLINE_ADDR + FLASH_IGM_TRAMP_NOCHEATS_OFF)
 4: .word (IGM_NOR_TRAMPOLINE_ADDR + FLASH_IGM_TRAMP_CHEATS_OFF)
-#endif
-
-#ifdef SUPERCHIS_IO
-  hackpatches_start:
-    .balign 4
-    .incbin "res/hackpatches.db"
-    .balign 4
-  hackpatches_end:
 #endif
 
   cheat_gbk_start:

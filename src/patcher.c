@@ -70,6 +70,7 @@ bool patchmem_lookup(const uint8_t *gamecode, const uint8_t *dbptr, t_patch *pda
   pdata->menu_layout = 0;
   pdata->web_edits = 0;
   pdata->image_kib = 0;
+  pdata->nor_image_kib = 0;
   const t_db_header *dbh = (t_db_header*)dbptr;
   if (dbh->signature != 0x31424450 ||      // PTDB signature mismatch
       dbh->dbversion != 0x00010000)        // Version check
@@ -294,7 +295,7 @@ void apply_patch_ops(
   uint32_t baseaddr,
   // Patch to apply
   const uint32_t *ops, unsigned pcount,
-  const t_patch_prog *prgs, const t_psave_info *psi
+  const t_patch_prog *prgs, const t_psave_info *psi, bool nor
 ) {
   for (unsigned i = 0; i < pcount; i++) {
     uint32_t opc = ops[i] >> 28;
@@ -312,7 +313,12 @@ void apply_patch_ops(
       i += 1;
       break;
     case PATCH_NATIVE_FLASH_READ_OPCODE:
-      if (arg == IRQPATCH_VBLANK_ARGUMENT) i += 2;
+      if (arg == PATCH_NOR_WRITE_ARGUMENT) {
+        // ROM 自带的卡带模式切换只在 NOR 路径改写，TF 保留原指令。
+        if (nor)
+          write_patch_word(buffer, bufsize, baseaddr, moff, ops[i + 1]);
+        i++;
+      } else if (arg == IRQPATCH_VBLANK_ARGUMENT) i += 2;
       break;
     case IRQPATCH_DEAD_ARG_OPCODE:
       i += 6;
@@ -417,7 +423,6 @@ bool patch_apply_rom(
   bool nor
 ) {
   const uint32_t *ops = &pdata->op[0];
-  if(nor && patch_has_sdram_only_ops(pdata))return false;
   if(!apply_asset_move_ops(buffer,bufsize,baseaddr,ops,pdata->wcnt_ops))return false;
   // Save patch routines vary depending on whether DirectSave is enabled or not.
   const t_psave_info psi = {
@@ -429,11 +434,11 @@ bool patch_apply_rom(
 
   // Apply the WAIT CNT patches
   if (patch_waitcnt)
-    apply_patch_ops(buffer, bufsize, baseaddr, ops, pdata->wcnt_ops, pdata->prgs, &psi);
+    apply_patch_ops(buffer, bufsize, baseaddr, ops, pdata->wcnt_ops, pdata->prgs, &psi, nor);
   ops += pdata->wcnt_ops;
 
   // Apply save patches
-  apply_patch_ops(buffer, bufsize, baseaddr, ops, pdata->save_ops, pdata->prgs, &psi);
+  apply_patch_ops(buffer, bufsize, baseaddr, ops, pdata->save_ops, pdata->prgs, &psi, nor);
   ops += pdata->save_ops;
 
   if (patch_waitcnt && !irqpatch_apply_nesting(buffer, bufsize, baseaddr, ops, pdata->irqh_ops))
@@ -458,8 +463,8 @@ bool patch_apply_rom(
     }
     if (!irqpatch_apply_vblank(buffer, bufsize, baseaddr, ops, pdata->irqh_ops,
           igmenu_addr + ingame_menu_payload.explicit_menu_entry,
-          igmenu_addr + offsetof(t_igmenu, menu_hotkey))) return false;
-    apply_patch_ops(buffer, bufsize, baseaddr, ops, pdata->irqh_ops, pdata->prgs, &psi);
+          nor ? 0 : igmenu_addr + offsetof(t_igmenu, menu_hotkey))) return false;
+    apply_patch_ops(buffer, bufsize, baseaddr, ops, pdata->irqh_ops, pdata->prgs, &psi, nor);
 
     // 由原生启动处的 IRQ 写入钩子安装菜单时，保留游戏头部的汉化跳板。
     if (!(pdata->irq_flags & IRQPATCH_NATIVE_STARTUP)) {
@@ -485,7 +490,7 @@ bool patch_apply_rom(
     if (rtc_custom_supported(pdata))
       rtc_custom_apply(buffer, bufsize, baseaddr, pdata);
     else
-      apply_patch_ops(buffer, bufsize, baseaddr, ops, pdata->rtc_ops, pdata->prgs, &psi);
+      apply_patch_ops(buffer, bufsize, baseaddr, ops, pdata->rtc_ops, pdata->prgs, &psi, nor);
   }
 
   return true;

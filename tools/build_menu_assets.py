@@ -23,6 +23,7 @@ def generate():
         'MENU_NOR_CHEATS': 0x09000000+symbols['scatter_nor_cheats']-0x02000000,
         'MENU_NOR_HOOK_HANDLER': symbols['ingame_menu_entrypoint_nocheats']-0x02000000,
         'MENU_NOR_EXPLICIT_ENTRY': symbols['ingame_menu_entry']-0x02000000,
+        'MENU_NOR_ENTRY_FIELD': symbols['explicit_menu_entry']-0x02000000,
     }
     (SRC/'src/menu_nor_offsets.h').write_text('\n'.join('#define %s 0x%X'%kv for kv in nor_defines.items())+'\n')
     arm=os.environ.get('CROSS_COMPILE','arm-none-eabi-')

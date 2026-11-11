@@ -142,10 +142,13 @@ menu_data_offset: .word __EWRAM_SIZE__
 menu_packed_size: .word 0
 
 
+// 第九个安装点放在原有头部预留，后面的入口地址保持不变。
+.org IRQPATCH_EXTRA_HOOK_OFFSET
+  .fill (IRQPATCH_HOOK_OFFSET - IRQPATCH_EXTRA_HOOK_OFFSET) / 4, 4, 0xE1A00000
 .balign IRQPATCH_HOOK_OFFSET
 .global irq_boot_hooks
 irq_boot_hooks:
-  .fill IRQPATCH_MAX_HOOKS * IRQPATCH_HOOK_SIZE / 4, 4, 0xE1A00000
+  .fill IRQPATCH_PRIMARY_HOOKS * IRQPATCH_HOOK_SIZE / 4, 4, 0xE1A00000
 
 
 // Necessary handlers for the SC driver

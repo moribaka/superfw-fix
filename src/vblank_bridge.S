@@ -12,9 +12,17 @@ vblank_bridge:
   mov r0,#0x04000000
   add r0,r0,#0x100
   ldrh r1,[r0,#0x30]
+#ifdef NOR
+  mrs r3,cpsr
+  msr cpsr_c,#0x97
+  mov r2,lr
+  msr cpsr_cxs,r3
+  cmp r2,r1,lsl #16
+#else
   ldr r2,=0x11111111
   ldrh r2,[r2]
   cmp r1,r2
+#endif
 
   bne resume
   ldr r1,=0x03007ff4

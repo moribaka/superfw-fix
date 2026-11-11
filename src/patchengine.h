@@ -42,7 +42,8 @@ struct struct_t_patch {
   uint8_t rtc_ops;                // RTC patches
   uint8_t irq_flags;
   uint8_t web_edits;
-  uint16_t image_kib;
+  uint16_t image_kib;             // 外置补丁的 ROM 扩展长度。
+  uint16_t nor_image_kib;         // 加强库的 NOR 菜单空间，独立于 TF 镜像。
   uint32_t menu_layout;            // Reviewed scatter layout, zero for legacy.
   uint32_t hole_size;             // Hole/trailing info, for ROM free space
   uint32_t hole_addr;
@@ -95,26 +96,13 @@ typedef struct {
 } t_patch_builder;
 
 
-// These new paths currently have actual SDRAM mGBA evidence only.
-static inline bool patch_has_sdram_only_ops(const t_patch *patch) {
-  if (!patch) return false;
-  if (patch->menu_layout>=701 && patch->menu_layout<=705) return true;
-  for (unsigned i=0;i<patch->wcnt_ops;) {
-    unsigned op=patch->op[i]>>28,arg=(patch->op[i]>>25)&7;
-    if(op==5 && arg==2)return true;
-    unsigned n=op==3?1+(arg+4)/4:op==4?arg+2:1;
-    if(n>patch->wcnt_ops-i)return true;
-    i+=n;
-  }
-  return false;
-}
-
 void patchmem_dbinfo(const uint8_t *dbptr, uint32_t *pcnt, char *version, char *date, char *creator);
 // Lookup routines (builtin, on-disk, etc).
 bool patchmem_lookup(const uint8_t *gamecode, const uint8_t *dbptr, t_patch *pdata);
 // Actual patching magic
 bool patch_rtc_supported(const t_patch *patch);
 bool patch_igm_supported(const t_patch *patch, bool nor);
+bool patch_nor_bridge_required(const t_patch *patch);
 bool patch_apply_rom(uint8_t *buffer, unsigned bufsize, uint32_t baseaddr, bool patch_waitcnt, const t_patch *pdata,
                      bool patch_rtc, uint32_t igmenu_addr, uint32_t ds_addr, bool nor);
 // Payload patching routine

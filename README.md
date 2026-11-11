@@ -1,27 +1,32 @@
-# SuperFW fix r88（SuperChis）
+# SuperFW fix R88-B（SuperChis）
 
-基于 [SuperFW 主线 v0.22](https://github.com/davidgfnet/superfw/releases/tag/v0.22)，构建标识 `88000001`，仅适用于 SuperChis。内置 1,965 条 Hack 补丁库，保留既有游戏与完整/精简菜单适配。
+基于 [SuperFW v0.22](https://github.com/davidgfnet/superfw/releases/tag/v0.22)，构建标识 `88000002`。使用“Hack 加强”应用本版 ROM 适配。
 
-感谢 David Guillen Fandos（davidgf / davidgfnet）开发并开放 [SuperFW](https://github.com/davidgfnet/superfw)，感谢 ChisBread 的 [SuperChis](https://github.com/ChisBread/SuperChis) 项目。原有署名、GPL 和第三方许可随源码保留。[主线文档](https://superfw.davidgf.net/)。
+- 《机战 A－添加战斗汉化和语音 1.4 版》新增 NOR 游戏内菜单适配。
+- 《龙珠 GT》汉化版、《西格玛星际传说》v1.2、《战斗弹珠人 B 传说》公测版 v3_89、《换装迷宫 3》完美汉化测试版新增 TF、NOR 菜单适配。
+- 《横行霸道·复仇》汉化版新增 TF、NOR 游戏内菜单适配。
+- 《宝可梦拉撒路》新增 TF、NOR 游戏内菜单适配。
+- 《Quake》GBA 非官方移植原型版新增 TF、NOR 游戏内菜单适配。
+- 《危险人物－报复 Payback》欧版补充 TF、NOR 游戏内菜单兼容。
+- 《杜皮狗之网球公开赛》欧版、《Global Star Sudoku Fever》美版及欧版补充 TF、NOR 游戏内菜单兼容。
+- 《X 战警》《雷曼 4 光明之旅》D 商版补充 TF、NOR 游戏内菜单兼容。
+- 《甲虫王国 格莱特斯特冠军之路》日版新增 TF 游戏内菜单适配。
+- 《神游 Famicom Mini Collection》未发售简体中文版调整 NOR 菜单返回兼容。
+- 《神游之密特罗德 融合》简体版补充 NOR 游戏内菜单适配。
+- 《阿斯特堡的恶魔》汉化版调整 NOR 游戏内菜单兼容。
+- 《口袋妖怪 绿宝石》美化重制 beta0.1、冰魔计划 3.1、幻影之翼 DP、零、Phantom Wing 调整 NOR 资源兼容。
+- 《Famicom Mini》《Classic NES Series》本批精确版本补充 TF、NOR 游戏内菜单兼容，逐版本列于附件 ROM 适配明细。
 
-## 兼容性更新
+## NOR 重刷范围
 
-- 《欢乐足球 球队球员名全汉化版 v1.3》（BIXJ v0）：调整游戏内存档兼容，解决提示保存成功但重新启动没有进度的问题。请使用“Hack 加强”补丁模式启动。
+仅部分游戏需重刷 NOR。已写入 NOR、需要应用本版新增或调整 NOR 菜单的精确 ROM 版本，需要重新写入对应游戏，包括机战 A 语音 1.4、宝可梦拉撒路、Quake、Payback 及本批 Famicom Mini / Classic NES 适配版本。仅 TF 变化的甲虫王国及黑暗的遗产 Gauntlet 无需因此重刷 NOR。小容量 NOR 分配缩小项可在重新安装时回收空间。
 
-## NOR 是否需要重刷
+## 使用与构建
 
-**仅已写入 NOR 的《欢乐足球 球队球员名全汉化版 v1.3》需重新写入一次**，以替换游戏 ROM 中旧的存档适配。其他 NOR 游戏无需因本次更新重刷；从 TF 直接启动该游戏时，更新固件并选择“Hack 加强”即可应用。
+将当前游戏进度转存至 TF，再更新固件。固件信息页按 `Down+B+Start` 启用升级，打开 `.fw` 后按 `L+R+Up` 开始更新，完成后重启。
 
-历史例外：此前用旧版菜单适配写入 NOR 的《晓月圆舞曲[简大字]》仍需重新写入，以应用该游戏的汉化兼容修正。已使用修正版写入的无需再次重刷。
+源码构建执行 `make BOARD=chis`，需要 devkitARM、GNU Make、Python 3 和宿主机 C++ 编译器。
 
-## 欢乐足球验证范围
+本机 mGBA 测试覆盖相应版本的启动、菜单呼出及返回，实卡及完整剧情仍待验收。
 
-上述版本已通过本机 SRAM、DirectSave 的新建保存、覆盖保存及独立冷启动读档测试，实卡仍待确认。
-
-## 升级
-
-1. 将当前游戏进度转存到 TF，将 `superfw-chis-r88.fw` 复制到卡上。
-2. 固件信息页按 `Down+B+Start` 启用升级，返回文件浏览器打开 `.fw`，按 `L+R+Up` 开始刷写。
-3. 刷写会覆盖固件，过程中不要断电。完成后重启，确认构建标识 `88000001`。
-
-源码构建：`make BOARD=chis`。源码包不含用户 ROM、BIOS、存档或本地排查工具。[下载 r88 固件和完整源码](https://github.com/moribaka/superfw-fix/releases/tag/r88)。
+感谢 [David Guillen Fandos](https://github.com/davidgfnet/superfw) 与 [ChisBread](https://github.com/ChisBread/SuperChis)。原项目署名和许可随源码保留。

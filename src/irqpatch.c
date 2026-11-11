@@ -402,10 +402,14 @@ static bool thumb_store_replay(const uint32_t *operations) {
     return operations[3] == 0xBC01BC10 && (register_epilogue || flag_epilogue) &&
            (operations[4] == 0x03FFFFFC || operations[4] == 0x03007FFC);
   }
-  unsigned first = operations[1] & 0xFFFF, store = operations[1] >> 16;
+  unsigned kind = (operations[0] >> 25) & 7;
+  bool prefix = kind == IRQPATCH_STORE_PREFIX_ARGUMENT;
+  bool direct = kind == IRQPATCH_STORE_DIRECT_ARGUMENT;
+  unsigned first = (prefix ? operations[1] >> 16 : operations[1]) & 0xFFFF;
+  unsigned store = prefix ? operations[2] & 0xFFFF : operations[1] >> 16;
   if ((first & 0xF800) != 0x4800 || (store & 0xF800) != 0x6000 ||
-      ((store >> 3) & 7) != ((first >> 8) & 7) || ((store >> 6) & 31) != 15 ||
-      operations[4] != 0x03007FC0)
+      ((store >> 3) & 7) != ((first >> 8) & 7) || ((store >> 6) & 31) != (direct ? 0 : 15) ||
+      operations[4 + prefix] != (direct ? 0x03007FFC : 0x03007FC0))
     return false;
   unsigned literals = 0;
   for (unsigned index = 0; index < 6; index++) {
@@ -798,10 +802,11 @@ static unsigned operation_words(uint32_t operation) {
     case 3: return 1 + (argument + 4) / 4;
     case 4: return argument + 2;
     case 5: return argument == 0 || argument == 1 || argument == 4 || argument == 5 ? 1 : 0;
-    case IRQPATCH_METADATA_OPCODE: return argument == IRQPATCH_VBLANK_ARGUMENT ? 3 :
+    case IRQPATCH_METADATA_OPCODE: return argument == PATCH_NOR_WRITE_ARGUMENT ? 2 :
+      argument == IRQPATCH_VBLANK_ARGUMENT ? 3 :
       argument >= 1 && argument <= IRQPATCH_ENTRY_CHECK_ARGUMENT ? 1 : 0;
     case IRQPATCH_OPCODE: case IRQPATCH_DMA_OPCODE: return argument == 0 ? 3 : 0;
-    case IRQPATCH_STORE_OPCODE: return argument == 0 ? 3 : argument == 1 || argument == 3 ? 8 : 0;
+    case IRQPATCH_STORE_OPCODE: return argument == 0 ? 3 : argument >= 1 && argument <= 4 ? 8 : 0;
     case IRQPATCH_REGISTER_OPCODE: return argument == 0 ? 5 : 0;
     case IRQPATCH_DEAD_ARG_OPCODE: return argument == 0 ? 7 : 0;
     case IRQPATCH_NESTING_OPCODE: return argument == 0 ? 2 : 0;
@@ -850,7 +855,8 @@ NOINLINE bool irqpatch_hook_count(const uint32_t *operations, unsigned count, un
       if ((site & 3) || site < 192 || site > 32 * 1024 * 1024 - 4 || (hook & 3) ||
           hook < 192 || hook > 32 * 1024 * 1024 - 128 ||
           (site < hook + 128 && site + 4 > hook) ||
-          operations[cursor + 1] < 0x080000C0 || operations[cursor + 1] >= 0x0A000000)
+          !((operations[cursor + 1] >= 0x02000000 && operations[cursor + 1] < 0x04000000) ||
+            (operations[cursor + 1] >= 0x080000C0 && operations[cursor + 1] < 0x0A000000)))
         return false;
     } else if (operations[cursor] >> 28 == IRQPATCH_METADATA_OPCODE &&
                ((operations[cursor] >> 25) & 7) == IRQPATCH_ENTRY_CHECK_ARGUMENT) {
@@ -956,6 +962,12 @@ static bool encode_thumb_call(uint32_t source, uint32_t destination, uint32_t *i
   return true;
 }
 
+static unsigned hook_offset(unsigned index, bool wide) {
+  // 额外安装点使用头部原有预留，保持已有菜单与 NOR 入口的偏移。
+  return index == IRQPATCH_PRIMARY_HOOKS || (wide && index == IRQPATCH_PRIMARY_HOOKS - 1)
+    ? IRQPATCH_EXTRA_HOOK_OFFSET : IRQPATCH_HOOK_OFFSET + index * IRQPATCH_HOOK_SIZE;
+}
+
 bool irqpatch_apply(uint8_t *buffer, unsigned size, uint32_t base, const uint32_t *operations,
                     unsigned count, uint32_t menu_address, unsigned handler_offset) {
   unsigned hooks;
@@ -972,7 +984,7 @@ bool irqpatch_apply(uint8_t *buffer, unsigned size, uint32_t base, const uint32_
       continue;
     uint32_t site = operations[cursor] & 0x1FFFFFF;
     bool thumb_store = opcode == IRQPATCH_STORE_OPCODE && ((operations[cursor] >> 25) & 7) != 0;
-    uint32_t hook = menu_address - 0x08000000 + IRQPATCH_HOOK_OFFSET + checked * IRQPATCH_HOOK_SIZE;
+    uint32_t hook = menu_address - 0x08000000 + hook_offset(checked, thumb_store);
     checked += thumb_store ? 2 : 1;
     uint32_t encoded;
     if (!thumb_store && opcode != IRQPATCH_REGISTER_OPCODE && opcode != IRQPATCH_DEAD_ARG_OPCODE && (opcode != IRQPATCH_DMA_OPCODE ?
@@ -1000,12 +1012,13 @@ bool irqpatch_apply(uint8_t *buffer, unsigned size, uint32_t base, const uint32_
     uint32_t site = operations[cursor] & 0x1FFFFFF;
     uint32_t original = operations[cursor + 1];
     bool thumb_store = opcode == IRQPATCH_STORE_OPCODE && ((operations[cursor] >> 25) & 7) != 0;
-    uint32_t hook = menu_address - 0x08000000 + IRQPATCH_HOOK_OFFSET + index * IRQPATCH_HOOK_SIZE;
+    uint32_t hook = menu_address - 0x08000000 + hook_offset(index, thumb_store);
     index += thumb_store ? 2 : 1;
     uint32_t jump, resume;
     if (thumb_store) {
       uint16_t code[32] = {0xBC80};
       bool mirror = ((operations[cursor] >> 25) & 7) == 3;
+      bool direct = ((operations[cursor] >> 25) & 7) == IRQPATCH_STORE_DIRECT_ARGUMENT;
       unsigned literals = 0;
       for (unsigned replay = 0; replay < 6; replay++) {
         uint16_t instruction = operations[cursor + 1 + replay / 2] >> ((replay & 1) * 16);
@@ -1013,11 +1026,12 @@ bool irqpatch_apply(uint8_t *buffer, unsigned size, uint32_t base, const uint32_
           unsigned pool = 36 + literals * 4, address = 2 + replay * 2;
           instruction = (instruction & 0xFF00) | ((pool - ((address + 4) & ~3U)) / 4);
           uint32_t value = operations[cursor + 4 + literals++];
-          if (mirror && replay == 0)
+          if ((mirror || direct) && replay == 0)
             value -= 8;
           memcpy((uint8_t*)code + pool, &value, 4);
         }
-        if (replay == 1 && !mirror)
+        // 前缀形式先加载原生 IRQ 地址，第三条才是需要重定向的写入。
+        if (replay == (((operations[cursor] >> 25) & 7) == IRQPATCH_STORE_PREFIX_ARGUMENT ? 2 : 1) && !mirror && !direct)
           instruction ^= 0x80;
         code[1 + replay] = instruction;
       }
@@ -1128,8 +1142,8 @@ bool irqpatch_apply_vblank(uint8_t *buffer, unsigned size, uint32_t base,
     if (operations[cursor] >> 28 != IRQPATCH_METADATA_OPCODE ||
         ((operations[cursor] >> 25) & 7) != IRQPATCH_VBLANK_ARGUMENT) continue;
     unsigned site = operations[cursor] & 0x1FFFFFF, hook = operations[cursor + 2];
-    const uint32_t *code = vblank_bridge_sdram;
-    unsigned length = sizeof(vblank_bridge_sdram);
+    const uint32_t *code = hotkey ? vblank_bridge_sdram : vblank_bridge_nor;
+    unsigned length = hotkey ? sizeof(vblank_bridge_sdram) : sizeof(vblank_bridge_nor);
     for (unsigned byte = 0; byte < 4; byte++)
       if (site + byte >= base && site + byte - base < size &&
           buffer[site + byte - base] != (uint8_t)(operations[cursor + 1] >> (byte * 8))) return false;

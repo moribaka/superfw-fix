@@ -1,0 +1,59 @@
+{
+  "roms": [
+    {
+      "name": "X战警（D商版）",
+      "size": 33554432,
+      "sha256": "93972b71d7cb54724ea4fb1164332d0d50563f405621355ffd22e65daa240542",
+      "quick_id": 3006991411,
+      "menu_space": {
+        "offset": 22528,
+        "length": 229376,
+        "fill": 0
+      },
+      "modes": [
+        "TF",
+        "NOR"
+      ]
+    },
+    {
+      "name": "雷曼4 光明之旅（D商版）",
+      "size": 33554432,
+      "sha256": "93c6b814c39e4d356e2e7d4396c8972c88ac6b4175640d60fe8dd64ee45719a1",
+      "quick_id": 3403688915,
+      "menu_space": {
+        "offset": 4216832,
+        "length": 229376,
+        "fill": 0
+      },
+      "modes": [
+        "TF",
+        "NOR"
+      ]
+    },
+    {
+      "name": "甲虫王国 格莱特斯特冠军之路（日版）",
+      "size": 33554432,
+      "sha256": "44e5793ffd95dd1701e67b1401816637e7aeef8982d352d9c5c11dc6897d5853",
+      "quick_id": 3565701737,
+      "menu_space": {
+        "offset": 32347136,
+        "length": 229376,
+        "fill": 0
+      },
+      "modes": [
+        "TF",
+        "NOR"
+      ]
+    },
+    {
+      "name": "神游 Famicom Mini Collection（未发售简体中文版）",
+      "size": 4194304,
+      "sha256": "8d7d91742dafaa1c5f314d89a9782680191219920259bf56fe63e28beb6a6c07",
+      "quick_id": 3363886698,
+      "modes": [
+        "TF",
+        "NOR"
+      ]
+    }
+  ]
+}

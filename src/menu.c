@@ -591,16 +591,35 @@ static bool load_hack_database(t_load_gba_info *info) {
   uint32_t identity, offsets[32];
   unsigned count;
   memcpy(&identity, hash, sizeof(identity));
+  uint32_t primary_identity = identity;
+  unsigned branch = 0;
+  do {
+    set_supercard_mode(MAPPED_SDRAM, true, false);
+    bool found = hackpatch_db_samples((const uint8_t*)ROM_HACKDB_U8, info->romfs | branch,
+                                      identity, offsets, &count);
+    set_supercard_mode(MAPPED_SDRAM, true, true);
+    if (!found) {
+      if (!branch)
+        return false;
+      break;
+    }
+    if (count && !hackpatch_quick_id(info->romfn, (const uint8_t*)&info->romh,
+                                    offsets, count, &identity))
+      return false;
+    if (!branch)
+      primary_identity = identity;
+    // 仅已登记的碰撞分组读取自己的新采样；其它版本沿用原身份及原采样。
+    branch ^= HACKPATCH_BRANCH_SIZE_BIT;
+  } while (branch);
   set_supercard_mode(MAPPED_SDRAM, true, false);
-  bool found = hackpatch_db_samples((const uint8_t*)ROM_HACKDB_U8, info->romfs,
-                                    identity, offsets, &count);
-  set_supercard_mode(MAPPED_SDRAM, true, true);
-  if (!found || (count && !hackpatch_quick_id(info->romfn, (const uint8_t*)&info->romh,
-                                            offsets, count, &identity)))
-    return false;
-  set_supercard_mode(MAPPED_SDRAM, true, false);
-  info->patches_hack_found = hackpatch_db_lookup((const uint8_t*)ROM_HACKDB_U8,
-                                               info->romfs, identity, &info->patches_hack);
+  for (;;) {
+    info->patches_hack_found = hackpatch_db_lookup((const uint8_t*)ROM_HACKDB_U8,
+                                                 info->romfs, identity, &info->patches_hack);
+    if (info->patches_hack_found || identity == primary_identity)
+      break;
+    // 新分支未登记的版本继续沿用原索引；不改变已有原件的补丁映射。
+    identity = primary_identity;
+  }
   set_supercard_mode(MAPPED_SDRAM, true, true);
   return info->patches_hack_found;
 }
@@ -614,9 +633,9 @@ static bool load_hack_record(t_load_gba_info *info) {
 }
 
 static void fallback_hack_to_database(t_load_gba_info *info) {
-  if (info->patch_type != PatchHack || info->patches_hack_found)
+  if (info->patch_type != PatchHack || info->patches_hack_found || info->patches_datab_found)
     return;
-  info->patch_type = info->patches_datab_found ? PatchDatabase : PatchNone;
+  info->patch_type = PatchNone;
 }
 
 static t_patch_policy next_patch_policy(t_patch_policy policy, bool forward) {
@@ -688,9 +707,12 @@ void sram_battery_test_callback(bool confirm) {
 
 
 static const t_patch * get_game_patch(const t_load_gba_info *info) {
+  // Hack 模式优先使用加强记录，回退原数据库时保留用户选择。
+  if (info->patch_type == PatchHack)
+    return info->patches_hack_found ? &info->patches_hack :
+           info->patches_datab_found ? &info->patches_datab : NULL;
   return info->patch_type == PatchDatabase && info->patches_datab_found ? &info->patches_datab :
-         info->patch_type == PatchEngine   && info->patches_cache_found ? &info->patches_cache :
-         info->patch_type == PatchHack     && info->patches_hack_found ? &info->patches_hack : NULL;
+         info->patch_type == PatchEngine   && info->patches_cache_found ? &info->patches_cache : NULL;
 }
 
 bool ingame_menu_avail_sdram(const t_load_gba_info *info) {
@@ -718,11 +740,13 @@ bool ingame_menu_avail_sdram(const t_load_gba_info *info) {
 
 bool ingame_menu_avail_flash(const t_load_gba_info *info) {
   const t_patch *p = get_game_patch(info);
+  unsigned image_size = patch_nor_rom_size(info->romfs, p, info->rtc_patch_enabled, true, false);
+  bool native_bridge = p && patch_nor_bridge_required(p);
 
   // Checks if the ROM is small enough so the last 4MiB block can be remapped.
-  if (patch_rom_size(info->romfs, p, info->rtc_patch_enabled) > MAX_GBA_ROM_SIZE - NOR_BLOCK_SIZE) {
+  if (image_size > MAX_GBA_ROM_SIZE - NOR_BLOCK_SIZE || native_bridge) {
     // Otherwise find a gap to flash on NOR our tiny payload
-    if ((!p || p->hole_size < DIRSAVE_REQ_SPACE || p->hole_addr + p->hole_size > info->romfs) &&
+    if ((!p || p->hole_size < DIRSAVE_REQ_SPACE + (native_bridge ? 2*1024 : 0) || p->hole_addr + p->hole_size > image_size) &&
         (!p || (!menu_layout_get(p->menu_layout)&&!menu_overlay_profile_get(p->menu_layout))))
       return false;   // Too big to fit!
   }
@@ -752,11 +776,12 @@ bool dirsav_avail_sdram(const t_load_gba_info *info) {
 
 bool dirsav_avail_flash(const t_load_gba_info *info) {
   const t_patch *p = get_game_patch(info);
+  unsigned image_size = patch_nor_rom_size(info->romfs, p, info->rtc_patch_enabled, info->ingame_menu_enabled, true);
 
   // Checks if the ROM is small enough so the last 4MiB block can be remapped.
-  if (patch_rom_size(info->romfs, p, info->rtc_patch_enabled) > MAX_GBA_ROM_SIZE - NOR_BLOCK_SIZE) {
+  if (image_size > MAX_GBA_ROM_SIZE - NOR_BLOCK_SIZE) {
     // Otherwise find a gap to flash on NOR our tiny payload
-    if (!p || p->hole_size < DIRSAVE_REQ_SPACE || p->hole_addr + p->hole_size > info->romfs)
+    if (!p || p->hole_size < DIRSAVE_REQ_SPACE || p->hole_addr + p->hole_size > image_size)
       return false;   // Too big to fit!
   }
 
@@ -773,7 +798,7 @@ static bool prepare_selected_hack_patches(t_load_gba_info *info, bool load_sdram
     return true;
   if (!load_hack_record(info)) {
     fallback_hack_to_database(info);
-    if (info->patch_type == PatchDatabase || info->patch_type == PatchNone)
+    if (info->patches_datab_found || info->patch_type == PatchNone)
       return true;
     spop.alert_msg = msgs[lang_id][MSG_HACKPATCH_FAIL];
     return false;
@@ -2560,7 +2585,7 @@ static void keypress_popup_loadgba(unsigned newkeys) {
     }
     else if (spop.submenu == GbaLoadPopPatch && spop.selector == GBAPatchGen) {
       if (spop.p.load.i.patch_type == PatchHack) {
-        bool success = load_hack_database(&spop.p.load.i);
+        bool success = load_hack_database(&spop.p.load.i) || spop.p.load.i.patches_datab_found;
         spop.alert_msg = msgs[lang_id][success ? MSG_HACKDB_LOADED : MSG_HACKPATCH_FAIL];
       }
       else {
@@ -2588,7 +2613,7 @@ static void keypress_popup_loadgba(unsigned newkeys) {
     else if (GbaLoadPopInfo == spop.submenu) {
       if (!prepare_selected_hack_patches(&spop.p.load.i, true))
         return;
-      if (spop.p.load.i.patch_type == PatchHack) {
+      if (spop.p.load.i.patch_type == PatchHack && spop.p.load.i.patches_hack_found) {
         const t_patch *resolved = get_game_patch(&spop.p.load.i);
         if (resolved && resolved->save_mode == SaveTypeNone) {
           spop.p.load.l.sram_load_type = SaveLoadDisable;
@@ -2738,7 +2763,7 @@ static void keypress_popup_norwrite(unsigned newkeys) {
 
     if ((newkeys & KEY_BUTTA) && spop.selector == GBAPatchGen) {
       if (spop.p.norwr.i.patch_type == PatchHack) {
-        bool success = load_hack_database(&spop.p.norwr.i);
+        bool success = load_hack_database(&spop.p.norwr.i) || spop.p.norwr.i.patches_datab_found;
         spop.alert_msg = msgs[lang_id][success ? MSG_HACKDB_LOADED : MSG_HACKPATCH_FAIL];
       }
       else {
@@ -2754,7 +2779,8 @@ static void keypress_popup_norwrite(unsigned newkeys) {
       const t_load_gba_info *info = &spop.p.norwr.i;
       const t_patch *p = get_game_patch(info);
       // Check whether we have enough space.
-      unsigned image_size = patch_rom_size(info->romfs, p, info->rtc_patch_enabled);
+      unsigned image_size = patch_nor_rom_size(info->romfs, p, info->rtc_patch_enabled,
+                                                info->ingame_menu_enabled, info->use_dsaving);
       unsigned blkcnt = (image_size + NOR_BLOCK_SIZE - 1) / NOR_BLOCK_SIZE;
       if (smenu.fbrowser.freeblks < blkcnt || smenu.fbrowser.maxentries + 1 >= FLASHG_MAXFN_CNT)
         spop.alert_msg = msgs[lang_id][MSG_ERR_NORSPC];

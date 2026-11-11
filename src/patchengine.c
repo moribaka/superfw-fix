@@ -182,10 +182,13 @@ static bool push_irq_operations(void *context, const uint32_t *operations, unsig
   return true;
 }
 
+bool patch_nor_bridge_required(const t_patch *patch) {
+  return patch->irq_flags & IRQPATCH_NOR_BRIDGE;
+}
+
 bool patch_igm_supported(const t_patch *patch, bool nor) {
-  if(nor && patch_has_sdram_only_ops(patch))return false;
   if (!patch || !patch->irqh_ops || (patch->irq_flags & IRQPATCH_UNSUPPORTED) ||
-      (patch->irq_flags & ~(IRQPATCH_BOOT_CLEAR | IRQPATCH_UNSUPPORTED | IRQPATCH_BOOT_RESTORE | IRQPATCH_ENTRY_CHECKS_SCANNED | IRQPATCH_NATIVE_STARTUP)) ||
+      (patch->irq_flags & ~(IRQPATCH_BOOT_CLEAR | IRQPATCH_UNSUPPORTED | IRQPATCH_BOOT_RESTORE | IRQPATCH_ENTRY_CHECKS_SCANNED | IRQPATCH_NATIVE_STARTUP | IRQPATCH_NOR_BRIDGE)) ||
       patch->wcnt_ops + patch->save_ops + patch->irqh_ops + patch->rtc_ops > MAX_PATCH_OPS)
     return false;
   unsigned hooks;
@@ -200,12 +203,14 @@ bool patch_igm_supported(const t_patch *patch, bool nor) {
     if (address == 0x03007FF4)
       program_mask |= 1U << index;
   }
-  if (nor) {
-    unsigned position = patch->wcnt_ops + patch->save_ops;
-    if (patch->irqh_ops == 3 && (patch->op[position] >> 25) ==
-        ((IRQPATCH_METADATA_OPCODE << 3) | IRQPATCH_VBLANK_ARGUMENT)) return false;
+  if(nor && !(patch->irq_flags & IRQPATCH_NOR_BRIDGE)) {
+    unsigned position=patch->wcnt_ops+patch->save_ops;
+    if(patch->irqh_ops==3 && (patch->op[position]>>25)==
+       ((IRQPATCH_METADATA_OPCODE<<3)|IRQPATCH_VBLANK_ARGUMENT))return false;
   }
-  return (!nor || !hooks || patch->menu_layout == 3 || (patch->irq_flags & IRQPATCH_NATIVE_STARTUP)) && irqpatch_native_program_present(patch->op + patch->wcnt_ops + patch->save_ops, patch->irqh_ops, program_mask) &&
+  return (!nor || !hooks || patch->menu_layout==3 ||
+          (patch->irq_flags & (IRQPATCH_NATIVE_STARTUP|IRQPATCH_NOR_BRIDGE))) &&
+         irqpatch_native_program_present(patch->op + patch->wcnt_ops + patch->save_ops, patch->irqh_ops, program_mask) &&
          (!(patch->irq_flags & (IRQPATCH_BOOT_CLEAR | IRQPATCH_BOOT_RESTORE)) || hooks);
 }
 
@@ -1379,6 +1384,7 @@ int serialize_patch(const t_patch *patch, uint8_t *buffer) {
   // Write the patch into the buffer.
   memcpy(&buffer[0], "SUPERFWPATCHV01", 16);
   if (patch->image_kib) buffer[14] = '3';
+  if (patch->nor_image_kib) buffer[14] = '4';
   buffer[16] = patch->wcnt_ops;
   buffer[17] = patch->save_ops;
   buffer[18] = patch->save_mode;
@@ -1392,6 +1398,11 @@ int serialize_patch(const t_patch *patch, uint8_t *buffer) {
   buffer[26] = patch->image_kib & 0xFF;
   buffer[27] = patch->image_kib >> 8;
   memcpy(buffer + 28, &patch->menu_layout, 4);
+  if (patch->nor_image_kib) {
+    // V04 保持 800 字节，将布局字的高 16 位用于 NOR 扩展长度。
+    buffer[30] = patch->nor_image_kib & 0xFF;
+    buffer[31] = patch->nor_image_kib >> 8;
+  }
   buffer += 32;
 
   memcpy(buffer, patch->prgs, sizeof(patch->prgs));
@@ -1411,15 +1422,17 @@ bool unserialize_patch(const uint8_t *buffer, unsigned size, t_patch *patch) {
   if (size < 32 + sizeof(patch->op) + sizeof(patch->prgs))
     return false;
   bool web = is_web_patch(buffer);
-  bool extended = web && buffer[14] == '3';
+  bool nor_extended = !memcmp(buffer, "SUPERFWPATCHV04", 16);
+  bool extended = nor_extended || (web && buffer[14] == '3');
   if (size != 32 + sizeof(patch->op) + sizeof(patch->prgs) &&
       !(web && size >= 32 + sizeof(patch->op) + sizeof(patch->prgs)))
     return false;
-  if (!web && memcmp(&buffer[0], "SUPERFWPATCHV01", 16))
+  if (!web && !nor_extended && memcmp(&buffer[0], "SUPERFWPATCHV01", 16))
     return false;
 
   patch->web_edits = web;
   patch->image_kib = extended ? buffer[26] | (buffer[27] << 8) : 0;
+  patch->nor_image_kib = nor_extended ? buffer[30] | (buffer[31] << 8) : 0;
   patch->wcnt_ops = buffer[16];
   patch->save_ops = buffer[17];
   patch->save_mode = buffer[18];
@@ -1427,6 +1440,7 @@ bool unserialize_patch(const uint8_t *buffer, unsigned size, t_patch *patch) {
   patch->rtc_ops = buffer[20];
   patch->irq_flags = buffer[21];
   memcpy(&patch->menu_layout, buffer + 28, 4);
+  if (nor_extended) patch->menu_layout &= 0xFFFF;
   patch->hole_size = (buffer[22] | (buffer[23] << 8)) << 10;
   patch->hole_addr = (buffer[24] | (buffer[25] << 8)) << 10;
   buffer += 32;

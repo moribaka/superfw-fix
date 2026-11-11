@@ -1,0 +1,1826 @@
+{
+  "policy": "与当前采用的SuperFW原数据库对同一ROM产生完整相同TF/NOR补丁输出的记录只归档，不进入hack库。",
+  "pdb_sha256": "c675f7135abe38c48b19ada4c1e0fcdc50252d9ac1d3d50bc0926c87b3b3dd6e",
+  "verified_index_count": 144,
+  "verified_rom_sha256_count": 234,
+  "records": [
+    {
+      "key": "2097152:62275b28",
+      "size": 2097152,
+      "quick_id": 1646746408,
+      "packed_sha256": "2cafcbcbeaec9f71ebff18466fe934a8e0cb3e98537153f144ece522f1d55307",
+      "serialized_sha256": "7d390bf590cb2c1d449227fb41e9289d142616a959b8e0cfd9709765a4401e78",
+      "proved_sha256s": [
+        "7d51063dbd684836d7e8573b95f78c9b4d21a4fc53841473db5c2f5611514d10"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/2097152-62275b28",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "4194304:020117a6",
+      "size": 4194304,
+      "quick_id": 33626022,
+      "packed_sha256": "11f56c1efc6864473c51e411adabb80ca9d918247d755b2c8148cace75dae026",
+      "serialized_sha256": "18d4b0c7d21e55fb97b415e1eb56b2f5d4f42203f817fa91c08a3792f37c07eb",
+      "proved_sha256s": [
+        "05c5335c9bddf7158023bf57cff23f3f610513a57e32135b8d85fc6e4d0e8c22"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/4194304-020117a6",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "4194304:0b987bb8",
+      "size": 4194304,
+      "quick_id": 194542520,
+      "packed_sha256": "960eac6fde8e01f120d3f0e31903781617d73f325b6a773b8acdea3e64142b15",
+      "serialized_sha256": "0c759ef2120d66ddd038d99b954ab8bfd78448b5fcef9f8e57577c55d60449a3",
+      "proved_sha256s": [
+        "88465bfb0bde8a9a3df4a6081cc9f8e999fa74c68c1ec91ebc8dfc977be85fd0"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/4194304-0b987bb8",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "4194304:11d9e7c4",
+      "size": 4194304,
+      "quick_id": 299493316,
+      "packed_sha256": "177c4d3cc28ce5fc38154a282e2cc7406cea1cb2dc2d861183ec4718cce1927d",
+      "serialized_sha256": "91a27dd722d799b79069ac9666ce924f018b03e03e7b025f480d8ab9b19b5f52",
+      "proved_sha256s": [
+        "8756fd01f0dd82937773caff63bd6a2716c13d5fb39107aba745b8f6b4cd25eb",
+        "89d06785d9fcdf2d5e5cf34d1628f7598993001a125ffa431a9088cd2278923d"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/4194304-11d9e7c4",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "4194304:17051be6",
+      "size": 4194304,
+      "quick_id": 386210790,
+      "packed_sha256": "9b8cffb6c01b326a79691597159a3a0d4c6937c4870304bcf03fb50f7fe848c3",
+      "serialized_sha256": "d08537c8b338f41e2b537a2c7574dafa69c5be127674bd3075b7f40c76efce85",
+      "proved_sha256s": [
+        "d76908c941ec3495062bb8205d2ec3d3e4ae225a37db0b0dcc64995d7aeda0da"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/4194304-17051be6",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "4194304:18053f13",
+      "size": 4194304,
+      "quick_id": 402997011,
+      "packed_sha256": "4bc3a5d82d0dc3eac71eff2b30bed6465da636be79d5d9ad3656cd9b5c2f6178",
+      "serialized_sha256": "5cb938b9457e855dc796d2e2f8e94e543dd3e998de43d078fc6bcf493bc5d98d",
+      "proved_sha256s": [
+        "d7952790a4b82b6d230a4953e4bfe48f6693ddd550f1cf0e7ace74bce95453f8"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/4194304-18053f13",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "4194304:1a544801",
+      "size": 4194304,
+      "quick_id": 441731073,
+      "packed_sha256": "531f445756285760932ae43355c8af00280a3763adae09d655828a2a305f6406",
+      "serialized_sha256": "247087d4fa7c96fd08a9478c95d4decfce0236a9aab51900b00a75fdf4b8ad15",
+      "proved_sha256s": [
+        "8ee9c7a9363d58c350a19b5ead16b544ff8e770dbc4d3c33bec67f444cee1ca4"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/4194304-1a544801",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "4194304:1d64d423",
+      "size": 4194304,
+      "quick_id": 493147171,
+      "packed_sha256": "3bf359a739f5f75bbdbb9e97aa5784c4bfa85630e373e7b955c8823c94bc9c60",
+      "serialized_sha256": "bf77353a79bbf06f4b2f162403d4913d3c5c8c2aced83276ac004f591a3502fb",
+      "proved_sha256s": [
+        "5026823af13f5e5eed2e407a67916c5c23d63b070b0f4143d87ce2fd2512808e"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/4194304-1d64d423",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "4194304:358f0b55",
+      "size": 4194304,
+      "quick_id": 898566997,
+      "packed_sha256": "ee9128bfe7e4d6c1546ab82cb5c7d8c975bdaabf168738cb59ac655407c634ab",
+      "serialized_sha256": "dc0fcb073c085254e1b4ad88995ab982e2c5e8141d16bcee75ecd2cab3572b85",
+      "proved_sha256s": [
+        "a39d80233a5a5a2ee69116f6c1739c2d7ad5a68a362b0f99b9b4eb0b1ad2363a"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/4194304-358f0b55",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "4194304:368d1d12",
+      "size": 4194304,
+      "quick_id": 915217682,
+      "packed_sha256": "5c4a1d9c34605f1460a91ad1e8d3be17c17778d1700edf3b4f6343103eb06dfa",
+      "serialized_sha256": "e3e16296e55b280b7c034e65a5f1f4ca7afe896f1ce584366e1d5922ed23dd47",
+      "proved_sha256s": [
+        "f0af99188e7ffaf0b0ea95e1503365a7eaf2eac6c9bc01c18c0f5c5ed010d4b6"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/4194304-368d1d12",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "4194304:3879b6d5",
+      "size": 4194304,
+      "quick_id": 947500757,
+      "packed_sha256": "e0bda97f921ddf1625746570e08050e43c060acbe575010f30f1f438ca5522de",
+      "serialized_sha256": "a775af415c869169afa7189b5bc8318988e53413544eb4d99ea9f57ac56fe696",
+      "proved_sha256s": [
+        "4df421269918a86ad9af0606b489a450aee8bff12191c5717025ef954c1da3f0"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/4194304-3879b6d5",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "4194304:3e55b05f",
+      "size": 4194304,
+      "quick_id": 1045803103,
+      "packed_sha256": "6d7bfc274cd9a1260b6abfb420d4f21a98cdda229239a94309645a47248a4f22",
+      "serialized_sha256": "366d1d8f3763fd30009a557beafbdc0d919ca1d2c25bd19597a5a0339d5f2ecf",
+      "proved_sha256s": [
+        "3a5679715c873637c8511cedfca9c93aa2517efc82044388c701646ada7d23ea",
+        "8fbc4cca2bc1e2f31cb526bc478247ed96448c910791cfb5f6bf5dc7e0fc0b4a"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/4194304-3e55b05f",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "4194304:40c43c91",
+      "size": 4194304,
+      "quick_id": 1086602385,
+      "packed_sha256": "7fc28c5e149ee3f2c09fb3ab4d3ee4a6bbbcef60a10683c806905f9d30306cf6",
+      "serialized_sha256": "061c23dfbc5e81cf2908882b94a2c576411da2a928d01014b5acc044cf66fad6",
+      "proved_sha256s": [
+        "b6de79490d210cc2d9d72af8b8b9b9329de590a148518e245f751f61087e7c15"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/4194304-40c43c91",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "4194304:4772da05",
+      "size": 4194304,
+      "quick_id": 1198709253,
+      "packed_sha256": "a96287178f1e84e2693415dba078b9cc5eb2b6705710249850c8880241561b61",
+      "serialized_sha256": "70119499b41d77184016e6c3e655aaa12e63c05912318c9ecfa9a35f2235b7b4",
+      "proved_sha256s": [
+        "1151b7b986881300b9c7db484a295833f7c12a6561b50f79fa1bce988bad9335"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/4194304-4772da05",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "4194304:48530758",
+      "size": 4194304,
+      "quick_id": 1213400920,
+      "packed_sha256": "583cb6495df5554ba1e3100be87b873c1525def8dca77bf32b53556ad416dd91",
+      "serialized_sha256": "cf432f7475f1ef754cb8da7f177b17f1e79d1958024333d0ada14586ce8350ee",
+      "proved_sha256s": [
+        "9906d344891803eaa9de77bc91869f818b9072ef0532617004c74c647edbadc3",
+        "e6d0f6458911934efed4a80a28aeab8227a2a3d767c7575c97072187559654e2",
+        "ea40df155c2640821b352edf3de9e04eeb0cc0866de78e5450b3cafc97ab96f4"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/4194304-48530758",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "4194304:5db5fba6",
+      "size": 4194304,
+      "quick_id": 1572207526,
+      "packed_sha256": "5e15cdfadf226c722bebbf3a3e512b56e0797c0efa6a16a3973b108e464306de",
+      "serialized_sha256": "c98abe4292c470777a87d18c7c398f3898ce88b8c70eff40a663735e21fa2c89",
+      "proved_sha256s": [
+        "0785bd8b0caf4560962c5dfad08f3ac9e5cefbe6956f5e95bf3b51d2b878a880"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/4194304-5db5fba6",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "4194304:5ddb06b0",
+      "size": 4194304,
+      "quick_id": 1574635184,
+      "packed_sha256": "0db74126e6aea81b725bd350d7cfa8dde21bde311af3e589be7be075d80f22d7",
+      "serialized_sha256": "5d0c038886e743381b30fd440e027e8c2a80fd17e4916f321fddad538d69290b",
+      "proved_sha256s": [
+        "16117cd914b7088936c827cdeb7dbe5be382148a77add40fdd1c6a63f9667f98",
+        "7bf08f36a9e203045d63b62b9830fc1693d8471c107f0476fe4a273011a9cb91"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/4194304-5ddb06b0",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "4194304:5f1ca89d",
+      "size": 4194304,
+      "quick_id": 1595713693,
+      "packed_sha256": "6cbea76670216ff8b4f429bfad9fe615ad0acb025e050bf68052816152b485fd",
+      "serialized_sha256": "09209d134869344f8da3a7665b4f97cffa9afe0098bc6599d18ec9dd8573a1ae",
+      "proved_sha256s": [
+        "28341daec417bfdbe1826813b3672c0398ecc5eb10874029e73f6d39bdd1bc03"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/4194304-5f1ca89d",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "4194304:666e3a35",
+      "size": 4194304,
+      "quick_id": 1718499893,
+      "packed_sha256": "248c173e07fc66c357dccdb31c69b80e85895a25808284c25d0b1ebd7cc11666",
+      "serialized_sha256": "b657581fc38b493fee6d88c72d702dfa9df791c2f35996c15a52af4a25cab752",
+      "proved_sha256s": [
+        "8a7ffe313df748c0033cc07618900ad7856ecc12057d44a524c70bf72abc9bae",
+        "e5621eacc61af62e6f1e838053936f1404df7e13b48ab53a9558c4f6700690d5"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/4194304-666e3a35",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "4194304:6b030b6b",
+      "size": 4194304,
+      "quick_id": 1795361643,
+      "packed_sha256": "eaaf2439058955a41b5f8d8132256d6975b1645d9f1b545869414b5e03573109",
+      "serialized_sha256": "20419b79ac2e952116815ee59366c6e19d7f3c6e68e69b75e421f007f295c4fa",
+      "proved_sha256s": [
+        "312defb2723bea2162511e2512fc559473831d6c70d9c0c1f5c1b73b9b988f70",
+        "59fd946f533bf4ddcf2dda0a5c59876a9ffe4d3900a7a907ffa0ecbc6a586b99",
+        "6c95dc09d7616b4680ec764e50a10623a65fd339a713e556b269c0ea91525f7f",
+        "caceda6a144aa8fcbf13eaa7c6495cfab41ffae758f55d6eadccded9b8cfe82f",
+        "d712a44cef17f5e2c04689f5ad43236b8ce8dca3cfee81271890ecd648f1537e"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/4194304-6b030b6b",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "4194304:731c97ca",
+      "size": 4194304,
+      "quick_id": 1931253706,
+      "packed_sha256": "c8909480da8903ca938573625382f33566859dc26945868bdba25e560d55ac79",
+      "serialized_sha256": "1678df2ce0d7d7e7e091ac90ef6da3b5a4342c6fbc3e5f3bead5a10fda1ee44f",
+      "proved_sha256s": [
+        "184fdd35bf48b8d0763047c9a23e766bbfc130fa3691f418a23db8afe094eea6"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/4194304-731c97ca",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "4194304:74b6e6d2",
+      "size": 4194304,
+      "quick_id": 1958143698,
+      "packed_sha256": "f430c56dd04caf124e729808292e916c5c343b101d62676f07df05d12df756a0",
+      "serialized_sha256": "b7d588df1cba7293d8033bd21adf439649023ad072d71a823239730b2c03ce4b",
+      "proved_sha256s": [
+        "d45969aac08146bf102f654c8e60dc17c954336757bd9b895e69252462dec9f6"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/4194304-74b6e6d2",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "4194304:7d7eadd6",
+      "size": 4194304,
+      "quick_id": 2105454038,
+      "packed_sha256": "cfc283df0b83d0ace18774bf79583396ac369e73b2a9ad11ec8f0e8ff0dcceed",
+      "serialized_sha256": "49c0f4e69a5766ceeb0a8b2ce226f937f094d5f9c32222c7647bf2c92dd111ca",
+      "proved_sha256s": [
+        "c373a662ff16d96009b16af1fa4e8fe453615651b463dd379dde06d1d5dade77"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/4194304-7d7eadd6",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "4194304:7f6d4110",
+      "size": 4194304,
+      "quick_id": 2137866512,
+      "packed_sha256": "d53fdffd54ad67e5c4557f956b53bfe0d40726f9b6c5bba78d058c15a247e089",
+      "serialized_sha256": "b1d664d94bb26ee4a0e73f42e9a62349d794a0f9aa70f4cf479b91f6ac266cfd",
+      "proved_sha256s": [
+        "52af6d9323f43254fe958c90f07d08bb48adafc534517433a14fddf18eca4b37"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/4194304-7f6d4110",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "4194304:7fe7d963",
+      "size": 4194304,
+      "quick_id": 2145900899,
+      "packed_sha256": "7cb5dac1fecf734869dca584f05376fd970f65402d960781cdf1dbaf116e3692",
+      "serialized_sha256": "baf47ca5ad0d6796644f40bfd878480944bcf83722bead080874c6941c3c85ab",
+      "proved_sha256s": [
+        "eed58607e7c099dcc49b3f62d8e3f4602b22a77ed4560b86b271be979dd6942c"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/4194304-7fe7d963",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "4194304:85046c74",
+      "size": 4194304,
+      "quick_id": 2231659636,
+      "packed_sha256": "f9fc92f09cab59eeead525c0cc866cccf138b8048d0e252a3656c7caeb47b0f0",
+      "serialized_sha256": "14c4af8679133485122865443f5cdbff0b024bb615073b3d0f0d27e13334c614",
+      "proved_sha256s": [
+        "4672b041571d46df880db5b3288c0f9dbf9b56e08c52e36cebbae6038d1fd0ec",
+        "623e456a9a6406c64bdb3d56504d882815368ec842c4cdfa3004627c2bbfb4b0",
+        "877dbe5e90f82db570347b7a0b183b77d56a88f2f5e43af1bdc62f96f585b595"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/4194304-85046c74",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "4194304:8b767d6d",
+      "size": 4194304,
+      "quick_id": 2339798381,
+      "packed_sha256": "c105facbc1185851de25582b2239b22e535c0331a1500d1ae0ed3cff93ea01fc",
+      "serialized_sha256": "11ae27d8980a80264e0550fcc1279cb67d9e956d86b0637ce687615491d0d7aa",
+      "proved_sha256s": [
+        "1443f0fc83144c9a1745abce8510c21a252cf6628f138b30cf8926f6196e7364"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/4194304-8b767d6d",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "4194304:8c5eab51",
+      "size": 4194304,
+      "quick_id": 2355014481,
+      "packed_sha256": "b95de6ce27f4e7e8a13fd756139b45a77c735f4e47b5c7622596aea1cc4c177c",
+      "serialized_sha256": "789dea18240e4914ca0acd4a7f18586bfcdcc458f2f4663b61a866087e1af232",
+      "proved_sha256s": [
+        "264fdc8b3f1dd6770694f3e0f39a05ea2ac05b48a9695cb8051e2005189be51f"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/4194304-8c5eab51",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "4194304:90cfe123",
+      "size": 4194304,
+      "quick_id": 2429542691,
+      "packed_sha256": "492dc5293312828c111a9f91c431a15319adc28928bc799a0a80ba20bdb91311",
+      "serialized_sha256": "4f3176620aca3e7bf08348f09ba0aa7dc04161c655847203d7a99a3e975aee96",
+      "proved_sha256s": [
+        "8ca3c14876fec1c70274c4f7914739a5715f4f08f26fe73a199369ea90a407bd"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/4194304-90cfe123",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "4194304:a2f8f1fe",
+      "size": 4194304,
+      "quick_id": 2734223870,
+      "packed_sha256": "75413be5cf59d0ddd92c101ddfe57c69c57e9a2c7431e9ed32a5dcee72e8e475",
+      "serialized_sha256": "2b88afbf37ebab159f8c65483c6af81dc17b31916cfe7549f3a4392944b5a49e",
+      "proved_sha256s": [
+        "406451128943c0060a016388992b3972f9ef91fd338c5c33acfbcce2b7cb5687",
+        "560467f70827b6a201620220d78808c6228beb882cae86da0dd52be6fa4be5bf",
+        "9429a7093dca658a9d77882eb6b18f585d7add2aee4e53dd5f68408c1014ab12",
+        "b887113900d9a9c7327d60f7f3e28419b756943292609b29d26c2453c1d9f9ee"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/4194304-a2f8f1fe",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "4194304:a7cb3653",
+      "size": 4194304,
+      "quick_id": 2815112787,
+      "packed_sha256": "92eb81ceb7459a7045c65d72f559fa20896fb79ca16930e1a2ea051c635c3356",
+      "serialized_sha256": "19f82b9d619a441d226ca6b7722cbcc577cd62cc610a52948e4931fb58c29515",
+      "proved_sha256s": [
+        "2be5064a8085072c20bceb7031efaa753ca67eb791fba5cc896ae1658cfdadcc"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/4194304-a7cb3653",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "4194304:b11b8a58",
+      "size": 4194304,
+      "quick_id": 2971372120,
+      "packed_sha256": "c895a5aa3a279cdb889ce5fe36b316b53ece7c42607642929bc4213e1e7389e1",
+      "serialized_sha256": "e1ea48516f6aeee21ad6f41e707ecca1deadaaebcca35c428509aa3712816651",
+      "proved_sha256s": [
+        "ded58c36d7d03c003d260f013b8ccd3d9cedf9d2cf766ae929c0933fbdb1d393"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/4194304-b11b8a58",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "4194304:b680cd8b",
+      "size": 4194304,
+      "quick_id": 3061894539,
+      "packed_sha256": "8cfe61e577dfe44cfdbdbd195c5be454a507c4df8dc887e17e4624872f79082a",
+      "serialized_sha256": "bc90c8ee22cf163e6639d29333d2699804bfa73eaa8376ddfb9dcb46ae6ec84d",
+      "proved_sha256s": [
+        "183bcd7ba276d457fd7d315957008daf19475006546d9823609864056859918f"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/4194304-b680cd8b",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "4194304:bff2ac83",
+      "size": 4194304,
+      "quick_id": 3220352131,
+      "packed_sha256": "cec6251bd318d66ba28085aee11a00dd26a69f037e02e3c817ffa4748337ad14",
+      "serialized_sha256": "0ecb1800f47102a985c1d765dde4430fab0515892d52cb49a2e2e93d7d99703d",
+      "proved_sha256s": [
+        "82042e4a36a338f0fcd9dd7febbe0996e6bdd1e9765a3a72cbcb85da7f1f9957"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/4194304-bff2ac83",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "4194304:e51f5661",
+      "size": 4194304,
+      "quick_id": 3844036193,
+      "packed_sha256": "58617d33128952a48288917c85a0c87d460a3aa2457e5f6bb381f1ea2684be3e",
+      "serialized_sha256": "a5b169d8cb11bfa53129947271645f7816046e0c354c1120137632cc43a9dd51",
+      "proved_sha256s": [
+        "87eb602a50fc80f205cab2a22f1455b0d49c7cb777b568e15227aabc0a9b1d71"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/4194304-e51f5661",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "4194304:e7b8e836",
+      "size": 4194304,
+      "quick_id": 3887654966,
+      "packed_sha256": "9fe0fd809fae0075d73d871a1ee7aeb6362b202bc0ae8a79419b7374f58c3433",
+      "serialized_sha256": "d2dc78511f8b8bcf1e50186faccf1ee9a2649ee162b22061087745d8b8d965c9",
+      "proved_sha256s": [
+        "78793c5cbf1d620977deadb263768548a5b17e0337f648c810489f05f0541238"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/4194304-e7b8e836",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "4194304:ed367b48",
+      "size": 4194304,
+      "quick_id": 3979770696,
+      "packed_sha256": "001bbd35926dfdad9c8a14d124919880fd783e025ebea4791c90af5450f33f90",
+      "serialized_sha256": "566509fb45067e1a67090d4e48bafa9ada818384fe603f38b38d363ed10a1ae7",
+      "proved_sha256s": [
+        "13dc18ab0c4a7b3eaa8f310b2d07ed0866a5967d285bb461eeebc737382c131a",
+        "7fe0b833376b560bc63434669c0bc917a899766b025694fcbe4486a9d37066f3",
+        "8c19a8cd654ec70036b484b930ad7cdf5f5c054f4a4ec7f841940dd99f680526"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/4194304-ed367b48",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "4194304:fb6b9f89",
+      "size": 4194304,
+      "quick_id": 4218134409,
+      "packed_sha256": "2fcf1f013e2dfc3cc3dfc96e7b47494bbff8b6f9449ecceede20d8d2471b7722",
+      "serialized_sha256": "c63292f95f37fe60fc231ac0a915a5fd7f4b7f84bdf0d60a0504d8a8e577c4e0",
+      "proved_sha256s": [
+        "372dd0ecd0803e6b0e60c79c34e03a9336f7102f33c6ebe0a264f828dc008856",
+        "789a75cd1936acbfbe133ce2fac233d269703a809ccd3b33bb0ad0bc71b600d6"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/4194304-fb6b9f89",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "4224224:17ef23f9",
+      "size": 4224224,
+      "quick_id": 401548281,
+      "packed_sha256": "75413be5cf59d0ddd92c101ddfe57c69c57e9a2c7431e9ed32a5dcee72e8e475",
+      "serialized_sha256": "2b88afbf37ebab159f8c65483c6af81dc17b31916cfe7549f3a4392944b5a49e",
+      "proved_sha256s": [
+        "dd656388db4fd5b309b9e2d471c8d7b5d568a093ecac320809cd5c77c91cd42a",
+        "df26f21eb6e0c331b7cab4f3c40a4b31e9c6819185b31eaa468302e6087ca6f0"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/4224224-17ef23f9",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "5790128:b0e952b1",
+      "size": 5790128,
+      "quick_id": 2968081073,
+      "packed_sha256": "466b0e8f764c1333056ce8976813a2f1e1dfff26a4844fdec9703ad56adf9f65",
+      "serialized_sha256": "5f743a01c21412ef38aa05f5347caa85f252aa3a6d185f52e9a23d69a8cbbb46",
+      "proved_sha256s": [
+        "7d1ed275e01f33feaa4efe04e0a5fe8bef139f60c3aa3fc687621028aabc0e3e"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/5790128-b0e952b1",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8138944:5eef6f4f",
+      "size": 8138944,
+      "quick_id": 1592749903,
+      "packed_sha256": "e2f9bd776d1505311b41551c0f32f6ee1801bd7c865900f28feb4f0854b3c7d7",
+      "serialized_sha256": "adbade188e08f2eb44fc080431ba86fdf97d909905c71f48da9d56a875c47154",
+      "proved_sha256s": [
+        "09b71ef78706c5dcf6a00b4bb3a2368dc5fa79ae14d69aed6c9c8c183bd27dab",
+        "1f8eac484edf872f8f84c2e3bb6b4b0a9bd3109dc7ba2849cd75fcabaed5b1cd"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8138944-5eef6f4f",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8296720:c4d1db72",
+      "size": 8296720,
+      "quick_id": 3302087538,
+      "packed_sha256": "3a87a0c54bfea0f26f7fd0b21fa07776d7db32123902c8ede0aea857b07b3ac8",
+      "serialized_sha256": "6e93907115adbe4781f96f38d71c21b1ffd556c0e7d4db25385124673f2ba1e1",
+      "proved_sha256s": [
+        "591bcd78ecbb43df951ef86df465c30eb8815edaa328c551db9f0245946f4c5b"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8296720-c4d1db72",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8374750:d81381d4",
+      "size": 8374750,
+      "quick_id": 3625157076,
+      "packed_sha256": "c63418c807c9644e3c1d24eb15d2347438a2ad0ba58f3e7265743a0c2ca0c7f0",
+      "serialized_sha256": "ad639549047d0571ed1580f9d0e667657bab729a9e23f2073c709fe9a943fd21",
+      "proved_sha256s": [
+        "8049cf3c7fa5f3184303f0eac310d7c8f4e9264cd77dcdeaf49ec7d802895d15"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8374750-d81381d4",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388567:155129fe",
+      "size": 8388567,
+      "quick_id": 357640702,
+      "packed_sha256": "5f8370e11c532daf8eecb90e734a2e2ec62982de59e4abaa48c193b6f16e7a92",
+      "serialized_sha256": "7cfdbd342e93eb49335acd6d6ce9d0a20e414d0b74ba2a00d096eebf71aec297",
+      "proved_sha256s": [
+        "0dd7e432f461e23418f72754598344218d13b8e69d8f4eae7e6ec7d6dfc89331",
+        "8fdc99ef3088f7a9f18779c415282f1b78ae0c4f2dcea9c34a8fea7887ecb6ca"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388567-155129fe",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:029840c1",
+      "size": 8388608,
+      "quick_id": 43532481,
+      "packed_sha256": "3fd74f2bacadd1040237806f8812096798e979543d853798dd24b10a2cfa83bc",
+      "serialized_sha256": "fdafac1ba5e261dc4d826279c1f44c750ce64a0335d84f2d4352e3e4f2f434b0",
+      "proved_sha256s": [
+        "841cfc2e5bd6ba402f3e17a379c670a616361bf2df1288361fbbb6a4a45199eb"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-029840c1",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:02bbb546",
+      "size": 8388608,
+      "quick_id": 45856070,
+      "packed_sha256": "744facfefd6b51314466f86eccff7b3c878c641e855636166c0bba2d05cb89ce",
+      "serialized_sha256": "5d84e44709cf17d472827ee28336277ca037c277fea1e52005369615f5dac576",
+      "proved_sha256s": [
+        "ea4da43ed54c22634ccf6a5c3f1571568c944f097839a3665e19b286bf68dd5b"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-02bbb546",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:03441ba6",
+      "size": 8388608,
+      "quick_id": 54795174,
+      "packed_sha256": "60dd51c70db00db38ea07e6bb466e28e773d1465305ad97c30ce7ed8e3e7ffcd",
+      "serialized_sha256": "18610610584be85388593ee38b0760082c49e1c6d9bc7c15e05872d1eda6b5aa",
+      "proved_sha256s": [
+        "845cdab7674b822d6a8d8a01c02eb31feb4d9d8ce243ebfa44f30cd77a4aa349",
+        "a39052860989f666ba43be8d3b2efd5e8c984c1631ab7e05da0193779cb26ae0"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-03441ba6",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:0592feab",
+      "size": 8388608,
+      "quick_id": 93519531,
+      "packed_sha256": "1c639d4d3155e4ad355938dfaddaf63ff6430cb8bcd97addb3737a3917b904c5",
+      "serialized_sha256": "536684795803acd7a6998d1a5cc6a7fc8285d6624f5d52e3d1d2c3eb558fc7a2",
+      "proved_sha256s": [
+        "648584e9d512da44f499bbc9e8f9a0cb0896e90f5ecdfcdc10c09bf3d7aaff1d",
+        "ebf14f23d609f0dff6642874549b1f36d7f1ea780873073b7980e6f59a7c39e7"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-0592feab",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:07d86f07",
+      "size": 8388608,
+      "quick_id": 131624711,
+      "packed_sha256": "c6012c051d0a60a02450572ed0cab9d1cada235f060fca7f5c4b1348fc480c74",
+      "serialized_sha256": "d15ae7a5724a2241909b84a895722ea7dd80a9cb9254f3b106f5004f0c4864f4",
+      "proved_sha256s": [
+        "335ab771994672d8e52c35fe52fc3c27f73fbdb288cb409d40f69f31743ed25a",
+        "b9bef71bd2e29722237e0f4823f66ebef15ec46104dc5a59f3833f974e63e3f4"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-07d86f07",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:0f94df77",
+      "size": 8388608,
+      "quick_id": 261414775,
+      "packed_sha256": "c63418c807c9644e3c1d24eb15d2347438a2ad0ba58f3e7265743a0c2ca0c7f0",
+      "serialized_sha256": "ad639549047d0571ed1580f9d0e667657bab729a9e23f2073c709fe9a943fd21",
+      "proved_sha256s": [
+        "67d6b1ae6edd5471e08a502525d81a8a841de5036c1634bea52edc3ade05eccf"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-0f94df77",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:0f9d9a30",
+      "size": 8388608,
+      "quick_id": 261986864,
+      "packed_sha256": "28f7f136e1e7c72efab47d2e759864812fae59ddd8685bc5157a0a14292426c5",
+      "serialized_sha256": "a1d08bed897f7d2a2af25c1959e50ece682162dad9e9f3a658599fa17f508b33",
+      "proved_sha256s": [
+        "1f5add8312dbe2519bc3f4bf185464eef5d90998ed10f86af7bbcba4de619243"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-0f9d9a30",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:1055b4cf",
+      "size": 8388608,
+      "quick_id": 274052303,
+      "packed_sha256": "d7a25c1992c42e0fe2e1e2fdf1145ffd46830da7c51a249fa4ec62906a78bb7b",
+      "serialized_sha256": "3e27af4668757623690a949b7a5a0f75e8194575db5d50c59f524d8da1032d2e",
+      "proved_sha256s": [
+        "a4f8d475eb877bc370cead79876caf7418864b1497d237650ff738c3afdf27a2"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-1055b4cf",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:15384b4d",
+      "size": 8388608,
+      "quick_id": 356010829,
+      "packed_sha256": "74e31eefc5bdea62440a716e17393a69f8d78d58e87fbf2240d8e2467f7f76ca",
+      "serialized_sha256": "28d785b22b0bd227311835283213d2af8a3c048e22d395f579e480af847811e8",
+      "proved_sha256s": [
+        "4bc38c2edb9cae0797d88416da2ec213262d51af5619c7684ebdee24464e6b09",
+        "534e946c8950ba315140b66ab0994c33635cf1325ad0701d54240f3031eac955"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-15384b4d",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:17165abc",
+      "size": 8388608,
+      "quick_id": 387340988,
+      "packed_sha256": "1f5acae2c8c194fc02cbe2a04b3856acd5acf35378c774b5ef1bc5b4933dfcf1",
+      "serialized_sha256": "943f0bd472a787e012a65be20c0e129040354e9ee3e307a7adc66eba9aeb0894",
+      "proved_sha256s": [
+        "05ad9e23775c80a454cb3f0973ec065f4a26bab56b3bbae039fea162ac096a13",
+        "06fae28163cb8ec59e7bc09b16745de1710945695e917e3ec776d7740523717d",
+        "187bfe167247e41bf5ab4c820b9c570e7c58e8455fba2ff0f47ff28607501156",
+        "221b08195fbf248edec89715d0298a4b8a5efdcfc919a9d6a30a733eddf13344",
+        "4ea682b262a9af1291499da0c9501d51ef57cbc05b9a84ab2be19ee7c65f692d",
+        "4fc48bac23dc74124707efe1f833e36fd99dfb0df7f7fd903628c83df8d4ca9c",
+        "7054a51e0dfc3a34ed323f643aeb555aac0e172c6893b77abce0564b9a715c3d",
+        "722e3dc7d084638fa760266bd3697ed344f650af24e9498a309802bea466a18e",
+        "7c2ac1ab22ad6252cb8532ed3991701314d9c3185d1ad8f6192dd76a0dc79ab6",
+        "89b6d75032ab3c90e1a60406e6ecee851ca9742b1c42cae186c79457431178cf",
+        "a1445202331201d05203bdb089f4bf4b8f8d0cafc841fa6b8175307ba2864471"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-17165abc",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:17dffa61",
+      "size": 8388608,
+      "quick_id": 400554593,
+      "packed_sha256": "40ea4e05ad70a5f325aec32b12de0beb84c8d7f56bfe47de23079076a0fefca5",
+      "serialized_sha256": "46f5a0f7914884da6954bab98d240d45d5e9ca96acba91aeeb9904f0368d1228",
+      "proved_sha256s": [
+        "75c1c3846f0a7e762c453455ff86c9fe7c3eecbd1d153809798831e5ee0a8117"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-17dffa61",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:19849184",
+      "size": 8388608,
+      "quick_id": 428118404,
+      "packed_sha256": "5f8370e11c532daf8eecb90e734a2e2ec62982de59e4abaa48c193b6f16e7a92",
+      "serialized_sha256": "7cfdbd342e93eb49335acd6d6ce9d0a20e414d0b74ba2a00d096eebf71aec297",
+      "proved_sha256s": [
+        "a85bafbfc00df7169e9146a2075838bf3c5243107dbad5aadb2144277e5efee1"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-19849184",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:1e966a95",
+      "size": 8388608,
+      "quick_id": 513174165,
+      "packed_sha256": "1dbeca2bb92e11871eefb7ed5bdee25e836c5a03cc7d49bf3257e0188de8c8eb",
+      "serialized_sha256": "ae5e734b82cdb50e9febac85dd764da186157450a8ae98e0f9fb2bafb1a1c043",
+      "proved_sha256s": [
+        "49df5e9e128302733fb1465104153923a4a5c0ef36efd8b77a0006bbc0a629d8",
+        "f610f09174d14660f21478c8727c6617e36fac196bb1c13dc3fc0dcfa64c5740"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-1e966a95",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:1fdcaf75",
+      "size": 8388608,
+      "quick_id": 534556533,
+      "packed_sha256": "3a87a0c54bfea0f26f7fd0b21fa07776d7db32123902c8ede0aea857b07b3ac8",
+      "serialized_sha256": "6e93907115adbe4781f96f38d71c21b1ffd556c0e7d4db25385124673f2ba1e1",
+      "proved_sha256s": [
+        "0cb0caff2dde60e1ebd9e4582cf80277c00658d74adbc4b9f0ae20438b258a4e",
+        "1df73f9d0d4e0dd219a1a17e0c131d4007733ccf9eba260cbe9cb9ac93bb78a1",
+        "618fe26c688cf480dbb78375aa1b9ea9ddfbe0f63365980f32774cb5dd0e8c11",
+        "96d094ab2dfe293fe88b92a71f29611eabfcb4b13acd872877ff1de5f9ed9f38"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-1fdcaf75",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:2511f50f",
+      "size": 8388608,
+      "quick_id": 621933839,
+      "packed_sha256": "7215430c16a1b3589aab65cae1dcd6808b324c6668ddb8d965a2330daf820650",
+      "serialized_sha256": "a1606eddb0b47a0b1ad6d18d224fdc8b42fd49ac602b8966846bebad59935b4b",
+      "proved_sha256s": [
+        "205bafef55d33faa51548635fac0dc6888edb1d760e01135bb61f46ddceb1397"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-2511f50f",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:268d1122",
+      "size": 8388608,
+      "quick_id": 646779170,
+      "packed_sha256": "f1c4a01b8c60aae7020233e02e865b95888dd7eb6de684cff14fccd4b3427fe0",
+      "serialized_sha256": "9907a5d9a4036103950aa649aa9eee7ed9ca182648b63f4e0421a6f520c95054",
+      "proved_sha256s": [
+        "a355eac15b1b7c2c233208902d12fb9efdd23617a9f4c04f9dfec902f5605bb7"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-268d1122",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:2700e351",
+      "size": 8388608,
+      "quick_id": 654369617,
+      "packed_sha256": "694f6886363f812967f4cd8ee7c9fa50714ce03eb38bb32ccd464123464a3fd6",
+      "serialized_sha256": "79b5d2da1f3d012c30bd13a40b670f92949103a2912f8b053c9f76e98664cbe7",
+      "proved_sha256s": [
+        "23cc2ad3e454295f4e4aaffe4abbdb22c861a5f1790670f346347f569f7fce74",
+        "4c960c252877059bd0a17600187ecca6d01e9a3c0c4c1f13b9de4e8b3fa20311"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-2700e351",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:280ec65c",
+      "size": 8388608,
+      "quick_id": 672056924,
+      "packed_sha256": "295c4b996b377f691ed22863a53446e1380f8c40db1a07448056d84eeacf24a0",
+      "serialized_sha256": "126f16d5e3169b567db4c63d9c05e829ae320b9a8a71312de7a9bf9fe8d539c2",
+      "proved_sha256s": [
+        "2bf6dec20d7dc52459b381b3cb069f37dce28de80c32ec6d57550bbe6458bc62"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-280ec65c",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:2844807a",
+      "size": 8388608,
+      "quick_id": 675577978,
+      "packed_sha256": "a64ba24680208d7953d48eeb49b293da3edcb5a715c63c8ccfdc230e019bffe4",
+      "serialized_sha256": "87bd47614d2e1c31d7629fa3a2881de04e4cecd4dfc0c09ae1f76b2b0b866e1e",
+      "proved_sha256s": [
+        "3ffc60b8ba77faca0cdfa4b8d2daa27fd9f243b42ed8f2a25f8266c5f3b088bb"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-2844807a",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:28a75b7e",
+      "size": 8388608,
+      "quick_id": 682056574,
+      "packed_sha256": "099ac63f71164318d37ba998b6164a6db7bd3b5db39bde2f047552352eaa57c7",
+      "serialized_sha256": "77b3f0a9a3efd18cc9b441912863a593f0041720c7187f7292b6734ef0508137",
+      "proved_sha256s": [
+        "13119409b11008bdbba83cd6f2b729f0bc8ead2556515241170762ab6a1ae1a4",
+        "5770d0bee957d49b1abacd3e236395b6d52fdc991e5ce5fb78c1891a8d615798",
+        "fc720ee19056874a43493b2383fca1872774d0742d29879a926ee92e7173a617"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-28a75b7e",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:2a704eab",
+      "size": 8388608,
+      "quick_id": 712003243,
+      "packed_sha256": "6061908b7c6912f7493d46206cc0f79a62d5bb4862e7a130d2d04fdd5aa66b30",
+      "serialized_sha256": "9799e3b2a42c5a91546afa33c89ddcfc0add525f0bf7549c1c7fb108d34e1ac9",
+      "proved_sha256s": [
+        "78c3b7f9ac9dbc4380237d08743a82fb04c92fb0a67c3d1803e7df5e2cea92c5"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-2a704eab",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:2b07fd10",
+      "size": 8388608,
+      "quick_id": 721943824,
+      "packed_sha256": "a71fd764b8658104d70c77120f6dc2e575ffc0b867610dfc58af1a82facd2bd7",
+      "serialized_sha256": "26a022a64ce5e39bbe8e713f0369df0432b977ed5ad0dd66b535c8b112b00e7e",
+      "proved_sha256s": [
+        "b1dea3c30fd2d2d3c9602eeb0b7b9b60e313707084a8ce667d52f11c94fac6bb"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-2b07fd10",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:2b4af970",
+      "size": 8388608,
+      "quick_id": 726333808,
+      "packed_sha256": "ac5328fb62cc956368c47e61f93fcea4948fd313c96afd152cd460730c2a2cec",
+      "serialized_sha256": "8295e6f591f54beebd823e83ba9d87f56da9bad5d217cb68ffb86c3a44e03b58",
+      "proved_sha256s": [
+        "5cbc2753a76523a79730176bb503e4c34f13ce56536d8076bc7fe351ef0275be"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-2b4af970",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:2f43c9ab",
+      "size": 8388608,
+      "quick_id": 792971691,
+      "packed_sha256": "094cf38dc2e886088cf0a55e5c228a95feda6e18df456b710b8bdb964e12be2e",
+      "serialized_sha256": "bd3fef9a9e43cd625dec3719d3287f8fb5f3df8413262d2227b1ff1536767033",
+      "proved_sha256s": [
+        "cc310814ce3a134a3d2975bbe0186603a298a5ee15e1795dedb25f07787851eb",
+        "f6d8c08ba4d8944128fb02c17784042e5a91fec5080dee72bb89c73d7dfd886a"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-2f43c9ab",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:3208856a",
+      "size": 8388608,
+      "quick_id": 839419242,
+      "packed_sha256": "0ae385bc6f50e5ca23f8b6c5378b0ea709dbd949e8be05db9873b913792e87b0",
+      "serialized_sha256": "e5202655046725ffe6e55459035ed3bd2bc8827045b39ee1e554613ec484cd9e",
+      "proved_sha256s": [
+        "f409136893839ced80b2035873e79ffd3c283978bec926f4c9e93ed5fec0ea8a"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-3208856a",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:3678c484",
+      "size": 8388608,
+      "quick_id": 913884292,
+      "packed_sha256": "b2167d06e2ad79a2fc59307e9d253b2e200d15df6a262b8364a7fd3014d1525f",
+      "serialized_sha256": "967bb3290cdcc70a1a46961c66bce10787bd19c5bd3839c2b141300528c094a7",
+      "proved_sha256s": [
+        "a2d3eadef20e198166f15bd4b6c2bdf91b6b727322d1a8c3ea4ad0e13c391907"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-3678c484",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:388c456c",
+      "size": 8388608,
+      "quick_id": 948716908,
+      "packed_sha256": "81be2fa735559853907ff3fe13930222792b1c97b7eb53372b089a227f7a0a65",
+      "serialized_sha256": "ad5de21e5d60148feb71a173e70e19b3b16262cdeb890810835cea00c072aba3",
+      "proved_sha256s": [
+        "36e5243a4852542b78acbc1f3d592d3b792c6b328ff19f6e57aff5d4c8382e2f"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-388c456c",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:3d4c7683",
+      "size": 8388608,
+      "quick_id": 1028421251,
+      "packed_sha256": "4aed5ac28fedcfee1e17e3430e5c3098a98245b0bbbee96ada7690be65fb327c",
+      "serialized_sha256": "3142c0bfea6eef79dd02315d5583f0fbf4bccc36ae69bbb2eee8671d5a19f132",
+      "proved_sha256s": [
+        "898b379846d971299a6c33c9173e114d16653ca7067c24287858fddddd3d665f",
+        "cf3f72d6aa835370f4bfb32aba79fab9a6ba927a373f7c761f8c78f7db2f492f"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-3d4c7683",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:522823cc",
+      "size": 8388608,
+      "quick_id": 1378362316,
+      "packed_sha256": "7733df98243d997697e32e71819375fc4c5f66dc31e9dc07256dd1dfb4053a70",
+      "serialized_sha256": "fa6870ec119bd5b53f85bd9cfdb239e788982fef16865e6ac542b4b5c82759c4",
+      "proved_sha256s": [
+        "de0e0152d55666b29cd2d414761852b7ae7645189a0db7c5e920ecb331c9eb82"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-522823cc",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:56e62666",
+      "size": 8388608,
+      "quick_id": 1457923686,
+      "packed_sha256": "f4aeae3316bdfbfc904affb4c710d70842bf26f90d058b3b34a3407062071130",
+      "serialized_sha256": "839d490457dd420d2aaa004f4f22d21709c3be70f4d9eeda2eaacb9265e7db9b",
+      "proved_sha256s": [
+        "8146d3338b05ebf18ac13cbf941ddfec491c7d21be87de10bd2bcbfbdcf37ee0"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-56e62666",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:6650dc19",
+      "size": 8388608,
+      "quick_id": 1716575257,
+      "packed_sha256": "b2167d06e2ad79a2fc59307e9d253b2e200d15df6a262b8364a7fd3014d1525f",
+      "serialized_sha256": "967bb3290cdcc70a1a46961c66bce10787bd19c5bd3839c2b141300528c094a7",
+      "proved_sha256s": [
+        "aaac3f181ff741174fb42da70ef09f0fcf44fa74ce61f384feb116843a37822a"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-6650dc19",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:698d5a2b",
+      "size": 8388608,
+      "quick_id": 1770871339,
+      "packed_sha256": "36f14028a1e2bdfd1f8083f524ab7dfd665ad43ce064ea1fc074713bdea34b0f",
+      "serialized_sha256": "ac1d29e949db64d1fd66f7bb5a2a978e60f01347dd623617a77811f53992999d",
+      "proved_sha256s": [
+        "74704e6b13200d855d347102c0b5b684a3210d4fa58c9e6ab2f7815317af145d"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-698d5a2b",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:6d218b83",
+      "size": 8388608,
+      "quick_id": 1830914947,
+      "packed_sha256": "744facfefd6b51314466f86eccff7b3c878c641e855636166c0bba2d05cb89ce",
+      "serialized_sha256": "5d84e44709cf17d472827ee28336277ca037c277fea1e52005369615f5dac576",
+      "proved_sha256s": [
+        "cf84ff402e46351339ba021f37f3e3296b6a0ca8f3d4d83c3279c8e3d6522ee1"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-6d218b83",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:78c8f0f3",
+      "size": 8388608,
+      "quick_id": 2026434803,
+      "packed_sha256": "618061a74a423df2b5bad25dc54b1d6a2875c66c0bd3f9a2e54c7e6cdcadaf0a",
+      "serialized_sha256": "594ef27beeaf8393dd93fbb57c7a65eb527bf4be9b55a9405032baf5d7970a0f",
+      "proved_sha256s": [
+        "901af0cb685441bc2e750a082512994fc8bd5a94d89d766b40718a4193011fc3"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-78c8f0f3",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:7ec57c5e",
+      "size": 8388608,
+      "quick_id": 2126871646,
+      "packed_sha256": "c53ef9876f5176679d97846b0301cd31f26b4db9160a60d706926fdba0860345",
+      "serialized_sha256": "bb08652983fe126a18c621030c721fd3e8351ef5fa5df9696fea78bce2ca249b",
+      "proved_sha256s": [
+        "868b70d9caa4c5b2a0a741c3571fb2f148d08ebdbaa25157f2a0ce43a22ca3bb"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-7ec57c5e",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:7ef9d77e",
+      "size": 8388608,
+      "quick_id": 2130302846,
+      "packed_sha256": "0a645f5bd6ffa12f706b695eb2756b746c8d3e618cfa946091cf5fa3b4ac74d3",
+      "serialized_sha256": "4d968e7e433b99bcfff2a244c8582a48061b8ada8ab2f1158ad318f72ec1192a",
+      "proved_sha256s": [
+        "4f904d42234bc6eb2f8f21ab97a0066c60090db6458df5a0e16735f23491bbce"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-7ef9d77e",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:8ad42ae9",
+      "size": 8388608,
+      "quick_id": 2329160425,
+      "packed_sha256": "cf1d10d932a6f3d788f54e7039dd3e2fca3fe94f4574496177027e9b4bf2e959",
+      "serialized_sha256": "4e76d0bd65458753722d9344daaf86644634d0b2ee4db4584aff420428688e88",
+      "proved_sha256s": [
+        "c3ea8170d572e14b221c984387416a46df5b8b857c21c8b64c0e0603fb81a952"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-8ad42ae9",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:8e54fc36",
+      "size": 8388608,
+      "quick_id": 2387934262,
+      "packed_sha256": "9c99a0664b49e4f93b9c83461fbe900240ceffa5940bd66ba8cd09e8b7a78581",
+      "serialized_sha256": "d2b35b300930b0cbc06c1de6822466b4c283142dc89b094ba56f09f7edfb8e09",
+      "proved_sha256s": [
+        "9db114eb85b8286fd6774283692a54c9396ed7bfaf8960b9884141530f9ad06b"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-8e54fc36",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:94cab09a",
+      "size": 8388608,
+      "quick_id": 2496311450,
+      "packed_sha256": "8411b6215ff699f3354545efbd19b8c8edc3e5f9d2b8cc313dd84df82c47741b",
+      "serialized_sha256": "4d43d16b494f59ee722b67dd078bb303ba27a186c9689aa82893865a1ad7aed5",
+      "proved_sha256s": [
+        "9d05fabf21210e109bbd16c5c6eecf6c476149c1f951b93a1d45a66994c74d76",
+        "a94c13650d71fd9c4c26a0378b64b5ebf1a40d1219dc718d9e588f237ce21aac"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-94cab09a",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:9781e4a7",
+      "size": 8388608,
+      "quick_id": 2541872295,
+      "packed_sha256": "619eeac497f443a942eca0f29c38ede1db12f5757d3d06e2241cd5cbbd437ffb",
+      "serialized_sha256": "b9bdc43b369892328a01e8c6234bf1a3b52be4d98912f5cb168a7432e0ce90ac",
+      "proved_sha256s": [
+        "08ac7e257c5729d769af2e48acc4b02cc2c7886eec3736280007ecc39db40200",
+        "b274e9bcc8583e36827a0d0784d3fa4e2f48551e8ef73a95b4b2c20e37a8abba"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-9781e4a7",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:99e7533e",
+      "size": 8388608,
+      "quick_id": 2582074174,
+      "packed_sha256": "42e2de6f5eeeef6cf42b4c7d82f21a842bfb7388a19e9d9010ffebeda5b8929a",
+      "serialized_sha256": "713b628d4f2fcba2c60c4339acc8fd0e7656f87707f72c41023d7911736a6c42",
+      "proved_sha256s": [
+        "1d5d7b27511f6aaef94cd0c4ecd829e14e3962969411bbfc3227f3c96eb6b128",
+        "4a238edd7d763791dc57f9d8b2cf0ed6cfc3798cc48150aca4d72106396eedca",
+        "82cd33720b66e44990d538d3a5e9475475cadc58327b643cfa8bb390c2888644"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-99e7533e",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:9b5eb26e",
+      "size": 8388608,
+      "quick_id": 2606674542,
+      "packed_sha256": "84412cb3909adf1e6ee979f1bf90956bf14514c6fa3b0c4fdb2d7777d2107730",
+      "serialized_sha256": "5ddb775e5c66a116a56fe8f854ba67e6516c2aa1d12afb80f5938ef1394457ff",
+      "proved_sha256s": [
+        "40dec99b515c033a9abe65bb65b0d5778c9bffc5f10057c8411e5bf5862b9e41",
+        "4842d9f8a6a862a48e287e022a026db200830aca290fb29439b0c3ffe51e4bf4",
+        "71bfc61257b01007fabc114e0b1260c2f589ecb6655e8917ab7de06d6a0d4e15",
+        "a79566f6f15c2cd66df1788dbf1322bb75a789e7239cf31858b070e770847e59"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-9b5eb26e",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:9cf05995",
+      "size": 8388608,
+      "quick_id": 2632997269,
+      "packed_sha256": "be5073767d079da748c59d4e75d9ea4e0374f5494e9e8ba5ab8c9fc0191f3b75",
+      "serialized_sha256": "bb39c04e46c5271152b40661f9ce4ce58fc4b8849fbd6117b454a5f2a7172824",
+      "proved_sha256s": [
+        "166762a38bc8984b7f7a4b34c224b77e37a6288ca2f7a96bcd0e902c14072494"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-9cf05995",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:a5ffccc2",
+      "size": 8388608,
+      "quick_id": 2785004738,
+      "packed_sha256": "b5d6a75d9c6e21c51a29ec78f4120224bb0279345ef8e7667d8a71716b403492",
+      "serialized_sha256": "c164b83a6f745182524ac4e8dd178f328b7c60de60463348c91c0e8a68e43e01",
+      "proved_sha256s": [
+        "bcfcf623a1addb0fbf251aeeab4f47275388f166a325c23c88b2741f01e070f3"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-a5ffccc2",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:ac410e39",
+      "size": 8388608,
+      "quick_id": 2889944633,
+      "packed_sha256": "5a9886e7c1a12069bf5ed2bef3134501f55b21b38135a26a5b526fee65fd4467",
+      "serialized_sha256": "9d256116bc998b4d3051a785d1ead224a2b0094367d00037bc20f204495af62f",
+      "proved_sha256s": [
+        "f1448b11cb8d0c4108d21384dd6543ac86df90830c2db9566000b4e8f51af609"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-ac410e39",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:b0dee0eb",
+      "size": 8388608,
+      "quick_id": 2967396587,
+      "packed_sha256": "c3ae0f806178ee2c4a8c2c82f0a68855e98a0362fdd33f78a9e5a2b75ad83c61",
+      "serialized_sha256": "3aee2617115a188d52bef313d1f338165a32ccca2422dc705f52f5caa7da7e68",
+      "proved_sha256s": [
+        "0e047503cb6cbf837372a4cdf318b9eb6a7ceac2c8bf99837c9d8dd0b35b877f"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-b0dee0eb",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:b22b6667",
+      "size": 8388608,
+      "quick_id": 2989188711,
+      "packed_sha256": "d7abc656d2a582e425b9264e210904fe2a049764211a37dbc972c263b6fd6a0d",
+      "serialized_sha256": "fa2b3d5c66243ebcd370113a90d6e6976f41e0770e9a15b3186e26c630175756",
+      "proved_sha256s": [
+        "0610e4ee9155a26a44aa6c2637ca02adf0d85cedd63c0690d148909c83e9b1f0",
+        "4438278a60cb892b6f6a0318dcf9ddc1dbc65327270de4b85be9d5a9e92aaa84",
+        "5f5b69cb5e913e970b90f616714301feff0669c9e0ef86bd26d04ff3dd0e6191",
+        "91329e462f62ecd0dae6dd1be062f56f81dac14c25dc1a07945df67ea6012f75",
+        "97ac7b27e045fc9985b71d6a969089c19520ec557fcdda17b1baa4a394469056",
+        "d324be7f0ef991f26492d319e53d8d734551ca68e28adf835549251d96bee6c6"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-b22b6667",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:b2baa773",
+      "size": 8388608,
+      "quick_id": 2998577011,
+      "packed_sha256": "42e2de6f5eeeef6cf42b4c7d82f21a842bfb7388a19e9d9010ffebeda5b8929a",
+      "serialized_sha256": "713b628d4f2fcba2c60c4339acc8fd0e7656f87707f72c41023d7911736a6c42",
+      "proved_sha256s": [
+        "9ac0979f6c4c014bfa3ff3f33fde600111078f4d7a53e2aa1e80d1a8eadcfcea"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-b2baa773",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:b617464d",
+      "size": 8388608,
+      "quick_id": 3054978637,
+      "packed_sha256": "c70f236125a446b33a276cac9ed1b9306d0de2a25a07f08df1053ec23bdb63fd",
+      "serialized_sha256": "fa5da64131c56508628a6ecab89b21f14c067745ddcd695f98191dcd33012feb",
+      "proved_sha256s": [
+        "78e135df3487fe180f0f96be30019de8ba770b514988733dba73b2fadc15c17d",
+        "7b666b46560703e8c6207083bd9218294ce155569e17c340a59073387d7d6d1c"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-b617464d",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:b7adec0c",
+      "size": 8388608,
+      "quick_id": 3081628684,
+      "packed_sha256": "e71c9f712d4f2d23d0cdfc44ee67c65e32b9b05df138c0a7b3b2b990008189bf",
+      "serialized_sha256": "71df89096abecd99df935775b6431800963e6d1538f876bb7b315f4e0c7ea5ae",
+      "proved_sha256s": [
+        "983288cceb23a901b932557b98e6bd7804c0ced1e6a55fc068b6872fd7d37c9e",
+        "c784c46185c7998362710e03b37aaa01e61eb8f19dfe2199444e0a92e67b29d3"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-b7adec0c",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:baa3aaf9",
+      "size": 8388608,
+      "quick_id": 3131288313,
+      "packed_sha256": "777278487e8ae3c9413e6fcea65159768298366121876fb1596829956b1cf30c",
+      "serialized_sha256": "46505d324347af7ae6ec1e2f09475cd629a550bbe5cbb2d8db1ee3ba75d35e42",
+      "proved_sha256s": [
+        "8cbe1baf21ac94635e9def0c2d803c6515a2658c0203ec1c58cd2652d7757080"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-baa3aaf9",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:bcd20e1d",
+      "size": 8388608,
+      "quick_id": 3167882781,
+      "packed_sha256": "2536fe5b7f991315be0796f9a3c1a73af826aa8e653b1b0134f25eb19e3ed6b6",
+      "serialized_sha256": "d53dcd85125ef4bc966ba3da2f87df57967a45d1c920e63271d1844409fbd07b",
+      "proved_sha256s": [
+        "4a82fb525d8cbf6e4a2df00db9b3d96c92735f4c39f84c2e83492641d9bf9e55"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-bcd20e1d",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:beea71d7",
+      "size": 8388608,
+      "quick_id": 3203035607,
+      "packed_sha256": "aef1ee6366a82f10a5cc7aeb234e49c9757c2b43d9a4e86c3cddf77768a3db72",
+      "serialized_sha256": "b4ec6c5c5fb9b8c1689dbd8d07d0b7c3e37f7908f951c2a27451803174af8608",
+      "proved_sha256s": [
+        "268d142673cc084726dcc4fa28c22451eeb539ac6d0c2f64a31d79297f3e7fc4",
+        "4402cda973089a4a12b2a77ec681fb977a625a4d9af8b4f0073135a7efa19f42"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-beea71d7",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:cc620265",
+      "size": 8388608,
+      "quick_id": 3428975205,
+      "packed_sha256": "adae348ef432f5574b629985ebbdc97ea7b36006769c66f751be17099148da25",
+      "serialized_sha256": "bd5df4b510f3de3538b93946c983c8f8faddec1f55fcd2ee19ac8808eee98f46",
+      "proved_sha256s": [
+        "036017d870770c164bc65f5de7444f001991e827e09f785d6239f1466faebce7"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-cc620265",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:ce746bff",
+      "size": 8388608,
+      "quick_id": 3463736319,
+      "packed_sha256": "71f52255158e12cf568c2b8aa0a02b437e6f691014406fafcf95521db471668f",
+      "serialized_sha256": "d72101e4baa76a259e6b93df80c3a1bcd575e879fb000692a0d6f7faf7656b4c",
+      "proved_sha256s": [
+        "0d354068ce70706ad07e0bbc9848d35fa4998a0523d989f4a4fac89f8e1006c5",
+        "d331abe19e3f02e2855aa4bbc2de14626810aca83e0c216862eb1d8ca8d024b0"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-ce746bff",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:cfbde219",
+      "size": 8388608,
+      "quick_id": 3485327897,
+      "packed_sha256": "463622970ffc27fb4923ede211d793fc41b4fb03c8fa08be0bc8b7de53f37bee",
+      "serialized_sha256": "7bd38c48bcabd65b486c7484925a501c0b119feda89b3896830f72398abb1869",
+      "proved_sha256s": [
+        "100c6c1089ae6b056075d4ab5491fead764b9f2c9306854480b4860003267938",
+        "5b373dd3d0a3bece764a57bc12265d2a04dcf2c1b77f69c69bd87ff676302861",
+        "ae8226e3f7578022f90db736bd17d349c5a95e4a6a49f69e8e63675431ac463f"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-cfbde219",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:d2bb8733",
+      "size": 8388608,
+      "quick_id": 3535505203,
+      "packed_sha256": "1f3ebeae49719a1eea312110fa77c0c50e92e6105ce40caa2549f1511690ba63",
+      "serialized_sha256": "a68da680618f103f7d5c34ffb12035027d13d6502caab4743291114084fc23e5",
+      "proved_sha256s": [
+        "34108df5039a298904f4b7fc5369436ccaccd5ddcc28f05c17abbd295c56f955",
+        "f4d7c48276f9b89b873279c3f3e0ef397a2b473290862530b508a7fb3c4ecea9"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-d2bb8733",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:d3da23d3",
+      "size": 8388608,
+      "quick_id": 3554288595,
+      "packed_sha256": "72adb6be2a0a8d2e120b8d1e644b431c6672f6a3f8538f95435b31da3e6ec120",
+      "serialized_sha256": "9ebcc8cfd265369747204a135133db2fb8e7d8737cb381585d730f37e9b92cba",
+      "proved_sha256s": [
+        "7a052a4be1840a2cb4ec69d4e87e6a7f88cc25cb8a0e38c9680f02182b5326de",
+        "d6add6091619b0e31654f284107b48afd628f836d76e74ccd4c87c0f1e4a757f"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-d3da23d3",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:d5dd8a63",
+      "size": 8388608,
+      "quick_id": 3588065891,
+      "packed_sha256": "35abbd8bf0b722dc6164760776b2f95ef21e58ba6026d1afd71f6087545fdc4c",
+      "serialized_sha256": "5b973a6fdb42a29d8f3537af9b62471c33258faa01c9e323c793ee535d7b55ca",
+      "proved_sha256s": [
+        "64b9804f2c501f4aa46aebe3d8a88a7c8270ee2a557b6bb2c63e418498f27143"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-d5dd8a63",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:da7a0305",
+      "size": 8388608,
+      "quick_id": 3665429253,
+      "packed_sha256": "ff17eccba9fe8922ef219d245543281f4dbe4c0489a0ac929d4a1ba7d6cbd9ea",
+      "serialized_sha256": "83aec2073922756f828cf213c1ced5320c4887c5973b3a14f543fea408a7af69",
+      "proved_sha256s": [
+        "0fa1daa6099ce9a1d96163e5eeed0ef9a19c4f79f9a03de7d49237892d2ef940",
+        "50130b56949a9fd10983d2db56b8f79c3df3a745f1b6720082208384e8be15bc"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-da7a0305",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:dfd21b25",
+      "size": 8388608,
+      "quick_id": 3755088677,
+      "packed_sha256": "e367d0d15cefb9ebfec0f2fa1832e4724843e51300bc87fe4c54d6ddb548d9a9",
+      "serialized_sha256": "8a11e036521ace54461fd8f5db7e4fb87e679d6fda4db48fd085816112164782",
+      "proved_sha256s": [
+        "aae45e6fec99bad50d7f819d7d75c5ca5510998bd1de5391464ca4a369f97dc2",
+        "f7eba3b4bbd6e0e3bcfd745aa156c4cbae6e75e14597d827f4be171b6859dc84"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-dfd21b25",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:e1622cb7",
+      "size": 8388608,
+      "quick_id": 3781307575,
+      "packed_sha256": "203ea638918ffcd36a54b52b42795eed394c40a9fd65bdcf92725af844ae9335",
+      "serialized_sha256": "0952f38c31f5e2650049a7abe233f536238e2fb0173de15d25a90c10b0f7751f",
+      "proved_sha256s": [
+        "3158689e1fa4b9891cc73cfa1f63150ceb3dfd8b7b030e8fa149a9b211fd2834",
+        "4f17b12c2f7039b61e86fff914d86dc043bce55ffce4e4e34818a3177cef41fe"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-e1622cb7",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:e19a163b",
+      "size": 8388608,
+      "quick_id": 3784971835,
+      "packed_sha256": "f8b1e2f4cf5646371c98b8b544f61a925e64ca37fca37597dc9bc51ddb3d5000",
+      "serialized_sha256": "eff733bf923723b458ea6182ec4e42a2966bd3be4b1fb8af80bcf158fdfce356",
+      "proved_sha256s": [
+        "5a453d04c8928d0e9426dd1643c3a18d1313ca38a5d2a8babbde8a5acc0c5a45"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-e19a163b",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:e2437261",
+      "size": 8388608,
+      "quick_id": 3796071009,
+      "packed_sha256": "66b1f32b5841201207300e2d6dd4b3ec3ee31afdc8a161de61cb316c10a40367",
+      "serialized_sha256": "21d7320afd0e7dec836cea555355ff34eae0eaea70abc5595d56345eafcc3635",
+      "proved_sha256s": [
+        "412eefc515fe40033e9bac640bc5842e60b531014c563c60659c9e574570fb72"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-e2437261",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:e3bc1da1",
+      "size": 8388608,
+      "quick_id": 3820756385,
+      "packed_sha256": "6e0d7d87d44c0bccfa3b3927db93e2d2f2bc2232cdf74f515b7d1141038a5e28",
+      "serialized_sha256": "cc721ddfcf15d39109d0ff79c66813f9009cd50c0d24e490f9bcc66203b3a003",
+      "proved_sha256s": [
+        "14269f56d73aba7c9e15ae586f7eaa1cc0eb0878442781b1cc1db1b21f48e0c0"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-e3bc1da1",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:e981f25b",
+      "size": 8388608,
+      "quick_id": 3917607515,
+      "packed_sha256": "bdecafbe25386e51085bdb33def39fcea8d5df534f0b30b3bb0f3c342c52cb6f",
+      "serialized_sha256": "01fe5044564c1b7bad940e7a798a087cfb326542db61ece0ce50b664c835a004",
+      "proved_sha256s": [
+        "a6e7d7067015ed1f7b930a1838cc30c48a02260bcc5db9cfc57b572ad78a2171"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-e981f25b",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:ef2d488c",
+      "size": 8388608,
+      "quick_id": 4012722316,
+      "packed_sha256": "4c90e8e6511a3b66b4b4b611a423636c5f975ee4351207b3bdb14640324d2024",
+      "serialized_sha256": "f580e5711fb8e54f7fe02b304dde8193f3fc3e10b48b03e0577cd9f5d9f0312f",
+      "proved_sha256s": [
+        "4bf17663615b2677c4613b8953fc102bfbc100f9f110e54e7ded9a4976dfb916",
+        "fb287cbd75f7c2b80990ec20a7269c92d6ba23acbfe05e14f20a2ba4954cc801"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-ef2d488c",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:f3586627",
+      "size": 8388608,
+      "quick_id": 4082656807,
+      "packed_sha256": "744facfefd6b51314466f86eccff7b3c878c641e855636166c0bba2d05cb89ce",
+      "serialized_sha256": "5d84e44709cf17d472827ee28336277ca037c277fea1e52005369615f5dac576",
+      "proved_sha256s": [
+        "d62a5f4099ca5b2fb446793a00703b027548abfb07334eb0e2f80c851aeb40ee"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-f3586627",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:f50cad42",
+      "size": 8388608,
+      "quick_id": 4111248706,
+      "packed_sha256": "58a3c044945a8a0d838e80d2f6cc0efccf5f00cfd190b4a5f50051b92a6abd77",
+      "serialized_sha256": "b482335b0327be64121fe4725dd13cbb18e64a92c14ffd00f86d2c31aa03c153",
+      "proved_sha256s": [
+        "c1ded629314fa0f3067d7abcc06754e614e507cb582cfe6953a89f0fe6c11fc9"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-f50cad42",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:fba51e09",
+      "size": 8388608,
+      "quick_id": 4221902345,
+      "packed_sha256": "2204630e3c3be14a63d6569b6aab20daa1f302a296e19375168845251d178dbf",
+      "serialized_sha256": "dac023732682e117cea863b124f5c2b15862a4aa581ac02d686177499c72b511",
+      "proved_sha256s": [
+        "15f042aa1cd7514361d6cc50e57b829c63fdf208dff564d6ae9944b2fe888d27",
+        "88c2b9dba992542566e5ece5ec80ae88a7985c5378b27df1ff0cbe244e2a6a78"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-fba51e09",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:fd0dcf65",
+      "size": 8388608,
+      "quick_id": 4245540709,
+      "packed_sha256": "4fdec21041070810e989ee3e505f817f24b7f86fb18f619f05179ac9e4027291",
+      "serialized_sha256": "01ea7661dd70fe4396dd6076bd24d8235db078ffa0bb2d4c6aa37294f1e4214c",
+      "proved_sha256s": [
+        "07e2ac34326977a7e7f69b45cdea61cf71ddb1a66d4aaf4d403dc1c6a9591013",
+        "445a0def151570a520cbebbbc24fc54cf09a7c8f402e6b34a6e70532b9a585ba"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-fd0dcf65",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8388608:fd50a211",
+      "size": 8388608,
+      "quick_id": 4249920017,
+      "packed_sha256": "15dec955df3240a180c7127851bc61f86cc6e06475def04e544054d7440610d5",
+      "serialized_sha256": "6707760f02b7b43aacb7c29f947e7f612ce41e72033aa85901be8e5935aa46e1",
+      "proved_sha256s": [
+        "38cd623021d04cdfc8227dec8185ade8f1ab9afba4ef58393f25786b1f445600",
+        "62c6d5fb11c0dca789d1043882b4b1212256cd062f2cf07edeae4304bcd4bff2",
+        "863290c787cc3f47ab718f8cc212c9d61a015e9eb9f376cde3d31221c0b620c9",
+        "e47c574d43716466929d9ed0e52aa9e79fc95099d31965becc28668677dec278"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8388608-fd50a211",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8394016:213f9f6b",
+      "size": 8394016,
+      "quick_id": 557817707,
+      "packed_sha256": "4aed5ac28fedcfee1e17e3430e5c3098a98245b0bbbee96ada7690be65fb327c",
+      "serialized_sha256": "3142c0bfea6eef79dd02315d5583f0fbf4bccc36ae69bbb2eee8671d5a19f132",
+      "proved_sha256s": [
+        "43fe22fff9593639073e14466f0dacade13df87775f3d34924b26f7df55f6b8d"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8394016-213f9f6b",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8415616:d0e0556d",
+      "size": 8415616,
+      "quick_id": 3504362861,
+      "packed_sha256": "bef55ab655530f5d348b45e1eb7655a9bd1de297ff924323926e9dc4d744328c",
+      "serialized_sha256": "7f32e992f7f7f568495d455d8bd0dad5d62431e51af7950d531d2b9e6a7f414d",
+      "proved_sha256s": [
+        "93e41ca2229573097e5b631904115143c31a4efdbcf663aaad09f6f9121829e2",
+        "ef578166e9501f11772cb7872ebac70359108756043a09925e5eb036d8532027"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8415616-d0e0556d",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8512288:ad6a37ed",
+      "size": 8512288,
+      "quick_id": 2909419501,
+      "packed_sha256": "c63418c807c9644e3c1d24eb15d2347438a2ad0ba58f3e7265743a0c2ca0c7f0",
+      "serialized_sha256": "ad639549047d0571ed1580f9d0e667657bab729a9e23f2073c709fe9a943fd21",
+      "proved_sha256s": [
+        "9578909a09e4c3c2cce42c2b9f7420eda1cd4fa604c736aaff34ce09ed99cdbc"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8512288-ad6a37ed",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8569088:3b329728",
+      "size": 8569088,
+      "quick_id": 993171240,
+      "packed_sha256": "0ebdf52d4943d3425ac495d6c4a81644cb43dab8b215aa346953dfce3d5a3609",
+      "serialized_sha256": "975941f740f278cc86fd379036a61a6403c16e11b7c15fdb9d6176117661877c",
+      "proved_sha256s": [
+        "1082c88633dac54c265f66811afcc227d5af5a46d9905ca14b4c1ec6fd0bcab4",
+        "1c2bda21d43125abcf4b503e230eaaa0e42418bb82f774dec4ffba58382b9c8b",
+        "cb43a865d4cb807b3bf6837303bd82f5ee8700a2009190aaf0668abfcd0a74dd"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8569088-3b329728",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8593920:a120afa2",
+      "size": 8593920,
+      "quick_id": 2703273890,
+      "packed_sha256": "cc73c75119f101f49f8e23fdc2ac02421023318bcf4bed2984ddb83dd8387706",
+      "serialized_sha256": "2a808fb1e20c1495dff3ca9d39d547ed8604d486e62060879f8bb970f4e12114",
+      "proved_sha256s": [
+        "28526671b436806ae82a9df4e00c2bbfbffffdd1c7e07f4f3018bd4d54d6e159",
+        "5967e264462293ab1467401eb9d19f16b2812f20bd077814dc024f3b414aba40"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8593920-a120afa2",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "8621272:bd9ef6ea",
+      "size": 8621272,
+      "quick_id": 3181311722,
+      "packed_sha256": "e367d0d15cefb9ebfec0f2fa1832e4724843e51300bc87fe4c54d6ddb548d9a9",
+      "serialized_sha256": "8a11e036521ace54461fd8f5db7e4fb87e679d6fda4db48fd085816112164782",
+      "proved_sha256s": [
+        "82d477d03586dc51c456634f7b0b9a74204460da1535817b276ee02880f52156",
+        "aefdb5e8445fc29768f67287f056d69ca0c69c3c5d2571fe2644d9687b8bb96d"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/8621272-bd9ef6ea",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "9177344:1991d27d",
+      "size": 9177344,
+      "quick_id": 428987005,
+      "packed_sha256": "5119a65ed1357c5a4cdf7cddc898d76d29d00238b99d7e7dbee2272771889927",
+      "serialized_sha256": "692a3fc58c1319c9d476594aa7538304761243f1996c1cd19f32ef487a412703",
+      "proved_sha256s": [
+        "7531d8704297af81ee07b4122ba613464ea05ed4d0514dc50d053bdc9e56f514"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/9177344-1991d27d",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "16777216:00e82243",
+      "size": 16777216,
+      "quick_id": 15213123,
+      "packed_sha256": "3c7a0f164aea1a76cd6beccff71aa2c8a0571a7f4c93afcbc4c694f2a492d5f0",
+      "serialized_sha256": "43e5f828eb6fdf31d7b013f43247815cdcda0cc62b03e1e4cf244b7842fbcded",
+      "proved_sha256s": [
+        "0162c1e8ad130d2ad14a0b78c503711e20a6260c305571afab82935f214db542",
+        "47b314fe058c7e6691f54101d39b0111992711bfaadf1e0e59673428fdc46747"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/16777216-00e82243",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "16777216:077a6d46",
+      "size": 16777216,
+      "quick_id": 125463878,
+      "packed_sha256": "d131ec636b6ced245c4951f266863d04045888ba83aaf23238584da0c4a66cf8",
+      "serialized_sha256": "12244b73bb74a62a47868a4ca59c3a3665fb65e39afc048d5940c5fa04ecc42a",
+      "proved_sha256s": [
+        "c269ff40f55dac7ea39fb0d195616f9a496dccab23b315f380baecfe828cae8d"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/16777216-077a6d46",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "16777216:0cd8646b",
+      "size": 16777216,
+      "quick_id": 215508075,
+      "packed_sha256": "3bceee960cd271a95758f177ff07b894ab1a22a4ac5c4ef18b01cb76986d3f66",
+      "serialized_sha256": "7e87a1139766853df29531866463d64e39960ef7d6bd6c01ebf0b491e76ee560",
+      "proved_sha256s": [
+        "39bb2471266fef058b24605005a1f251524079fc82378224e3535a9d7ba6535b",
+        "7b5276bac55937b766a5b03d3089525eb166e27c7656af66c92affa09b4564c3"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/16777216-0cd8646b",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "16777216:1a576fbb",
+      "size": 16777216,
+      "quick_id": 441937851,
+      "packed_sha256": "28cec398f4d63371c1ed109f99c59989ab9b90baaaadc5b9c7f1bde33e5e8860",
+      "serialized_sha256": "489cc100087bb4b209502d4136a023490e9b382d5f6c15e91e950000b0cba917",
+      "proved_sha256s": [
+        "7677d0e7f45755f7c3fba4e637750187dd24eefc6c083e6aaff31b8e80934e46"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/16777216-1a576fbb",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "16777216:1c253162",
+      "size": 16777216,
+      "quick_id": 472199522,
+      "packed_sha256": "26200417bd88d36962226f065a86467d4d6f54b7f64c142c67c9fbb2b0d457dd",
+      "serialized_sha256": "1ccd55fa12283ebecf4e7b0bb608b405841dde8866ab1464923770d79ed799cb",
+      "proved_sha256s": [
+        "8bd413f0ef3b49d2572f7abb32b9102c6a05d449d4acc6d6df9109d433c467e4"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/16777216-1c253162",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "16777216:29595bdc",
+      "size": 16777216,
+      "quick_id": 693722076,
+      "packed_sha256": "30bab5c15f77b6014e85d4e6a9c6e8d1d811ae298e81ff30e211ba261a257f45",
+      "serialized_sha256": "433ee9b8ca933f24ad29b70b3ffa821ec51d04338e0d7d0638780360d5df9a1e",
+      "proved_sha256s": [
+        "55c61cd0ab12c4c8e1cd4f7888f8f54e0f977816b17b789ef0706b319c495cae"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/16777216-29595bdc",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "16777216:3b74d258",
+      "size": 16777216,
+      "quick_id": 997511768,
+      "packed_sha256": "d9a6e345af01398ba13caae063d31fbd3bf3dad5c7f65d9a9e744c5a76565aed",
+      "serialized_sha256": "31e18578358030c41b27379b5e78807217893e6a44c0d5e7b65d13f5cb8f1e23",
+      "proved_sha256s": [
+        "8822be14a830ca26cb157033da3705b5f0487282fd75161b340e989903f981d3"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/16777216-3b74d258",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "16777216:4550d4eb",
+      "size": 16777216,
+      "quick_id": 1162925291,
+      "packed_sha256": "7909102e7fee514dd2c184813792df72456abca6ea6de60cd01a8d5b60bc41da",
+      "serialized_sha256": "9269617eafe5204b52380090906ae45cbff2aa7c65b6fa3e4435e7beb6075034",
+      "proved_sha256s": [
+        "63d5d491ceda6bdfd99a960fdcdaf87388104746e4cadc2e450713c61e731521"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/16777216-4550d4eb",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "16777216:4a48aafd",
+      "size": 16777216,
+      "quick_id": 1246276349,
+      "packed_sha256": "08e26ef0c305c3ca72f3f16de02d121389c469674651be9aa35ee11c5cec25f6",
+      "serialized_sha256": "35fdb99894553551b453e8e0c0a1b0ea39508b19f4772b1bdd5a15e20f43b58c",
+      "proved_sha256s": [
+        "97a54acad2b7cec350c4a28603c5b76b852b3c579fd12018cee5aeb5f6c6b82e"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/16777216-4a48aafd",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "16777216:4b54bd83",
+      "size": 16777216,
+      "quick_id": 1263844739,
+      "packed_sha256": "e8d956db64a22477ef6bca343690d9213dd19afb3718540c63924b49605f6856",
+      "serialized_sha256": "48d3af548d13dff13a2ed5dd141d5a5756c6edf6d77fe6f627c6049ec4b53e13",
+      "proved_sha256s": [
+        "3ec1e94f21167bb562067ecc44b7a5a16822e0eea06e228b37179156c45ff65f"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/16777216-4b54bd83",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "16777216:63421c67",
+      "size": 16777216,
+      "quick_id": 1665277031,
+      "packed_sha256": "b29ebbfdd03e14ff5fb3c90a23fab981e7376c078a28e1322becacaeb8a2586f",
+      "serialized_sha256": "d8dca4fc981ed61a2c40884fbe54953ec523f0edbc543adcf60cb3b0e4fb190a",
+      "proved_sha256s": [
+        "aa7b44cec5b6b5f56ded7e502b2bdbcf45b35f758df6a34f87fe97ef47e9ca92",
+        "f5853a1d314d9f534073fddf41bda7a4648ddf777860f3c309223bd45e563c86"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/16777216-63421c67",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "16777216:7a3c998f",
+      "size": 16777216,
+      "quick_id": 2050791823,
+      "packed_sha256": "617a7dfcceae8d2a9730a4d435220efd829665997ce2634a242b7c3d71034332",
+      "serialized_sha256": "af075fa3369cd021c4995f59700bbd9ff67e94e7a69ec69ec7624b6dd127bc3e",
+      "proved_sha256s": [
+        "0c74d49252fce1e7ce76b89810cdced6b0d374e6bfcef8fe910891b09d80ac79"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/16777216-7a3c998f",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "16777216:96a29611",
+      "size": 16777216,
+      "quick_id": 2527237649,
+      "packed_sha256": "77c7737cbe6dcb69ce098cb7b1cb6c86064a17549a54a798436096e3b5872f0d",
+      "serialized_sha256": "de5adefc40b536d0c218d77f13ef577cd5fde7f3504dac7c4e971a8b09652962",
+      "proved_sha256s": [
+        "60ea096a5122dcc0a770c3b963c98a591a0d473a3dc30a6de9b49a1e150ff93e",
+        "89626d066cf0d20aa1f4d7690718b7303d17a4e40b9f416f5d7291bb23ff0c2e",
+        "b0a6d890113fde219d3378be3c66d493a6bd713cd33369e85fed611b1464ee9a"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/16777216-96a29611",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "16777216:c45b19ee",
+      "size": 16777216,
+      "quick_id": 3294304750,
+      "packed_sha256": "6ab146d92a1c16e00f8b7794aac22a8fe944b2af72a4c0d1983a7faebc133c92",
+      "serialized_sha256": "b4872e287f03bfababf72d8ad53ac6989f9ab006d67699baec21032a5f608f8f",
+      "proved_sha256s": [
+        "35771bf1c20a00fae9ebd35b20ae6bbd62f7ed08ba3b09fcf0ea5e2c39e1056e"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/16777216-c45b19ee",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "16777216:d2abdb1c",
+      "size": 16777216,
+      "quick_id": 3534478108,
+      "packed_sha256": "0914fd024e5507dd96f38b68a5ad769161528ddb6fcdc18c7bf6560e102efdf2",
+      "serialized_sha256": "9419d718c661e256c1d3f8996eec9b73053c20a65af8b516626314fd71447406",
+      "proved_sha256s": [
+        "0fb87c7d34e8f01047e57c6ade9f54dd0f8742ee3db274c70939bcf9a8a078f5"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/16777216-d2abdb1c",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "16777216:dc4be4ae",
+      "size": 16777216,
+      "quick_id": 3695961262,
+      "packed_sha256": "d01b748ddc315967bb9126c00cdb5e74271c4e73fb562b98c1b058c15520205b",
+      "serialized_sha256": "e7547245261ae6aae48be50337dc94119d44e7ec1ed0a63e726da5c7c6dc1d32",
+      "proved_sha256s": [
+        "0bc0197b4db95dbd39c8a04001558f53a7509f7871b549849919865a8092eae8"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/16777216-dc4be4ae",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "16777216:fb1c4d05",
+      "size": 16777216,
+      "quick_id": 4212935941,
+      "packed_sha256": "75bdd9962ff88576de5fc7c15d45c1e4fa99a11de08349abc368af39dd21b4e4",
+      "serialized_sha256": "6bcdd626f12d51fc43a37ff75aa2872b182547f5e8a33c820bbbfee3cd537a37",
+      "proved_sha256s": [
+        "68398055267634e5521b79c0e5249bc7629ae2800c635b897aee66aede85770a",
+        "6f83c057de7d22f9c84ae21d916a22ce7fbdf3a4b3b272a15d06b6c78e878e5e",
+        "a81c960f66c1fdabaf01b189ed8c0be6da7948819804fd450f74adb54a22921e"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/16777216-fb1c4d05",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "17304864:013fc787",
+      "size": 17304864,
+      "quick_id": 20957063,
+      "packed_sha256": "4f870424f7f82a589b1779c2b6f05f2f41e6a159b9efab874ddc930526c9abdf",
+      "serialized_sha256": "ad72ff1e25ad069c00afe763be621f1c4e33bd3cf366683c32243ba94c376fb2",
+      "proved_sha256s": [
+        "1237e20025cefdcd8b16a581e952631282ab31818ef20b9229451a9d03294e87"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/17304864-013fc787",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "17825792:28a37cc1",
+      "size": 17825792,
+      "quick_id": 681802945,
+      "packed_sha256": "d7f2ee1242594eace7463cfc59b7babb425fef59a6d80629aefe6e14d8f15024",
+      "serialized_sha256": "c988eba5cf6cd22050b12eeaa212e7810945e958da184c66ab5f907d118ab44f",
+      "proved_sha256s": [
+        "b881599d5e3da5ca278759c34d7eaf5ac97e1bf8c98b35f856950b82328967d0",
+        "c158eeb8dffe478a7accdac81d72a0bb2c48e372f3571199c48f97fb0741ef2a",
+        "d832412a2e40fb6777d4fddb867f7315a0de1cbf2b505eec9fee851eae1a4b17",
+        "f4ae1fc29b76703dbde14f061737d8ce7581f0d95800185936196a7343b44bce"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/17825792-28a37cc1",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "17825792:3607e4cd",
+      "size": 17825792,
+      "quick_id": 906486989,
+      "packed_sha256": "64be5899b1679b26578e0baf6daa26ccaacc309f2fbf3946fa7858b0348e7b03",
+      "serialized_sha256": "679f257ff048cf9dcafd84228c746e3a9b5ad82c9414fea64aece688aa2951ec",
+      "proved_sha256s": [
+        "5bb3a9d7a98e6b58749a286a356a4d10bc0f259b001767bc7f9e7c8a723cc5fe",
+        "8d0b5d4fb7095150740da252ea73b98fea70e3b79f72aad36e289b703d23b1a5"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/17825792-3607e4cd",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    },
+    {
+      "key": "17867653:a9781a93",
+      "size": 17867653,
+      "quick_id": 2843220627,
+      "packed_sha256": "e9121222abf87fa265f844a802bcbbe6d98b4cc66ee10e470a070769eab9756b",
+      "serialized_sha256": "db64e1ffa69e39baf8a7b65d990a33edf531ae8424b0e3b2c1463a58f3957585",
+      "proved_sha256s": [
+        "c972b9dbaae6ff41249376408db1dcbd25a9ad0c55082d8b3c463e496437d763",
+        "eddcaaf0709ffe0228bbf9b74547fca83dac39bea8b68799ff3335912ca6746b"
+      ],
+      "archive": "build/delivery/superchis-upstream-equivalent-20261110/archive/17867653-a9781a93",
+      "reason": "全部已知同 ROM 别名均由当前主线 PDB 覆盖，完整补丁语义及 TF/NOR 实际 ARM 加载输出一致。"
+    }
+  ]
+}

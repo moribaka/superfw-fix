@@ -33,6 +33,7 @@
 #include "menu_layout.h"
 #include "menu_compact_config.h"
 #include "menu_layout_offsets.h"
+#include "menu_nor_offsets.h"
 #include "menu_overlay_profile.h"
 #include "fonts/font_render.h"
 #include "supercard_driver.h"
@@ -488,6 +489,24 @@ unsigned load_gba_rom(
 
 // Flashes a game to NOR patching it as necessary. This includes DirSav as well as IGM.
 NOINLINE
+// 通用 NOR 启动钩子与返回跳板在两种存储中使用相同地址。
+static void install_nor_bridge(uint8_t *buffer, unsigned size, unsigned base,
+                               unsigned anchor, unsigned menu_base) {
+  payload_apply_rom(buffer,size,base,ingame_nor_scatter_payload,ingame_nor_scatter_payload_size,anchor);
+  const uint16_t menu_words[]={(uint16_t)menu_base,(uint16_t)(menu_base>>16)};
+  payload_apply_rom(buffer,size,base,(const uint8_t*)menu_words,4,anchor+12);
+  for(unsigned i=0;i<ingame_nor_scatter_payload_size;i+=4) {
+    uint32_t word;
+    memcpy(&word,ingame_nor_scatter_payload+i,4);
+    if(word==MENU_NOR_ENTRY || word==MENU_NOR_CHEATS) {
+      word=menu_base+word-0x09000000;
+      const uint16_t words[]={(uint16_t)word,(uint16_t)(word>>16)};
+      payload_apply_rom(buffer,size,base,(const uint8_t*)words,4,anchor+i);
+    }
+  }
+}
+
+NOINLINE
 unsigned flash_gba_nor(
   const char *fn, uint32_t fs,
   const t_rom_header *rom_header,
@@ -499,8 +518,6 @@ unsigned flash_gba_nor(
   progress_fn progress,
   uint8_t *scratch, unsigned ssize
 ) {
-  if(patch_has_sdram_only_ops(ptch))return ERR_FLASH_OP;
-
   if (!flashinfo.size || !flashinfo.blksize || !flashinfo.blkcount || !flashinfo.blkwrite || !flashinfo.blksize)
     return ERR_FLASH_OP;
   if (ingame_menu && !patch_igm_supported(ptch, true))
@@ -509,8 +526,9 @@ unsigned flash_gba_nor(
   // Determine if the DirSav payload must be flashed in a ROM gap or not.
   const t_menu_layout *nor_layout=ingame_menu?menu_layout_get(ptch->menu_layout):NULL;
   const t_menu_overlay_profile *nor_overlay=ingame_menu?menu_overlay_profile_get(ptch->menu_layout):NULL;
-  const unsigned image_size = patch_rom_size(fs, ptch, rtc_patches);
-  const bool flashmap0 = image_size <= MAX_GBA_ROM_SIZE - NOR_BLOCK_SIZE;
+  const bool native_bridge=ingame_menu && !nor_layout && !nor_overlay && patch_nor_bridge_required(ptch);
+  const unsigned image_size = patch_nor_rom_size(fs, ptch, rtc_patches, ingame_menu, dirsaving);
+  const bool flashmap0 = !native_bridge && image_size <= MAX_GBA_ROM_SIZE - NOR_BLOCK_SIZE;
   uint32_t ds_flashoffset  = flashmap0 ? 0 : ptch->hole_addr;
   uint32_t igm_flashoffset = nor_overlay ? nor_overlay->anchor : nor_layout ? nor_layout->anchor : flashmap0 ? 0 : ptch->hole_addr + DIRSAVE_REQ_SPACE;
 
@@ -586,6 +604,9 @@ unsigned flash_gba_nor(
       payload_apply_rom(scratch,ssize,bigoff,ingame_nor_scatter_payload,ingame_nor_scatter_payload_size,igm_flashoffset);
       payload_apply_rom(scratch,ssize,bigoff,(const uint8_t*)&nor_layout->id,4,igm_flashoffset+8);
     }
+    if(native_bridge)
+      install_nor_bridge(scratch,ssize,bigoff,igm_flashoffset,
+                        igm_flashoffset<16*1024*1024?0x09000000:GBA_ROM_BASE);
 
     // Patch ROM, don't need WAITCNT patches
     if (!patch_apply_rom(scratch, ssize, bigoff, false, ptch, rtc_patches,
@@ -600,7 +621,7 @@ unsigned flash_gba_nor(
     if (dirsaving && ds_flashoffset)
       payload_apply_rom(scratch, ssize, bigoff, directsave_payload, directsave_payload_size, ds_flashoffset);
 
-    if (ingame_menu && igm_flashoffset && !nor_layout && !nor_overlay)
+    if (ingame_menu && igm_flashoffset && !nor_layout && !nor_overlay && !native_bridge)
       payload_apply_rom(scratch, ssize, bigoff, ingame_trampoline_payload, ingame_trampoline_payload_size, igm_flashoffset);
 
     if (!bigoff)
@@ -664,6 +685,7 @@ unsigned launch_gba_nor(
 
   const t_menu_layout *nor_layout=NULL;
   const t_menu_overlay_profile *nor_overlay=NULL;
+  unsigned native_anchor=0, native_menu=0;
   set_superchis_normap(normap);
   set_supercard_mode(MAPPED_FIRMWARE,false,false);
   if(ingame_menu) {
@@ -674,12 +696,16 @@ unsigned launch_gba_nor(
       unsigned id=*(const uint32_t*)(target+8);
       nor_layout=menu_layout_get(id);
       nor_overlay=menu_overlay_profile_get(id);
+      if(!id) {
+        native_anchor=target-GBA_ROM_BASE;
+        native_menu=*(const uint32_t*)(target+12);
+      }
     }
   }
   set_supercard_mode(MAPPED_SDRAM,true,true);
 
   // Now the IGM: it sits along in the SDRAM (at 0x0 offset)
-  uint32_t igm_addr = GBA_ROM_BASE+((nor_layout||nor_overlay)?16*1024*1024:0);
+  uint32_t igm_addr = native_anchor ? native_menu : GBA_ROM_BASE+((nor_layout||nor_overlay)?16*1024*1024:0);
   // IGM can use as much SDRAM as it needs, use 16MiB for now
   uint32_t igm_space = 16*1024*1024;
 
@@ -698,6 +724,12 @@ unsigned launch_gba_nor(
       set_supercard_mode(MAPPED_SDRAM,true,false);
       memcpy32((void*)(GBA_ROM_BASE+nor_layout->anchor),ingame_nor_scatter_payload,ingame_nor_scatter_payload_size);
       *(uint32_t*)(igm_addr+MENU_NOR_EXIT_BRIDGE_OFFSET)=GBA_ROM_BASE+nor_layout->anchor+MENU_NOR_EXIT_OFFSET;
+      set_supercard_mode(MAPPED_SDRAM,true,true);
+    }
+    if(native_anchor) {
+      set_supercard_mode(MAPPED_SDRAM,true,false);
+      install_nor_bridge((uint8_t*)GBA_ROM_BASE,MAX_GBA_ROM_SIZE,0,native_anchor,native_menu);
+      *(uint32_t*)(igm_addr+MENU_NOR_EXIT_BRIDGE_OFFSET)=GBA_ROM_BASE+native_anchor+MENU_NOR_EXIT_OFFSET;
       set_supercard_mode(MAPPED_SDRAM,true,true);
     }
     if (use_rtc_patches) {
